@@ -10,10 +10,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
-    "docker:dev": "docker-compose up frontend-dev",
-    "docker:preview": "docker-compose up frontend-preview",
+    "docker:dev": "docker compose up frontend-dev",
+    "docker:preview": "docker compose up frontend-preview",
     "docker:build": "docker build --target development -t feedback-frontend-dev .",
-    "docker:clean": "docker-compose down"
+    "docker:clean": "docker compose down"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
