@@ -14,12 +14,16 @@ export default defineConfig({
       "@theme": fileURLToPath(new URL("./src/theme", import.meta.url)),
     },
   },
-  // server: {
-  //   port: 3000,
-  //   host: true,
-  // },
-  // build: {
-  //   outDir: "dist",
-  //   sourcemap: false,
-  // },
+  server: {
+    host: "0.0.0.0",
+    port: 3000,
+    strictPort: true,
+    hmr: {
+      port: 3001,
+    },
+  },
+  build: {
+    outDir: "dist",
+    sourcemap: false,
+  },
 });
