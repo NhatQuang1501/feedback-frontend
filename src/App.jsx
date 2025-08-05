@@ -1,20 +1,18 @@
 import React from "react";
-import { ThemeProvider, CssBaseline, Container, Typography } from "@mui/material";
+import { ThemeProvider, CssBaseline, GlobalStyles } from "@mui/material";
 import { theme } from "@/theme";
+import FeedbackPage from "@/pages/feedback/FeedbackPage";
+import { StyledEngineProvider } from "@mui/material/styles";
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Container>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Feedback Application
-        </Typography>
-        <Typography variant="body1" color="text.secondary">
-          Ready for development
-        </Typography>
-      </Container>
-    </ThemeProvider>
+    <StyledEngineProvider enableCssLayer>
+      <ThemeProvider theme={theme}>
+        <GlobalStyles styles="@layer theme, base, mui, components, utilities;" />
+        <CssBaseline />
+        <FeedbackPage />
+      </ThemeProvider>
+    </StyledEngineProvider>
   );
 }
 
