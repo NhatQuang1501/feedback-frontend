@@ -160,7 +160,7 @@ const LoginPage = () => {
               Chào mừng trở lại
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              Đăng nhập để ti��p tục sử dụng Feedback Hub
+              Đăng nhập để tiếp tục sử dụng Feedback Hub
             </Typography>
           </Box>
 
