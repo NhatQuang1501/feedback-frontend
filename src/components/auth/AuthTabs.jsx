@@ -230,7 +230,7 @@ const AuthTabs = ({
                 md: 4,
               },
               "&:last-child": {
-                paddingBottom: { xs: 2, sm: 3, md: 4 },
+                paddingBottom: { xs: 3, sm: 4, md: 5 },
               },
               minHeight: { xs: 400, sm: 450, md: 500 },
               position: "relative",
@@ -254,29 +254,6 @@ const AuthTabs = ({
               />
             </TabPanel>
           </CardContent>
-
-          {/* ==================== FOOTER ==================== */}
-          <Box
-            sx={{
-              textAlign: "center",
-              paddingBottom: { xs: 1.5, sm: 2 },
-              paddingX: { xs: 2, sm: 3 },
-              backgroundColor: "background.paper",
-              borderTop: "1px solid",
-              borderColor: "divider",
-            }}
-          >
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{
-                fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                opacity: 0.8,
-              }}
-            >
-              © 2024 Feedback Hub. Tất cả quyền được bảo lưu.
-            </Typography>
-          </Box>
         </Card>
       </Container>
     </Box>

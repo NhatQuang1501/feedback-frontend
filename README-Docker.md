@@ -3,6 +3,7 @@
 ## Quick Start
 
 ### Development Mode (Hot Reload)
+
 ```bash
 # Start development server
 docker compose up frontend-dev
@@ -11,6 +12,7 @@ docker compose up frontend-dev
 ```
 
 ### Preview Production Build
+
 ```bash
 # Build and preview
 docker compose up frontend-preview
