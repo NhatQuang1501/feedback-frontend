@@ -12,6 +12,7 @@ import AuthLayout from "@/layouts/AuthLayout";
 const DashboardPage = lazy(() => import("@/pages/dashboard/DashboardPage"));
 const FeedbackPage = lazy(() => import("@/pages/feedback/FeedbackPage"));
 const NotFoundPage = lazy(() => import("@/pages/static/NotFoundPage"));
+const AuthPage = lazy(() => import("@/pages/auth/AuthPage"));
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Routes>
               {/* Auth Routes - No Header/Footer */}
               <Route path="/auth" element={<AuthLayout />}>
+                <Route path="login" element={<AuthPage />} />
                 <Route path="forgot-password" element={<div>Forgot Password Page</div>} />
                 <Route path="reset-password" element={<div>Reset Password Page</div>} />
                 <Route path="verify-otp" element={<div>Verify OTP Page</div>} />
