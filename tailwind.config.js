@@ -33,12 +33,24 @@ export default {
         ".text-shadow": {
           textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
         },
+        ".input-focus": {
+          "&:focus": {
+            borderColor: "#e6d486",
+            borderWidth: "2px",
+            outline: "none",
+          },
+        },
+        ".input-hover": {
+          "&:hover": {
+            borderColor: "#ffec99",
+            borderWidth: "2px",
+          },
+        },
       };
       addUtilities(newUtilities);
     },
   ],
-  important: "#root", // or true
-  // Avoid conflict with MUI
+  important: true,
   corePlugins: {
     preflight: false,
   },

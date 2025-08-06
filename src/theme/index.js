@@ -36,27 +36,27 @@ export const theme = createTheme({
   typography: {
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
-      // fontWeight: 500,
+      fontWeight: 700,
       color: "#333333",
     },
     h2: {
-      // fontWeight: 500,
+      fontWeight: 700,
       color: "#333333",
     },
     h3: {
-      // fontWeight: 500,
+      fontWeight: 700,
       color: "#333333",
     },
     h4: {
-      // fontWeight: 500,
+      fontWeight: 600,
       color: "#333333",
     },
     h5: {
-      // fontWeight: 500,
+      fontWeight: 600,
       color: "#333333",
     },
     h6: {
-      // fontWeight: 500,
+      fontWeight: 600,
       color: "#333333",
     },
   },
@@ -67,12 +67,21 @@ export const theme = createTheme({
           textTransform: "none",
           borderRadius: "8px",
           fontWeight: 500,
+          boxShadow: "none",
         },
         containedPrimary: {
           backgroundColor: "#ffec99",
           color: "#333333",
           "&:hover": {
             backgroundColor: "#e6d486",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          },
+        },
+        outlined: {
+          borderWidth: "1px",
+          "&:hover": {
+            borderWidth: "1px",
+            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
           },
         },
       },
@@ -81,11 +90,18 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           "& .MuiOutlinedInput-root": {
-            "&:hover fieldset": {
-              borderColor: "#ffec99",
+            borderRadius: "8px",
+            "& .MuiOutlinedInput-notchedOutline": {
+              borderColor: "rgba(0, 0, 0, 0.23)",
+              borderWidth: "1px",
             },
-            "&.Mui-focused fieldset": {
+            "&:hover .MuiOutlinedInput-notchedOutline": {
+              borderColor: "#ffec99",
+              borderWidth: "2px",
+            },
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
               borderColor: "#e6d486",
+              borderWidth: "2px",
             },
           },
         },
@@ -94,12 +110,42 @@ export const theme = createTheme({
     MuiSelect: {
       styleOverrides: {
         root: {
+          borderRadius: "8px",
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: "rgba(0, 0, 0, 0.23)",
+            borderWidth: "1px",
+          },
           "&:hover .MuiOutlinedInput-notchedOutline": {
             borderColor: "#ffec99",
+            borderWidth: "2px",
           },
           "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
             borderColor: "#e6d486",
+            borderWidth: "2px",
           },
+        },
+      },
+    },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          "& .MuiOutlinedInput-root": {
+            borderRadius: "8px",
+          },
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: "12px",
+        },
+      },
+    },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          borderRadius: "12px",
         },
       },
     },

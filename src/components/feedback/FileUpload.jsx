@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Box, Button, Typography, Alert, Chip, Paper } from "@mui/material";
 import AttachFileIcon from "@mui/icons-material/AttachFile";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from "@/utils/constants";
 import { validateFileSize, validateFileType } from "@/utils/validation";
 
@@ -89,62 +90,70 @@ const FileUpload = ({ onFilesChange, error }) => {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col items-center">
-        <Button
-          component="label"
-          variant="contained"
-          startIcon={<AttachFileIcon />}
-          className="mb-4 px-6 py-2"
-          size="large"
-        >
-          Chọn file
-          <input
-            id="file-upload-input"
-            type="file"
-            multiple
-            onChange={handleFileSelect}
-            accept={ALLOWED_FILE_TYPES.join(",")}
-            className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-            style={{ clip: "rect(0 0 0 0)", clipPath: "inset(50%)" }}
-          />
-        </Button>
-
-        <Paper
-          className={`relative w-full overflow-hidden rounded-xl border-2 border-dashed p-6 text-center transition-all duration-300 ease-in-out ${
-            dragOver
-              ? "border-primary-dark bg-gray-100/40 shadow-md"
-              : "hover:border-primary-main border-gray-200 hover:bg-gray-100/10"
-          }`}
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          elevation={0}
-        >
-          <div className="relative">
-            <Typography variant="body2" className="text-gray-500">
-              Hỗ trợ: JPG, PNG, GIF, PDF, TXT, DOC, DOCX
-            </Typography>
-            <Typography variant="body2" className="text-gray-500">
-              Kích thước tối đa: {formatFileSize(MAX_FILE_SIZE)}
-            </Typography>
+      <Paper
+        className={`relative flex min-h-[180px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed p-6 text-center transition-all duration-300 ease-in-out ${
+          dragOver
+            ? "border-primary-dark bg-gray-100/40 shadow-lg"
+            : "hover:border-primary-main border-gray-200 hover:bg-gray-100/10"
+        }`}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        elevation={0}
+        onClick={() => document.getElementById("file-upload-input").click()}
+      >
+        <div className="flex flex-col items-center">
+          <div className="bg-primary-light/30 mb-4 rounded-full p-4">
+            <CloudUploadIcon className="text-primary-dark text-3xl" />
           </div>
-        </Paper>
-      </div>
+
+          <Typography variant="body1" className="mb-3 font-medium">
+            Kéo thả file vào đây hoặc click để chọn
+          </Typography>
+
+          <Typography variant="body2" className="mb-2 text-gray-500">
+            Hỗ trợ: JPG, PNG, GIF, PDF, TXT, DOC, DOCX
+          </Typography>
+
+          <Typography variant="body2" className="mb-4 text-gray-500">
+            Kích thước tối đa: {formatFileSize(MAX_FILE_SIZE)}
+          </Typography>
+
+          <Button
+            component="label"
+            variant="contained"
+            startIcon={<AttachFileIcon />}
+            size="medium"
+            className="px-6 py-1.5"
+          >
+            Chọn file
+            <input
+              id="file-upload-input"
+              type="file"
+              multiple
+              onChange={handleFileSelect}
+              accept={ALLOWED_FILE_TYPES.join(",")}
+              className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
+              style={{ clip: "rect(0 0 0 0)", clipPath: "inset(50%)" }}
+            />
+          </Button>
+        </div>
+      </Paper>
 
       {/* Error Alert */}
       {(uploadError || error) && (
-        <Alert severity="error" className="rounded-lg shadow-sm">
+        <Alert severity="error" className="flex items-center rounded-lg shadow-sm">
           {uploadError || error}
         </Alert>
       )}
 
       {/* Selected Files */}
       {files.length > 0 && (
-        <Box className="rounded-lg bg-gray-50/80 p-4">
-          <Typography variant="subtitle2" className="mb-3 font-medium text-gray-500">
+        <Box className="rounded-lg border border-gray-100 bg-gray-50/80 p-4">
+          <Typography variant="subtitle2" className="mb-3 font-medium text-gray-700">
             File đã chọn ({files.length}):
           </Typography>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             {files.map((file, index) => (
               <Chip
                 key={`${file.name}-${index}`}
@@ -152,16 +161,8 @@ const FileUpload = ({ onFilesChange, error }) => {
                 onDelete={() => handleRemoveFile(index)}
                 deleteIcon={<DeleteIcon />}
                 variant="outlined"
-                className="bg-white py-3 shadow-sm hover:bg-gray-50"
-                sx={{
-                  maxWidth: { xs: "100%", sm: 250 },
-                  borderRadius: "8px",
-                  "& .MuiChip-label": {
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  },
-                }}
+                className="max-w-full bg-white py-3 shadow-sm transition-all hover:bg-gray-50 sm:max-w-[250px] [&_.MuiChip-label]:overflow-hidden [&_.MuiChip-label]:text-ellipsis [&_.MuiChip-label]:whitespace-nowrap"
+                style={{ borderRadius: "8px" }}
               />
             ))}
           </div>
