@@ -23,8 +23,7 @@ const RegisterForm = ({ onRegister, loading = false, error = null, onSwitchToLog
 
   const { formData, errors, isSubmitting, handleChange, handleSubmit } = useForm(
     {
-      firstName: "",
-      lastName: "",
+      fullName: "",
       email: "",
       password: "",
       confirmPassword: "",
@@ -63,35 +62,20 @@ const RegisterForm = ({ onRegister, loading = false, error = null, onSwitchToLog
       {/* ==================== REGISTER FORM ==================== */}
       <form onSubmit={handleFormSubmit} className="w-full">
         <div className="space-y-6">
-          {/* ==================== NAME FIELDS ==================== */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
-            <div className="space-y-1">
-              <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
-                Họ
-              </Typography>
-              <FormField
-                name="firstName"
-                placeholder="Nhập họ của bạn"
-                value={formData.firstName}
-                onChange={handleChange}
-                error={errors.firstName}
-                startIcon={<Person className="text-xl text-gray-500" />}
-                className="w-full"
-              />
-            </div>
-            <div className="space-y-1">
-              <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
-                Tên
-              </Typography>
-              <FormField
-                name="lastName"
-                placeholder="Nhập tên của bạn"
-                value={formData.lastName}
-                onChange={handleChange}
-                error={errors.lastName}
-                className="w-full"
-              />
-            </div>
+          {/* ==================== FULL NAME FIELD ==================== */}
+          <div className="space-y-1">
+            <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
+              Họ và tên
+            </Typography>
+            <FormField
+              name="fullName"
+              placeholder="Nhập họ và tên của bạn"
+              value={formData.fullName}
+              onChange={handleChange}
+              error={errors.fullName}
+              startIcon={<Person className="text-xl text-gray-500" />}
+              className="w-full"
+            />
           </div>
 
           {/* ==================== EMAIL FIELD ==================== */}
