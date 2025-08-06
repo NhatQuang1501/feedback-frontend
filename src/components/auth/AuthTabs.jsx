@@ -9,6 +9,7 @@ import {
   useTheme,
   useMediaQuery,
   Container,
+  Paper,
 } from "@mui/material";
 import { Login, PersonAdd } from "@mui/icons-material";
 import LoginForm from "./LoginForm";
@@ -48,17 +49,16 @@ const AuthTabs = ({
         hidden={value !== index}
         id={`auth-tabpanel-${index}`}
         aria-labelledby={`auth-tab-${index}`}
+        className={`transition-opacity duration-300 ease-in-out ${
+          value === index ? "opacity-100" : "opacity-0"
+        }`}
         {...other}
-        style={{
-          transition: "opacity 0.3s ease-in-out",
-          opacity: value === index ? 1 : 0,
-        }}
       >
         {value === index && (
           <Box
             sx={{
-              paddingTop: { xs: 2, sm: 3 },
-              minHeight: currentTab === 0 ? "400px" : "600px",
+              pt: { xs: 2, sm: 3 },
+              minHeight: currentTab === 0 ? 400 : 600,
               display: "flex",
               flexDirection: "column",
               justifyContent: "flex-start",
@@ -73,92 +73,38 @@ const AuthTabs = ({
 
   // ==================== RENDER ====================
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        backgroundColor: "background.default",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 0,
-        overflowX: "hidden",
-        WebkitFontSmoothing: "antialiased",
-        MozOsxFontSmoothing: "grayscale",
-      }}
-    >
-      <Container
-        maxWidth="sm"
-        sx={{
-          padding: { xs: 1, sm: 2 },
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          minHeight: "100vh",
-        }}
+    <div className="mx-auto w-full max-w-4xl">
+      {/* ==================== HEADER ==================== */}
+      <div className="mb-8 text-center">
+        <Typography
+          variant="h3"
+          component="h1"
+          align="center"
+          className="text-shadow mb-2 text-[1.75rem] leading-tight font-bold text-[#ffec99] sm:text-[2.25rem] md:text-[2.75rem]"
+        >
+          Feedback Hub
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          align="center"
+          className="mx-auto mb-3 max-w-xl text-[0.9rem] leading-relaxed text-gray-600 sm:text-[1rem]"
+        >
+          Hệ thống quản lý phản hồi người dùng
+        </Typography>
+        <div className="mx-auto mb-6 h-1 w-16 rounded-full bg-[#ffec99]"></div>
+      </div>
+
+      {/* ==================== AUTH CARD ==================== */}
+      <Paper
+        elevation={6}
+        className="overflow-hidden rounded-2xl border border-[#fff1b8]/30 bg-gradient-to-br from-white to-[#fffef7] shadow-lg transition-all duration-300 ease-in-out"
       >
         <Card
           sx={{
-            width: "100%",
-            maxWidth: {
-              xs: "100%",
-              sm: 480,
-              md: 520,
-            },
-            minWidth: {
-              xs: 280,
-              sm: 400,
-            },
-            boxShadow: {
-              xs: 1,
-              sm: 3,
-              md: 4,
-            },
-            borderRadius: {
-              xs: 2,
-              sm: 3,
-              md: 4,
-            },
-            overflow: "hidden",
-            transform: "translateZ(0)",
-            backfaceVisibility: "hidden",
-            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-            contain: "layout style paint",
+            boxShadow: "none",
+            backgroundColor: "transparent",
           }}
         >
-          {/* ==================== HEADER ==================== */}
-          <Box
-            sx={{
-              textAlign: "center",
-              paddingTop: { xs: 2, sm: 3 },
-              paddingX: { xs: 2, sm: 3 },
-              paddingBottom: { xs: 1, sm: 2 },
-              backgroundColor: "background.paper",
-            }}
-          >
-            <Typography
-              variant={isMobile ? "h5" : "h4"}
-              component="h1"
-              gutterBottom
-              color="primary"
-              sx={{
-                fontWeight: 600,
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Feedback Hub
-            </Typography>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{
-                fontSize: { xs: "0.875rem", sm: "1rem" },
-                marginBottom: 1,
-              }}
-            >
-              Hệ thống quản lý phản hồi người dùng
-            </Typography>
-          </Box>
-
           {/* ==================== TABS NAVIGATION ==================== */}
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
@@ -174,18 +120,20 @@ const AuthTabs = ({
                   fontWeight: 500,
                   minHeight: { xs: 56, sm: 64 },
                   padding: { xs: "8px 12px", sm: "12px 16px" },
+                  color: "#6b7280",
                   "&:hover": {
-                    backgroundColor: "action.hover",
-                    transition: "background-color 0.2s ease",
+                    backgroundColor: "rgba(255, 236, 153, 0.04)",
+                    color: "#374151",
                   },
                   "&.Mui-selected": {
                     fontWeight: 600,
+                    color: "#374151",
                   },
                 },
                 "& .MuiTabs-indicator": {
                   height: 3,
                   borderRadius: "3px 3px 0 0",
-                  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+                  backgroundColor: "#ffec99",
                 },
                 "& .MuiTabs-flexContainer": {
                   height: { xs: 56, sm: 64 },
@@ -193,49 +141,26 @@ const AuthTabs = ({
               }}
             >
               <Tab
-                icon={<Login sx={{ fontSize: { xs: "1.2rem", sm: "1.5rem" } }} />}
+                icon={<Login sx={{ fontSize: { xs: "1.2rem", sm: "1.5rem" }, color: "inherit" }} />}
                 label="Đăng Nhập"
                 id="auth-tab-0"
                 aria-controls="auth-tabpanel-0"
                 iconPosition={isMobile ? "top" : "start"}
-                sx={{
-                  "& .MuiTab-iconWrapper": {
-                    marginBottom: isMobile ? 0.5 : 0,
-                    marginRight: isMobile ? 0 : 1,
-                  },
-                }}
               />
               <Tab
-                icon={<PersonAdd sx={{ fontSize: { xs: "1.2rem", sm: "1.5rem" } }} />}
+                icon={
+                  <PersonAdd sx={{ fontSize: { xs: "1.2rem", sm: "1.5rem" }, color: "inherit" }} />
+                }
                 label="Đăng Ký"
                 id="auth-tab-1"
                 aria-controls="auth-tabpanel-1"
                 iconPosition={isMobile ? "top" : "start"}
-                sx={{
-                  "& .MuiTab-iconWrapper": {
-                    marginBottom: isMobile ? 0.5 : 0,
-                    marginRight: isMobile ? 0 : 1,
-                  },
-                }}
               />
             </Tabs>
           </Box>
 
           {/* ==================== TAB CONTENT ==================== */}
-          <CardContent
-            sx={{
-              padding: {
-                xs: 2,
-                sm: 3,
-                md: 4,
-              },
-              "&:last-child": {
-                paddingBottom: { xs: 3, sm: 4, md: 5 },
-              },
-              minHeight: { xs: 400, sm: 450, md: 500 },
-              position: "relative",
-            }}
-          >
+          <CardContent className="p-6 sm:p-8 lg:p-10">
             <TabPanel value={currentTab} index={0}>
               <LoginForm
                 onLogin={onLogin}
@@ -255,8 +180,8 @@ const AuthTabs = ({
             </TabPanel>
           </CardContent>
         </Card>
-      </Container>
-    </Box>
+      </Paper>
+    </div>
   );
 };
 

@@ -1,21 +1,25 @@
-import React from 'react';
-import {
-  Button,
-  CircularProgress,
-} from '@mui/material';
+import React from "react";
+import { Button, CircularProgress } from "@mui/material";
 
 // ==================== SUBMIT BUTTON COMPONENT ====================
 const SubmitButton = ({
   children,
   loading = false,
   disabled = false,
-  variant = 'contained',
-  size = 'large',
+  variant = "contained",
+  size = "large",
   fullWidth = true,
-  type = 'submit',
+  type = "submit",
   onClick,
+  className = "",
   ...props
 }) => {
+  // Style giống feedback form
+  const buttonClasses =
+    variant === "contained"
+      ? `h-[52px] w-full min-w-0 rounded-xl bg-[#ffec99] text-base font-semibold text-[#333333] normal-case shadow-lg transition-all duration-200 ease-in-out hover:-translate-y-1 hover:bg-[#e6d486] hover:shadow-xl active:-translate-y-0.5 disabled:bg-gray-100 disabled:text-gray-400 disabled:shadow-none ${className}`
+      : `h-[52px] w-full min-w-0 rounded-xl border-2 border-[#e6d486] bg-white text-base font-medium text-[#333333] normal-case shadow-md transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:border-[#ffec99] hover:bg-[#fffef7] hover:shadow-lg active:translate-y-0 disabled:bg-gray-100 disabled:text-gray-400 disabled:shadow-none disabled:border-gray-300 ${className}`;
+
   // ==================== RENDER ====================
   return (
     <Button
@@ -25,29 +29,15 @@ const SubmitButton = ({
       size={size}
       disabled={loading || disabled}
       onClick={onClick}
+      className={buttonClasses}
       sx={{
-        height: 52,
-        borderRadius: 2,
-        fontSize: '1rem',
-        fontWeight: 600,
-        textTransform: 'none',
-        boxShadow: variant === 'contained' ? 2 : undefined,
-        '&:hover': {
-          boxShadow: variant === 'contained' ? 4 : 2,
-          transform: 'translateY(-1px)',
-        },
-        '&:disabled': {
-          backgroundColor: 'action.disabledBackground',
-        },
+        textTransform: "none",
+        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
         ...props.sx,
       }}
       {...props}
     >
-      {loading ? (
-        <CircularProgress size={24} color="inherit" />
-      ) : (
-        children
-      )}
+      {loading ? <CircularProgress size={24} color="inherit" /> : children}
     </Button>
   );
 };

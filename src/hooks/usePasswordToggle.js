@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 // ==================== PASSWORD TOGGLE HOOK ====================
 export const usePasswordToggle = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePassword = () => {
-    setShowPassword(prev => !prev);
+    setShowPassword((prev) => !prev);
   };
 
   return {
@@ -24,7 +24,7 @@ export const useMultiplePasswordToggle = (fields = []) => {
   const [passwordVisibility, setPasswordVisibility] = useState(initialState);
 
   const togglePassword = (fieldName) => {
-    setPasswordVisibility(prev => ({
+    setPasswordVisibility((prev) => ({
       ...prev,
       [fieldName]: !prev[fieldName],
     }));

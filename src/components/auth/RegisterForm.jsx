@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Typography,
-  Alert,
-  Divider,
-  Stack,
-  Grid,
-} from "@mui/material";
+import { Typography, Alert, Divider, Grid } from "@mui/material";
 import { Email, Lock, Person } from "@mui/icons-material";
 import GoogleIcon from "@mui/icons-material/Google";
 
@@ -24,17 +17,11 @@ import { validateRegisterForm } from "../../utils/validation";
 const RegisterForm = ({ onRegister, loading = false, error = null, onSwitchToLogin }) => {
   // ==================== HOOKS ====================
   const { passwordVisibility, togglePassword, getVisibility } = useMultiplePasswordToggle([
-    'password',
-    'confirmPassword'
+    "password",
+    "confirmPassword",
   ]);
-  
-  const {
-    formData,
-    errors,
-    isSubmitting,
-    handleChange,
-    handleSubmit,
-  } = useForm(
+
+  const { formData, errors, isSubmitting, handleChange, handleSubmit } = useForm(
     {
       firstName: "",
       lastName: "",
@@ -42,18 +29,18 @@ const RegisterForm = ({ onRegister, loading = false, error = null, onSwitchToLog
       password: "",
       confirmPassword: "",
     },
-    validateRegisterForm
+    validateRegisterForm,
   );
 
   // ==================== HANDLERS ====================
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    
+
     const success = await handleSubmit((data) => {
       const { confirmPassword, ...registerData } = data;
       return onRegister(registerData);
     });
-    
+
     if (success) {
       console.log("Registration successful");
     }
@@ -65,151 +52,151 @@ const RegisterForm = ({ onRegister, loading = false, error = null, onSwitchToLog
 
   // ==================== RENDER ====================
   return (
-    <Box>
+    <div className="w-full">
       {/* ==================== ERROR ALERT ==================== */}
       {error && (
-        <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+        <Alert severity="error" className="mb-6 rounded-lg">
           {error}
         </Alert>
       )}
 
       {/* ==================== REGISTER FORM ==================== */}
-      <Box component="form" onSubmit={handleFormSubmit}>
-        <Stack spacing={2.5}>
+      <form onSubmit={handleFormSubmit} className="w-full">
+        <div className="space-y-6">
           {/* ==================== NAME FIELDS ==================== */}
-          <Grid container spacing={2}>
-            <Grid item xs={6}>
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
+            <div className="space-y-1">
+              <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
+                Họ
+              </Typography>
               <FormField
                 name="firstName"
-                label="Họ"
+                placeholder="Nhập họ của bạn"
                 value={formData.firstName}
                 onChange={handleChange}
                 error={errors.firstName}
-                placeholder="Nhập họ của bạn"
-                startIcon={<Person color="action" sx={{ fontSize: '1.2rem' }} />}
+                startIcon={<Person className="text-xl text-gray-500" />}
+                className="w-full"
               />
-            </Grid>
-            <Grid item xs={6}>
+            </div>
+            <div className="space-y-1">
+              <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
+                Tên
+              </Typography>
               <FormField
                 name="lastName"
-                label="Tên"
+                placeholder="Nhập tên của bạn"
                 value={formData.lastName}
                 onChange={handleChange}
                 error={errors.lastName}
-                placeholder="Nhập tên của bạn"
+                className="w-full"
               />
-            </Grid>
-          </Grid>
+            </div>
+          </div>
 
           {/* ==================== EMAIL FIELD ==================== */}
-          <FormField
-            name="email"
-            type="email"
-            label="Email"
-            value={formData.email}
-            onChange={handleChange}
-            error={errors.email}
-            placeholder="Nhập email của bạn"
-            startIcon={<Email color="action" sx={{ fontSize: '1.2rem' }} />}
-          />
+          <div className="space-y-1">
+            <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
+              Địa chỉ email
+            </Typography>
+            <FormField
+              name="email"
+              type="email"
+              placeholder="yourname@example.com"
+              value={formData.email}
+              onChange={handleChange}
+              error={errors.email}
+              startIcon={<Email className="text-xl text-gray-500" />}
+              className="w-full"
+            />
+          </div>
 
           {/* ==================== PASSWORD FIELD ==================== */}
-          <FormField
-            name="password"
-            type="password"
-            label="Mật khẩu"
-            value={formData.password}
-            onChange={handleChange}
-            error={errors.password}
-            placeholder="Nhập mật khẩu của bạn"
-            startIcon={<Lock color="action" sx={{ fontSize: '1.2rem' }} />}
-            showPassword={getVisibility('password')}
-            onTogglePassword={() => togglePassword('password')}
-          />
+          <div className="space-y-1">
+            <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
+              Mật khẩu
+            </Typography>
+            <FormField
+              name="password"
+              type="password"
+              placeholder="Nhập mật khẩu của bạn"
+              value={formData.password}
+              onChange={handleChange}
+              error={errors.password}
+              startIcon={<Lock className="text-xl text-gray-500" />}
+              showPassword={getVisibility("password")}
+              onTogglePassword={() => togglePassword("password")}
+              className="w-full"
+            />
+          </div>
 
           {/* ==================== CONFIRM PASSWORD FIELD ==================== */}
-          <FormField
-            name="confirmPassword"
-            type="password"
-            label="Xác nhận mật khẩu"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            error={errors.confirmPassword}
-            placeholder="Nhập lại mật khẩu của bạn"
-            startIcon={<Lock color="action" sx={{ fontSize: '1.2rem' }} />}
-            showPassword={getVisibility('confirmPassword')}
-            onTogglePassword={() => togglePassword('confirmPassword')}
-          />
+          <div className="space-y-1">
+            <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
+              Xác nhận mật khẩu
+            </Typography>
+            <FormField
+              name="confirmPassword"
+              type="password"
+              placeholder="Nhập lại mật khẩu của bạn"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              error={errors.confirmPassword}
+              startIcon={<Lock className="text-xl text-gray-500" />}
+              showPassword={getVisibility("confirmPassword")}
+              onTogglePassword={() => togglePassword("confirmPassword")}
+              className="w-full"
+            />
+          </div>
 
           {/* ==================== SUBMIT BUTTON ==================== */}
-          <SubmitButton loading={loading || isSubmitting} sx={{ mt: 1 }}>
-            Đăng Ký
-          </SubmitButton>
+          <div className="pt-4">
+            <SubmitButton loading={loading || isSubmitting} className="w-full">
+              Đăng Ký
+            </SubmitButton>
+          </div>
 
           {/* ==================== DIVIDER ==================== */}
-          <Divider sx={{ my: 1 }}>
-            <Typography variant="body2" color="text.secondary" sx={{ px: 2 }}>
-              Hoặc
-            </Typography>
-          </Divider>
+          <div className="py-2">
+            <Divider className="relative">
+              <Typography
+                variant="body2"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform bg-white px-4 text-gray-500"
+              >
+                Hoặc
+              </Typography>
+            </Divider>
+          </div>
 
           {/* ==================== GOOGLE BUTTON ==================== */}
           <SocialButton
-            icon={<GoogleIcon sx={{ fontSize: '1.2rem' }} />}
+            icon={<GoogleIcon className="text-xl" />}
             onClick={handleGoogleRegister}
+            className="w-full"
           >
             Đăng ký với Google
           </SocialButton>
 
           {/* ==================== TERMS ==================== */}
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{
-              textAlign: "center",
-              fontSize: "0.875rem",
-              lineHeight: 1.6,
-              pt: 1,
-              opacity: 0.8,
-            }}
-          >
-            Bằng việc đăng ký, bạn đồng ý với{" "}
+          <div className="pt-4">
             <Typography
-              component="span"
               variant="body2"
-              sx={{
-                color: "primary.main",
-                textDecoration: "underline",
-                cursor: "pointer",
-                fontWeight: 500,
-                "&:hover": {
-                  textDecoration: "none",
-                },
-              }}
+              className="text-center text-sm leading-relaxed text-gray-600 opacity-80"
             >
-              Điều khoản sử dụng
-            </Typography>{" "}
-            và{" "}
-            <Typography
-              component="span"
-              variant="body2"
-              sx={{
-                color: "primary.main",
-                textDecoration: "underline",
-                cursor: "pointer",
-                fontWeight: 500,
-                "&:hover": {
-                  textDecoration: "none",
-                },
-              }}
-            >
-              Chính sách bảo mật
-            </Typography>{" "}
-            của chúng tôi.
-          </Typography>
-        </Stack>
-      </Box>
-    </Box>
+              Bằng việc đăng ký, bạn đồng ý với{" "}
+              <span className="cursor-pointer font-medium text-[#e6d486] underline transition-all duration-200 hover:text-[#ffec99] hover:no-underline">
+                Điều khoản sử dụng
+              </span>{" "}
+              và{" "}
+              <span className="cursor-pointer font-medium text-[#e6d486] underline transition-all duration-200 hover:text-[#ffec99] hover:no-underline">
+                Chính sách bảo mật
+              </span>{" "}
+              của chúng tôi.
+            </Typography>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 };
 

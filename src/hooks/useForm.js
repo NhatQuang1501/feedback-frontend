@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from "react";
 
 // ==================== CUSTOM FORM HOOK ====================
 export const useForm = (initialValues, validationFn) => {
@@ -9,24 +9,24 @@ export const useForm = (initialValues, validationFn) => {
   // ==================== HANDLERS ====================
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
-    setFormData(prev => ({
+
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
 
     // Clear error for this field when user starts typing
     if (errors[name]) {
-      setErrors(prev => ({
+      setErrors((prev) => ({
         ...prev,
-        [name]: '',
+        [name]: "",
       }));
     }
   };
 
   const handleSubmit = async (onSubmit) => {
     const validation = validationFn(formData);
-    
+
     if (!validation.isValid) {
       setErrors(validation.errors);
       return false;
@@ -39,7 +39,7 @@ export const useForm = (initialValues, validationFn) => {
       await onSubmit(formData);
       return true;
     } catch (error) {
-      console.error('Form submission error:', error);
+      console.error("Form submission error:", error);
       return false;
     } finally {
       setIsSubmitting(false);
@@ -53,7 +53,7 @@ export const useForm = (initialValues, validationFn) => {
   };
 
   const setFieldError = (fieldName, errorMessage) => {
-    setErrors(prev => ({
+    setErrors((prev) => ({
       ...prev,
       [fieldName]: errorMessage,
     }));

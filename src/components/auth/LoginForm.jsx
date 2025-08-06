@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Typography,
-  Alert,
-  Link,
-  Divider,
-  Stack,
-} from "@mui/material";
+import { Typography, Alert, Link, Divider, Box } from "@mui/material";
 import { Email, Lock } from "@mui/icons-material";
 import GoogleIcon from "@mui/icons-material/Google";
 
@@ -26,25 +19,19 @@ const LoginForm = ({ onLogin, loading = false, error = null, onSwitchToRegister 
   // ==================== HOOKS ====================
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const { showPassword, togglePassword } = usePasswordToggle();
-  
-  const {
-    formData,
-    errors,
-    isSubmitting,
-    handleChange,
-    handleSubmit,
-  } = useForm(
+
+  const { formData, errors, isSubmitting, handleChange, handleSubmit } = useForm(
     {
       email: "",
       password: "",
     },
-    validateLoginForm
+    validateLoginForm,
   );
 
   // ==================== HANDLERS ====================
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-    
+
     const success = await handleSubmit(onLogin);
     if (success) {
       console.log("Login successful");
@@ -69,84 +56,95 @@ const LoginForm = ({ onLogin, loading = false, error = null, onSwitchToRegister 
 
   // ==================== RENDER ====================
   return (
-    <Box>
+    <div className="w-full">
       {/* ==================== ERROR ALERT ==================== */}
       {error && (
-        <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
+        <Alert severity="error" className="mb-6 rounded-lg">
           {error}
         </Alert>
       )}
 
       {/* ==================== LOGIN FORM ==================== */}
-      <Box component="form" onSubmit={handleFormSubmit}>
-        <Stack spacing={2.5}>
+      <form onSubmit={handleFormSubmit} className="w-full">
+        <div className="space-y-6">
           {/* ==================== EMAIL FIELD ==================== */}
-          <FormField
-            name="email"
-            type="email"
-            label="Email"
-            value={formData.email}
-            onChange={handleChange}
-            error={errors.email}
-            placeholder="Nhập email của bạn"
-            startIcon={<Email color="action" sx={{ fontSize: '1.2rem' }} />}
-          />
+          <div className="space-y-1">
+            <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
+              Địa chỉ email
+            </Typography>
+            <FormField
+              name="email"
+              type="email"
+              placeholder="Nhập email của bạn"
+              value={formData.email}
+              onChange={handleChange}
+              error={errors.email}
+              startIcon={<Email className="text-xl text-gray-500" />}
+              className="w-full"
+            />
+          </div>
 
           {/* ==================== PASSWORD FIELD ==================== */}
-          <FormField
-            name="password"
-            type="password"
-            label="Mật khẩu"
-            value={formData.password}
-            onChange={handleChange}
-            error={errors.password}
-            placeholder="Nhập mật khẩu của bạn"
-            startIcon={<Lock color="action" sx={{ fontSize: '1.2rem' }} />}
-            showPassword={showPassword}
-            onTogglePassword={togglePassword}
-          />
+          <div className="space-y-1">
+            <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
+              Mật khẩu
+            </Typography>
+            <FormField
+              name="password"
+              type="password"
+              placeholder="Nhập mật khẩu của bạn"
+              value={formData.password}
+              onChange={handleChange}
+              error={errors.password}
+              startIcon={<Lock className="text-xl text-gray-500" />}
+              showPassword={showPassword}
+              onTogglePassword={togglePassword}
+              className="w-full"
+            />
+          </div>
 
           {/* ==================== FORGOT PASSWORD ==================== */}
-          <Box sx={{ textAlign: "right", mt: -1 }}>
+          <div className="flex justify-end">
             <Link
               component="button"
               type="button"
               variant="body2"
               onClick={handleForgotPasswordOpen}
-              sx={{
-                textDecoration: "none",
-                color: "primary.main",
-                fontSize: '0.875rem',
-                "&:hover": {
-                  textDecoration: "underline",
-                },
-              }}
+              className="cursor-pointer border-none bg-transparent text-sm font-medium text-[#e6d486] transition-colors duration-200 hover:text-[#ffec99] hover:underline"
             >
               Quên mật khẩu?
             </Link>
-          </Box>
+          </div>
 
           {/* ==================== SUBMIT BUTTON ==================== */}
-          <SubmitButton loading={loading || isSubmitting}>
-            Đăng Nhập
-          </SubmitButton>
+          <div className="pt-2">
+            <SubmitButton loading={loading || isSubmitting} className="w-full">
+              Đăng Nhập
+            </SubmitButton>
+          </div>
 
           {/* ==================== DIVIDER ==================== */}
-          <Divider sx={{ my: 1 }}>
-            <Typography variant="body2" color="text.secondary" sx={{ px: 2 }}>
-              Hoặc
-            </Typography>
-          </Divider>
+          <div className="py-2">
+            <Divider className="relative">
+              <Typography
+                variant="body2"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform bg-white px-4 text-gray-500"
+              >
+                Hoặc
+              </Typography>
+            </Divider>
+          </div>
 
           {/* ==================== GOOGLE BUTTON ==================== */}
           <SocialButton
-            icon={<GoogleIcon sx={{ fontSize: '1.2rem' }} />}
+            icon={<GoogleIcon className="text-xl" />}
             onClick={handleGoogleLogin}
+            className="w-full"
           >
             Đăng nhập với Google
           </SocialButton>
-        </Stack>
-      </Box>
+        </div>
+      </form>
 
       {/* ==================== FORGOT PASSWORD DIALOG ==================== */}
       <ForgotPasswordDialog
@@ -154,7 +152,7 @@ const LoginForm = ({ onLogin, loading = false, error = null, onSwitchToRegister 
         onClose={handleForgotPasswordClose}
         onSuccess={handleForgotPasswordSuccess}
       />
-    </Box>
+    </div>
   );
 };
 

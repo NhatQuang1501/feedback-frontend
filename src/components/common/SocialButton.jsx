@@ -1,7 +1,5 @@
-import React from 'react';
-import {
-  Button,
-} from '@mui/material';
+import React from "react";
+import { Button } from "@mui/material";
 
 // ==================== SOCIAL BUTTON COMPONENT ====================
 const SocialButton = ({
@@ -10,45 +8,38 @@ const SocialButton = ({
   onClick,
   disabled = false,
   fullWidth = true,
-  variant = 'outlined',
-  size = 'large',
+  variant = "outlined",
+  size = "large",
+  className = "",
   ...props
 }) => {
+  // Style giống feedback form - outlined button
+  const buttonClasses = `h-[52px] w-full min-w-0 rounded-xl border-2 border-[#e6d486] bg-white text-base font-medium text-[#333333] normal-case shadow-md transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:border-[#ffec99] hover:bg-[#fffef7] hover:shadow-lg active:translate-y-0 disabled:bg-gray-100 disabled:text-gray-400 disabled:shadow-none disabled:border-gray-300 ${className}`;
+
   // ==================== RENDER ====================
   return (
     <Button
       fullWidth={fullWidth}
       variant={variant}
       size={size}
-      startIcon={icon}
+      startIcon={<div className="text-xl">{icon}</div>}
       onClick={onClick}
       disabled={disabled}
+      className={buttonClasses}
       sx={{
-        height: 52,
-        borderRadius: 2,
-        textTransform: 'none',
-        fontSize: '1rem',
-        fontWeight: 500,
-        color: 'text.primary',
-        borderColor: 'divider',
-        borderWidth: 1.5,
-        '&:hover': {
-          borderColor: 'primary.main',
-          backgroundColor: 'primary.light',
-          color: 'primary.contrastText',
-          borderWidth: 1.5,
-          transform: 'translateY(-1px)',
-          boxShadow: 2,
-        },
-        '&:disabled': {
-          backgroundColor: 'action.disabledBackground',
-          borderColor: 'action.disabled',
+        textTransform: "none",
+        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+        "& .MuiButton-startIcon": {
+          marginRight: "8px",
+          "& > *:nth-of-type(1)": {
+            fontSize: "1.2rem",
+          },
         },
         ...props.sx,
       }}
       {...props}
     >
-      {children}
+      <span className="font-medium text-[#333333]">{children}</span>
     </Button>
   );
 };
