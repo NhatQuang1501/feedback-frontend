@@ -55,6 +55,21 @@ export const validateName = (name, fieldName) => {
   return errors;
 };
 
+// ==================== FULL NAME VALIDATION ====================
+export const validateFullName = (fullName) => {
+  const errors = {};
+
+  if (!fullName.trim()) {
+    errors.fullName = "Họ và tên là bắt buộc";
+  } else if (fullName.trim().length < 2) {
+    errors.fullName = "Họ và tên phải có ít nhất 2 ký tự";
+  } else if (fullName.trim().length > 100) {
+    errors.fullName = "Họ và tên không được quá 100 ký tự";
+  }
+
+  return errors;
+};
+
 // ==================== CONFIRM PASSWORD VALIDATION ====================
 export const validateConfirmPassword = (password, confirmPassword) => {
   const errors = {};
@@ -84,8 +99,7 @@ export const validateLoginForm = (formData) => {
 // ==================== REGISTER FORM VALIDATION ====================
 export const validateRegisterForm = (formData) => {
   const errors = {
-    ...validateName(formData.firstName, "Họ"),
-    ...validateName(formData.lastName, "Tên"),
+    ...validateFullName(formData.fullName),
     ...validateEmailAuth(formData.email),
     ...validateStrongPassword(formData.password),
     ...validateConfirmPassword(formData.password, formData.confirmPassword),
@@ -106,6 +120,8 @@ export const validateForgotPasswordForm = (email) => {
     isValid: Object.keys(errors).length === 0,
   };
 };
+
+// ==================== FEEDBACK FORM VALIDATION ====================
 import { MAX_FILE_SIZE, ALLOWED_FILE_TYPES } from "./constants";
 
 export const validateEmail = (email) => {
