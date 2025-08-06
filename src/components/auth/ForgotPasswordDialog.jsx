@@ -1,87 +1,73 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
-  Button,
   Typography,
   Box,
   Alert,
-  CircularProgress,
-  InputAdornment,
+  Button,
   Stack,
 } from "@mui/material";
 import { Email, ArrowBack } from "@mui/icons-material";
 
+// Custom components
+import FormField from "../common/FormField";
+import SubmitButton from "../common/SubmitButton";
+
+// Hooks and utils
+import { useForm } from "../../hooks/useForm";
+import { validateForgotPasswordForm } from "../../utils/validation";
+
+// ==================== FORGOT PASSWORD DIALOG COMPONENT ====================
 const ForgotPasswordDialog = ({ open, onClose, onSuccess = null }) => {
-  // ==================== STATE ====================
-  const [email, setEmail] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  // ==================== HOOKS ====================
+  const {
+    formData,
+    errors,
+    isSubmitting,
+    handleChange,
+    handleSubmit,
+    resetForm,
+  } = useForm(
+    { email: "" },
+    (data) => validateForgotPasswordForm(data.email)
+  );
+
+  const [success, setSuccess] = React.useState(false);
 
   // ==================== HANDLERS ====================
   const handleClose = () => {
-    setEmail("");
-    setError("");
+    resetForm();
     setSuccess(false);
-    setLoading(false);
     onClose();
   };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-    if (error) {
-      setError("");
-    }
-  };
-
-  const validateEmail = () => {
-    if (!email.trim()) {
-      setError("Email là bắt buộc");
-      return false;
-    }
-
-    const emailRegex = /\S+@\S+\.\S+/;
-    if (!emailRegex.test(email)) {
-      setError("Email không hợp lệ");
-      return false;
-    }
-
-    return true;
-  };
-
-  const handleSubmit = async () => {
-    if (!validateEmail()) {
-      return;
-    }
-
-    setLoading(true);
-
-    try {
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    
+    const submitSuccess = await handleSubmit(async (data) => {
+      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
-
+      
+      console.log("Gửi email reset password đến:", data.email);
       setSuccess(true);
 
       if (onSuccess) {
-        onSuccess(email);
+        onSuccess(data.email);
       }
 
+      // Auto close after 3 seconds
       setTimeout(() => {
         handleClose();
       }, 3000);
-    } catch (error) {
-      setError("Có lỗi xảy ra. Vui lòng thử lại sau.");
-    } finally {
-      setLoading(false);
-    }
+    });
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter" && !loading && !success) {
-      handleSubmit();
+    if (e.key === "Enter" && !isSubmitting && !success) {
+      handleFormSubmit(e);
     }
   };
 
@@ -99,8 +85,8 @@ const ForgotPasswordDialog = ({ open, onClose, onSuccess = null }) => {
           maxWidth: 480,
         },
       }}
-      disableBackdropClick={loading}
-      disableEscapeKeyDown={loading}
+      disableBackdropClick={isSubmitting}
+      disableEscapeKeyDown={isSubmitting}
     >
       {/* ==================== DIALOG TITLE ==================== */}
       <DialogTitle sx={{ textAlign: "center", pb: 2, pt: 3 }}>
@@ -112,7 +98,7 @@ const ForgotPasswordDialog = ({ open, onClose, onSuccess = null }) => {
             gap: 1.5,
           }}
         >
-          <Email color="primary" sx={{ fontSize: "1.8rem" }} />
+          <Email color="primary" sx={{ fontSize: '1.8rem' }} />
           <Typography variant="h5" component="span" sx={{ fontWeight: 600 }}>
             Quên Mật Khẩu
           </Typography>
@@ -122,69 +108,48 @@ const ForgotPasswordDialog = ({ open, onClose, onSuccess = null }) => {
       {/* ==================== DIALOG CONTENT ==================== */}
       <DialogContent sx={{ px: 3, py: 2 }}>
         {!success ? (
-          <Stack spacing={3}>
-            <Typography
-              variant="body1"
-              color="text.secondary"
-              sx={{
-                textAlign: "center",
-                lineHeight: 1.6,
-                fontSize: "1rem",
-              }}
-            >
-              Nhập email của bạn và chúng tôi sẽ gửi link đặt lại mật khẩu
-            </Typography>
+          <Box component="form" onSubmit={handleFormSubmit}>
+            <Stack spacing={3}>
+              <Typography
+                variant="body1"
+                color="text.secondary"
+                sx={{
+                  textAlign: "center",
+                  lineHeight: 1.6,
+                  fontSize: '1rem',
+                }}
+              >
+                Nhập email của bạn và chúng tôi sẽ gửi link đặt lại mật khẩu
+              </Typography>
 
-            <TextField
-              fullWidth
-              type="email"
-              label="Email"
-              value={email}
-              onChange={handleEmailChange}
-              onKeyPress={handleKeyPress}
-              error={!!error}
-              helperText={error}
-              disabled={loading}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Email color="action" sx={{ fontSize: "1.2rem" }} />
-                  </InputAdornment>
-                ),
-              }}
-              placeholder="Nhập email của bạn"
-              autoFocus
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: 2,
-                  height: 56,
-                  "& .MuiInputAdornment-root": {
-                    marginLeft: 0,
-                  },
-                },
-                "& .MuiInputBase-input": {
-                  paddingLeft: 1,
-                  fontSize: "1rem",
-                },
-                "& .MuiFormLabel-root": {
-                  fontSize: "1rem",
-                },
-              }}
-            />
-          </Stack>
+              <FormField
+                name="email"
+                type="email"
+                label="Email"
+                value={formData.email}
+                onChange={handleChange}
+                onKeyPress={handleKeyPress}
+                error={errors.email}
+                placeholder="Nhập email của bạn"
+                startIcon={<Email color="action" sx={{ fontSize: '1.2rem' }} />}
+                disabled={isSubmitting}
+                autoFocus
+              />
+            </Stack>
+          </Box>
         ) : (
           <Stack spacing={2} sx={{ textAlign: "center", py: 2 }}>
             <Alert
               severity="success"
               sx={{
                 borderRadius: 2,
-                "& .MuiAlert-message": {
+                '& .MuiAlert-message': {
                   width: "100%",
                 },
               }}
             >
               <Typography variant="body1" sx={{ fontWeight: 600, mb: 1 }}>
-                Email đ�� được gửi thành công!
+                Email đã được gửi thành công!
               </Typography>
               <Typography variant="body2" sx={{ mb: 1, opacity: 0.9 }}>
                 Chúng tôi đã gửi link đặt lại mật khẩu đến:
@@ -197,7 +162,7 @@ const ForgotPasswordDialog = ({ open, onClose, onSuccess = null }) => {
                   mb: 1,
                 }}
               >
-                {email}
+                {formData.email}
               </Typography>
               <Typography
                 variant="body2"
@@ -211,7 +176,7 @@ const ForgotPasswordDialog = ({ open, onClose, onSuccess = null }) => {
               </Typography>
             </Alert>
 
-            <Typography variant="body2" color="text.secondary" sx={{ fontSize: "0.875rem" }}>
+            <Typography variant="body2" color="text.secondary" sx={{ fontSize: '0.875rem' }}>
               Dialog sẽ tự động đóng sau 3 giây...
             </Typography>
           </Stack>
@@ -225,66 +190,44 @@ const ForgotPasswordDialog = ({ open, onClose, onSuccess = null }) => {
             <Button
               onClick={handleClose}
               startIcon={<ArrowBack />}
-              disabled={loading}
+              disabled={isSubmitting}
               sx={{
                 textTransform: "none",
                 color: "text.secondary",
                 borderRadius: 2,
                 px: 2,
                 py: 1,
-                fontSize: "0.95rem",
+                fontSize: '0.95rem',
               }}
             >
               Quay lại
             </Button>
 
-            <Button
-              onClick={handleSubmit}
-              variant="contained"
-              disabled={loading || !email.trim()}
+            <SubmitButton
+              onClick={handleFormSubmit}
+              loading={isSubmitting}
+              disabled={!formData.email.trim()}
               sx={{
-                textTransform: "none",
                 minWidth: 140,
-                borderRadius: 2,
                 px: 3,
                 py: 1,
-                fontSize: "0.95rem",
-                fontWeight: 600,
-                boxShadow: 2,
-                "&:hover": {
-                  boxShadow: 4,
-                },
+                fontSize: '0.95rem',
               }}
             >
-              {loading ? (
-                <>
-                  <CircularProgress size={18} color="inherit" sx={{ mr: 1 }} />
-                  Đang gửi...
-                </>
-              ) : (
-                "Gửi Email"
-              )}
-            </Button>
+              Gửi Email
+            </SubmitButton>
           </>
         ) : (
-          <Button
+          <SubmitButton
             onClick={handleClose}
-            variant="contained"
             fullWidth
             sx={{
-              textTransform: "none",
-              borderRadius: 2,
               py: 1.5,
-              fontSize: "1rem",
-              fontWeight: 600,
-              boxShadow: 2,
-              "&:hover": {
-                boxShadow: 4,
-              },
+              fontSize: '1rem',
             }}
           >
             Đóng
-          </Button>
+          </SubmitButton>
         )}
       </DialogActions>
     </Dialog>

@@ -1,77 +1,54 @@
 import React, { useState } from "react";
 import {
   Box,
-  TextField,
-  Button,
   Typography,
   Alert,
-  CircularProgress,
-  InputAdornment,
-  IconButton,
   Link,
   Divider,
   Stack,
 } from "@mui/material";
-import { Visibility, VisibilityOff, Email, Lock } from "@mui/icons-material";
-import ForgotPasswordDialog from "./ForgotPasswordDialog";
+import { Email, Lock } from "@mui/icons-material";
 import GoogleIcon from "@mui/icons-material/Google";
 
-const LoginForm = ({ onLogin, loading = false, error = null, onSwitchToRegister }) => {
-  // ==================== STATE ====================
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+// Custom components
+import FormField from "../common/FormField";
+import SubmitButton from "../common/SubmitButton";
+import SocialButton from "../common/SocialButton";
+import ForgotPasswordDialog from "./ForgotPasswordDialog";
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState({});
+// Hooks and utils
+import { useForm } from "../../hooks/useForm";
+import { usePasswordToggle } from "../../hooks/usePasswordToggle";
+import { validateLoginForm } from "../../utils/validation";
+
+// ==================== LOGIN FORM COMPONENT ====================
+const LoginForm = ({ onLogin, loading = false, error = null, onSwitchToRegister }) => {
+  // ==================== HOOKS ====================
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
+  const { showPassword, togglePassword } = usePasswordToggle();
+  
+  const {
+    formData,
+    errors,
+    isSubmitting,
+    handleChange,
+    handleSubmit,
+  } = useForm(
+    {
+      email: "",
+      password: "",
+    },
+    validateLoginForm
+  );
 
   // ==================== HANDLERS ====================
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    if (errors[name]) {
-      setErrors((prev) => ({
-        ...prev,
-        [name]: "",
-      }));
-    }
-  };
-
-  const validateForm = () => {
-    const newErrors = {};
-
-    if (!formData.email) {
-      newErrors.email = "Email là bắt buộc";
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = "Email không hợp lệ";
-    }
-
-    if (!formData.password) {
-      newErrors.password = "Mật khẩu là bắt buộc";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Mật khẩu phải có ít nhất 6 ký tự";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-
-    if (validateForm()) {
-      onLogin(formData);
+    
+    const success = await handleSubmit(onLogin);
+    if (success) {
+      console.log("Login successful");
     }
-  };
-
-  const handleTogglePassword = () => {
-    setShowPassword(!showPassword);
   };
 
   const handleForgotPasswordOpen = () => {
@@ -101,90 +78,32 @@ const LoginForm = ({ onLogin, loading = false, error = null, onSwitchToRegister 
       )}
 
       {/* ==================== LOGIN FORM ==================== */}
-      <Box component="form" onSubmit={handleSubmit}>
+      <Box component="form" onSubmit={handleFormSubmit}>
         <Stack spacing={2.5}>
           {/* ==================== EMAIL FIELD ==================== */}
-          <TextField
-            fullWidth
+          <FormField
             name="email"
             type="email"
             label="Email"
             value={formData.email}
             onChange={handleChange}
-            error={!!errors.email}
-            helperText={errors.email}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Email color="action" sx={{ fontSize: "1.2rem" }} />
-                </InputAdornment>
-              ),
-            }}
+            error={errors.email}
             placeholder="Nhập email của bạn"
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 2,
-                height: 56,
-                "& .MuiInputAdornment-root": {
-                  marginLeft: 0,
-                },
-              },
-              "& .MuiInputBase-input": {
-                paddingLeft: 1,
-                fontSize: "1rem",
-              },
-              "& .MuiFormLabel-root": {
-                fontSize: "1rem",
-              },
-            }}
+            startIcon={<Email color="action" sx={{ fontSize: '1.2rem' }} />}
           />
 
           {/* ==================== PASSWORD FIELD ==================== */}
-          <TextField
-            fullWidth
+          <FormField
             name="password"
-            type={showPassword ? "text" : "password"}
+            type="password"
             label="Mật khẩu"
             value={formData.password}
             onChange={handleChange}
-            error={!!errors.password}
-            helperText={errors.password}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Lock color="action" sx={{ fontSize: "1.2rem" }} />
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={handleTogglePassword}
-                    edge="end"
-                    size="small"
-                    sx={{ mr: 0.5 }}
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
+            error={errors.password}
             placeholder="Nhập mật khẩu của bạn"
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 2,
-                height: 56,
-                "& .MuiInputAdornment-root": {
-                  marginLeft: 0,
-                },
-              },
-              "& .MuiInputBase-input": {
-                paddingLeft: 1,
-                fontSize: "1rem",
-              },
-              "& .MuiFormLabel-root": {
-                fontSize: "1rem",
-              },
-            }}
+            startIcon={<Lock color="action" sx={{ fontSize: '1.2rem' }} />}
+            showPassword={showPassword}
+            onTogglePassword={togglePassword}
           />
 
           {/* ==================== FORGOT PASSWORD ==================== */}
@@ -197,7 +116,7 @@ const LoginForm = ({ onLogin, loading = false, error = null, onSwitchToRegister 
               sx={{
                 textDecoration: "none",
                 color: "primary.main",
-                fontSize: "0.875rem",
+                fontSize: '0.875rem',
                 "&:hover": {
                   textDecoration: "underline",
                 },
@@ -208,30 +127,9 @@ const LoginForm = ({ onLogin, loading = false, error = null, onSwitchToRegister 
           </Box>
 
           {/* ==================== SUBMIT BUTTON ==================== */}
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            size="large"
-            disabled={loading}
-            sx={{
-              height: 52,
-              borderRadius: 2,
-              fontSize: "1rem",
-              fontWeight: 600,
-              textTransform: "none",
-              boxShadow: 2,
-              "&:hover": {
-                boxShadow: 4,
-                transform: "translateY(-1px)",
-              },
-              "&:disabled": {
-                backgroundColor: "action.disabledBackground",
-              },
-            }}
-          >
-            {loading ? <CircularProgress size={24} color="inherit" /> : "Đăng Nhập"}
-          </Button>
+          <SubmitButton loading={loading || isSubmitting}>
+            Đăng Nhập
+          </SubmitButton>
 
           {/* ==================== DIVIDER ==================== */}
           <Divider sx={{ my: 1 }}>
@@ -241,33 +139,12 @@ const LoginForm = ({ onLogin, loading = false, error = null, onSwitchToRegister 
           </Divider>
 
           {/* ==================== GOOGLE BUTTON ==================== */}
-          <Button
-            fullWidth
-            variant="outlined"
-            size="large"
-            startIcon={<GoogleIcon sx={{ fontSize: "1.2rem" }} />}
+          <SocialButton
+            icon={<GoogleIcon sx={{ fontSize: '1.2rem' }} />}
             onClick={handleGoogleLogin}
-            sx={{
-              height: 52,
-              borderRadius: 2,
-              textTransform: "none",
-              fontSize: "1rem",
-              fontWeight: 500,
-              color: "text.primary",
-              borderColor: "divider",
-              borderWidth: 1.5,
-              "&:hover": {
-                borderColor: "primary.main",
-                backgroundColor: "primary.light",
-                color: "primary.contrastText",
-                borderWidth: 1.5,
-                transform: "translateY(-1px)",
-                boxShadow: 2,
-              },
-            }}
           >
             Đăng nhập với Google
-          </Button>
+          </SocialButton>
         </Stack>
       </Box>
 
