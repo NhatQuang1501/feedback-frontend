@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
+import feedbackReducer from "./slices/feedbackSlice";
 
 export const store = configureStore({
   reducer: {
-    // Add your slices here
+    feedback: feedbackReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
