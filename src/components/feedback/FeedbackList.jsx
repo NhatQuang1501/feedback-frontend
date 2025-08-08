@@ -77,7 +77,7 @@ const FeedbackList = ({ feedbacks, loading }) => {
   };
 
   const handleViewDetail = (feedbackId) => {
-    navigate(`/feedback/${feedbackId}`);
+    navigate(`/feedbacks/${feedbackId}`);
   };
 
   const formatDate = (dateString) => {

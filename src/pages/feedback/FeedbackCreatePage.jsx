@@ -2,7 +2,7 @@ import React from "react";
 import FeedbackForm from "@/components/feedback/FeedbackForm";
 import { Paper, Typography } from "@mui/material";
 
-const FeedbackPage = () => {
+const FeedbackCreatePage = () => {
   return (
     <div className="mx-auto w-full max-w-4xl">
       <div className="mb-8 text-center">
@@ -34,4 +34,4 @@ const FeedbackPage = () => {
   );
 };
 
-export default FeedbackPage;
+export default FeedbackCreatePage;

@@ -9,7 +9,7 @@ import AuthLayout from "@/layouts/AuthLayout";
 import AdminLayout from "@/layouts/AdminLayout";
 
 const DashboardPage = lazy(() => import("@/pages/dashboard/DashboardPage"));
-const FeedbackPage = lazy(() => import("@/pages/feedback/FeedbackPage"));
+const FeedbackCreatePage = lazy(() => import("@/pages/feedback/FeedbackCreatePage"));
 const NotFoundPage = lazy(() => import("@/pages/static/NotFoundPage"));
 const AuthPage = lazy(() => import("@/pages/auth/AuthPage"));
 const FeedbackManagementPage = lazy(() => import("@/pages/feedback/FeedbackManagementPage"));
@@ -28,7 +28,7 @@ function App() {
             }
           >
             <Routes>
-              {/* Auth Routes - No Header/Footer */}
+              {/* Auth Routes */}
               <Route path="/auth" element={<AuthLayout />}>
                 <Route index element={<Navigate to="/auth/login" replace />} />
                 <Route path="login" element={<AuthPage />} />
@@ -37,7 +37,7 @@ function App() {
                 <Route path="verify-otp" element={<div>Verify OTP Page</div>} />
               </Route>
 
-              {/* Admin Routes - With Admin Header/Footer */}
+              {/* Admin Routes */}
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<Navigate to="/admin/feedbacks" replace />} />
                 <Route path="feedbacks" element={<FeedbackManagementPage />} />
@@ -45,15 +45,15 @@ function App() {
                 <Route path="dashboard" element={<AdminDashboardPage />} />
               </Route>
 
-              {/* Main Routes - With Header/Footer */}
+              {/* Main Routes */}
               <Route path="/" element={<MainLayout />}>
-                <Route index element={<Navigate to="/feedback" replace />} />
+                <Route index element={<Navigate to="/feedbacks/create" replace />} />
                 <Route path="dashboard" element={<DashboardPage />} />
-                <Route path="feedback" element={<FeedbackPage />} />
-                <Route path="feedback/:id" element={<FeedbackDetailPage />} />
+                <Route path="feedbacks/create" element={<FeedbackCreatePage />} />
+                <Route path="feedbacks/:id" element={<FeedbackDetailPage />} />
               </Route>
 
-              {/* 404 Page - No Layout */}
+              {/* 404 Page */}
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>

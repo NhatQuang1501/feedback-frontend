@@ -15,9 +15,9 @@ const NotFoundPage = () => {
         Trang không tồn tại
       </Typography>
       <Typography variant="body1" className="mb-8 text-gray-500">
-        Trang bạn đang tìm kiếm không tồn tại hoặc đã bị di chuyển.
+        Trang bạn đang tìm kiếm không tồn tại.
       </Typography>
-      <Button component={Link} to="/" variant="contained" color="primary" size="large">
+      <Button component={Link} variant="contained" color="primary" size="large">
         Quay về trang chủ
       </Button>
     </Container>

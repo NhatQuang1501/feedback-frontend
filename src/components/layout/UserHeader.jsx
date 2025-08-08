@@ -13,7 +13,7 @@ const UserHeader = () => {
   const navigationItems = [
     {
       label: "Phản hồi",
-      path: "/feedback",
+      path: "/feedbacks/create",
     },
     {
       label: "Dashboard",

@@ -1,15 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  CardContent,
-  Button,
-  Typography,
-  Alert,
-  CircularProgress,
-  Snackbar,
-  Box,
-  TextareaAutosize,
-} from "@mui/material";
+import { CardContent, Typography, Alert, Snackbar, Box, TextareaAutosize } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { submitFeedback, resetSubmitState } from "@/store/slices/feedbackSlice";
@@ -18,6 +9,8 @@ import { validateFeedbackForm } from "@/utils/validation";
 import FileUpload from "./FileUpload";
 import TextField from "@/components/common/TextField";
 import CustomSelect from "@/components/common/CustomSelect";
+import ConfirmDialog from "@/components/common/ConfirmDialog";
+import Button from "@/components/common/Button";
 
 const FeedbackForm = () => {
   const dispatch = useDispatch();
@@ -35,6 +28,9 @@ const FeedbackForm = () => {
 
   const [errors, setErrors] = useState({});
   const [showSuccess, setShowSuccess] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [confirmDialogType, setConfirmDialogType] = useState("submit");
+  const [confirmAction, setConfirmAction] = useState(null);
 
   useEffect(() => {
     if (submitSuccess) {
@@ -74,16 +70,48 @@ const FeedbackForm = () => {
     }));
   };
 
-  const handleSubmit = async (event) => {
+  const handleConfirmSubmit = (event) => {
     event.preventDefault();
 
     const validation = validateFeedbackForm(formData);
-
     if (!validation.isValid) {
       setErrors(validation.errors);
       return;
     }
 
+    setConfirmDialogType("submit");
+    setConfirmAction(() => () => handleSubmit());
+    setConfirmDialogOpen(true);
+  };
+
+  const handleConfirmReset = () => {
+    const hasData = Object.values(formData).some((value) => {
+      if (Array.isArray(value)) return value.length > 0;
+      return value !== "";
+    });
+
+    if (!hasData) {
+      handleReset();
+      return;
+    }
+
+    setConfirmDialogType("warning");
+    setConfirmAction(() => handleReset);
+    setConfirmDialogOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setConfirmDialogOpen(false);
+  };
+
+  const handleConfirmAction = () => {
+    if (confirmAction) {
+      confirmAction();
+    }
+    setConfirmDialogOpen(false);
+  };
+
+  const handleSubmit = async () => {
     setErrors({});
 
     const submitData = {
@@ -127,7 +155,7 @@ const FeedbackForm = () => {
   return (
     <>
       <CardContent className="p-6 sm:p-8 lg:p-10">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleConfirmSubmit} className="space-y-6">
           {/* Error Alert */}
           {submitError && (
             <Alert severity="error" className="mb-4">
@@ -204,7 +232,6 @@ const FeedbackForm = () => {
                   Loại phản hồi
                 </Typography>
                 <CustomSelect
-                  label="Loại phản hồi"
                   value={formData.type}
                   onChange={handleInputChange("type")}
                   options={FEEDBACK_TYPES}
@@ -219,7 +246,6 @@ const FeedbackForm = () => {
                   Mức độ ưu tiên
                 </Typography>
                 <CustomSelect
-                  label="Mức độ ưu tiên"
                   value={formData.priority}
                   onChange={handleInputChange("priority")}
                   options={PRIORITY_LEVELS}
@@ -301,39 +327,44 @@ const FeedbackForm = () => {
           {/* Actions */}
           <Box className="flex flex-col justify-center gap-3 pt-4 sm:flex-row sm:gap-6">
             <Button
-              type="button"
               variant="outlined"
               size="large"
-              onClick={handleReset}
+              onClick={handleConfirmReset}
               startIcon={<RefreshIcon />}
               disabled={isSubmitting}
-              className={`h-[52px] w-full min-w-0 rounded-xl text-base font-semibold normal-case shadow-lg transition-all duration-200 ease-in-out ${
-                isSubmitting
-                  ? "border-gray-300 bg-gray-100 text-gray-400 shadow-none"
-                  : "border-amber-600 bg-white text-amber-400 hover:-translate-y-1 hover:border-amber-700 hover:bg-amber-50 hover:shadow-xl active:-translate-y-0.5"
-              } sm:order-1 sm:w-40`}
+              className="border text-amber-400 hover:border-amber-500 hover:text-amber-500 sm:order-1 sm:w-40"
             >
               Làm mới
             </Button>
             <Button
-              type="submit"
-              variant="contained"
+              variant="primary"
               size="large"
-              startIcon={
-                isSubmitting ? <CircularProgress size={20} color="inherit" /> : <SendIcon />
-              }
-              disabled={isSubmitting}
-              className={`h-[52px] w-full min-w-0 rounded-xl text-base font-semibold normal-case shadow-lg transition-all duration-200 ease-in-out ${
-                isSubmitting
-                  ? "bg-gray-100 text-gray-400 shadow-none"
-                  : "bg-amber-400 text-white hover:-translate-y-1 hover:bg-amber-500 hover:shadow-xl active:-translate-y-0.5"
-              } sm:order-2 sm:w-40`}
+              type="submit"
+              startIcon={<SendIcon />}
+              loading={isSubmitting}
+              className="sm:order-2 sm:w-45"
             >
-              {isSubmitting ? "Đang gửi..." : "Gửi phản hồi"}
+              Gửi phản hồi
             </Button>
           </Box>
         </form>
       </CardContent>
+
+      <ConfirmDialog
+        open={confirmDialogOpen}
+        onClose={handleCloseDialog}
+        onConfirm={handleConfirmAction}
+        title={confirmDialogType === "submit" ? "Xác nhận gửi phản hồi" : "Xác nhận làm mới"}
+        content={
+          confirmDialogType === "submit"
+            ? "Bạn có chắc chắn muốn gửi phản hồi này không?"
+            : "Bạn có chắc chắn muốn làm mới form và xóa tất cả thông tin đã nhập không?"
+        }
+        confirmText={confirmDialogType === "submit" ? "Gửi phản hồi" : "Làm mới"}
+        cancelText="Hủy bỏ"
+        type={confirmDialogType}
+        loading={isSubmitting && confirmDialogType === "submit"}
+      />
 
       {/* Success Snackbar */}
       <Snackbar
