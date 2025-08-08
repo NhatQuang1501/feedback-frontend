@@ -1,5 +1,5 @@
-// CustomTextField.jsx
 import React from "react";
+import PropTypes from "prop-types";
 import { TextField as MuiTextField } from "@mui/material";
 
 const TextField = ({ className, InputProps, ...props }) => {
@@ -24,6 +24,14 @@ const TextField = ({ className, InputProps, ...props }) => {
       }}
     />
   );
+};
+
+TextField.propTypes = {
+  className: PropTypes.string,
+  InputProps: PropTypes.shape({
+    className: PropTypes.string,
+    sx: PropTypes.object,
+  }),
 };
 
 export default TextField;

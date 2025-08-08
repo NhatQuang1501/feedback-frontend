@@ -158,6 +158,12 @@ export const validateFeedbackForm = (formData) => {
   } else if (!validateEmail(formData.email)) {
     errors.email = "Email không hợp lệ";
   }
+  // Title
+  if (!validateRequired(formData.title)) {
+    errors.title = "Vui lòng nhập tiêu đề";
+  } else if (!validateMinLength(formData.title, 5)) {
+    errors.title = "Tiêu đề phải có ít nhất 5 ký tự";
+  }
   // Feedback content
   if (!validateRequired(formData.content)) {
     errors.content = "Vui lòng nhập nội dung phản hồi";

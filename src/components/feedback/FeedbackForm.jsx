@@ -2,17 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   CardContent,
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
   Button,
   Typography,
   Alert,
   CircularProgress,
-  FormHelperText,
   Snackbar,
   Box,
+  TextareaAutosize,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import RefreshIcon from "@mui/icons-material/Refresh";
@@ -20,6 +16,8 @@ import { submitFeedback, resetSubmitState } from "@/store/slices/feedbackSlice";
 import { FEEDBACK_TYPES, PRIORITY_LEVELS } from "@/utils/constants";
 import { validateFeedbackForm } from "@/utils/validation";
 import FileUpload from "./FileUpload";
+import TextField from "@/components/common/TextField";
+import CustomSelect from "@/components/common/CustomSelect";
 
 const FeedbackForm = () => {
   const dispatch = useDispatch();
@@ -28,6 +26,7 @@ const FeedbackForm = () => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
+    title: "",
     content: "",
     type: "",
     priority: "",
@@ -43,6 +42,7 @@ const FeedbackForm = () => {
       setFormData({
         fullName: "",
         email: "",
+        title: "",
         content: "",
         type: "",
         priority: "",
@@ -107,6 +107,7 @@ const FeedbackForm = () => {
     setFormData({
       fullName: "",
       email: "",
+      title: "",
       content: "",
       type: "",
       priority: "",
@@ -202,57 +203,52 @@ const FeedbackForm = () => {
                 <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
                   Loại phản hồi
                 </Typography>
-                <FormControl fullWidth error={!!errors.type} className="bg-gray-50/50">
-                  <Select
-                    value={formData.type}
-                    onChange={handleInputChange("type")}
-                    displayEmpty
-                    native={false}
-                    className="hover:border-primary-main focus:border-primary-dark h-14 rounded-lg border border-gray-300 text-base [&_.MuiSelect-nativeInput]:hidden [&_.MuiSelect-select]:flex [&_.MuiSelect-select]:items-center [&_.MuiSelect-select]:px-[14px] [&_.MuiSelect-select]:py-4"
-                    renderValue={(selected) => {
-                      if (!selected) {
-                        return <span className="text-gray-400">Chọn loại phản hồi</span>;
-                      }
-                      return FEEDBACK_TYPES.find((type) => type.value === selected)?.label;
-                    }}
-                  >
-                    {FEEDBACK_TYPES.map((type) => (
-                      <MenuItem key={type.value} value={type.value}>
-                        {type.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {errors.type && <FormHelperText>{errors.type}</FormHelperText>}
-                </FormControl>
+                <CustomSelect
+                  label="Loại phản hồi"
+                  value={formData.type}
+                  onChange={handleInputChange("type")}
+                  options={FEEDBACK_TYPES}
+                  placeholder="Chọn loại phản hồi"
+                  error={errors.type}
+                  size="large"
+                />
               </div>
 
               <div className="space-y-1">
                 <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
                   Mức độ ưu tiên
                 </Typography>
-                <FormControl fullWidth error={!!errors.priority} className="bg-gray-50/50">
-                  <Select
-                    value={formData.priority}
-                    onChange={handleInputChange("priority")}
-                    displayEmpty
-                    native={false}
-                    className="hover:border-primary-main focus:border-primary-dark h-14 rounded-lg border border-gray-300 text-base [&_.MuiSelect-nativeInput]:hidden [&_.MuiSelect-select]:flex [&_.MuiSelect-select]:items-center [&_.MuiSelect-select]:px-[14px] [&_.MuiSelect-select]:py-4"
-                    renderValue={(selected) => {
-                      if (!selected) {
-                        return <span className="text-gray-400">Chọn mức độ ưu tiên</span>;
-                      }
-                      return PRIORITY_LEVELS.find((priority) => priority.value === selected)?.label;
-                    }}
-                  >
-                    {PRIORITY_LEVELS.map((priority) => (
-                      <MenuItem key={priority.value} value={priority.value}>
-                        {priority.label}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  {errors.priority && <FormHelperText>{errors.priority}</FormHelperText>}
-                </FormControl>
+                <CustomSelect
+                  label="Mức độ ưu tiên"
+                  value={formData.priority}
+                  onChange={handleInputChange("priority")}
+                  options={PRIORITY_LEVELS}
+                  placeholder="Chọn mức độ ưu tiên"
+                  error={errors.priority}
+                  size="large"
+                />
               </div>
+            </div>
+
+            {/* Title - Thêm trường tiêu đề */}
+            <div className="mt-6 space-y-1">
+              <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
+                Tiêu đề
+              </Typography>
+              <TextField
+                fullWidth
+                placeholder="Nhập tiêu đề phản hồi"
+                value={formData.title}
+                onChange={handleInputChange("title")}
+                error={!!errors.title}
+                helperText={errors.title}
+                variant="outlined"
+                className="bg-gray-50/50 [&_.MuiOutlinedInput-input]:pl-4 [&_.MuiOutlinedInput-root]:h-14 [&_.MuiOutlinedInput-root]:text-base"
+                InputProps={{
+                  className:
+                    "rounded-lg border border-gray-300 hover:border-primary-main focus:border-primary-dark",
+                }}
+              />
             </div>
 
             {/* Content */}
@@ -260,24 +256,29 @@ const FeedbackForm = () => {
               <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
                 Chi tiết phản hồi
               </Typography>
-              <TextField
-                fullWidth
-                multiline
-                rows={4}
-                placeholder="Mô tả chi tiết vấn đề hoặc ý kiến của bạn..."
-                value={formData.content}
-                onChange={handleInputChange("content")}
-                error={!!errors.content}
-                helperText={
-                  errors.content || "Mô tả chi tiết vấn đề hoặc ý kiến của bạn (tối thiểu 10 ký tự)"
-                }
-                variant="outlined"
-                className="bg-gray-50/50 [&_.MuiOutlinedInput-input]:pt-3 [&_.MuiOutlinedInput-input]:pl-4 [&_.MuiOutlinedInput-root]:text-base [&_.MuiOutlinedInput-root]:leading-6"
-                InputProps={{
-                  className:
-                    "rounded-lg border border-gray-300 hover:border-primary-main focus:border-primary-dark",
-                }}
-              />
+              <div className="relative">
+                <TextareaAutosize
+                  minRows={4}
+                  placeholder="Mô tả chi tiết vấn đề hoặc ý kiến của bạn..."
+                  value={formData.content}
+                  onChange={handleInputChange("content")}
+                  className={`w-full rounded-lg border bg-gray-50/50 px-4 py-3 text-base leading-6 transition-colors ${
+                    errors.content
+                      ? "border-red-500 focus:border-red-500 focus:ring focus:ring-red-200"
+                      : "border-gray-300 hover:border-amber-600 focus:border-amber-600 focus:ring focus:ring-amber-100"
+                  }`}
+                  style={{ minHeight: "50px", resize: "vertical" }}
+                />
+                <Typography
+                  variant="caption"
+                  className={`mt-1 block text-sm ${
+                    errors.content ? "text-red-500" : "text-gray-500"
+                  }`}
+                >
+                  {errors.content ||
+                    "Mô tả chi tiết vấn đề hoặc ý kiến của bạn (tối thiểu 10 ký tự)"}
+                </Typography>
+              </div>
             </div>
           </Box>
 
@@ -298,7 +299,7 @@ const FeedbackForm = () => {
           </Box>
 
           {/* Actions */}
-          <Box className="flex flex-col justify-center gap-3 pt-4 sm:flex-row sm:gap-4">
+          <Box className="flex flex-col justify-center gap-3 pt-4 sm:flex-row sm:gap-6">
             <Button
               type="button"
               variant="outlined"
@@ -306,7 +307,11 @@ const FeedbackForm = () => {
               onClick={handleReset}
               startIcon={<RefreshIcon />}
               disabled={isSubmitting}
-              className="order-2 h-[52px] w-full min-w-0 rounded-xl border-2 border-[#e6d486] bg-white text-base font-medium text-[#333333] normal-case shadow-md transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:border-[#ffec99] hover:bg-[#fffef7] hover:shadow-lg active:translate-y-0 sm:order-1 sm:w-40"
+              className={`h-[52px] w-full min-w-0 rounded-xl text-base font-semibold normal-case shadow-lg transition-all duration-200 ease-in-out ${
+                isSubmitting
+                  ? "border-gray-300 bg-gray-100 text-gray-400 shadow-none"
+                  : "border-amber-600 bg-white text-amber-400 hover:-translate-y-1 hover:border-amber-700 hover:bg-amber-50 hover:shadow-xl active:-translate-y-0.5"
+              } sm:order-1 sm:w-40`}
             >
               Làm mới
             </Button>
@@ -318,7 +323,11 @@ const FeedbackForm = () => {
                 isSubmitting ? <CircularProgress size={20} color="inherit" /> : <SendIcon />
               }
               disabled={isSubmitting}
-              className="order-1 h-[52px] w-full min-w-0 rounded-xl bg-[#ffec99] text-base font-semibold text-[#333333] normal-case shadow-lg transition-all duration-200 ease-in-out hover:-translate-y-1 hover:bg-[#e6d486] hover:shadow-xl active:-translate-y-0.5 disabled:bg-gray-100 disabled:text-gray-400 disabled:shadow-none sm:order-2 sm:w-40"
+              className={`h-[52px] w-full min-w-0 rounded-xl text-base font-semibold normal-case shadow-lg transition-all duration-200 ease-in-out ${
+                isSubmitting
+                  ? "bg-gray-100 text-gray-400 shadow-none"
+                  : "bg-amber-400 text-white hover:-translate-y-1 hover:bg-amber-500 hover:shadow-xl active:-translate-y-0.5"
+              } sm:order-2 sm:w-40`}
             >
               {isSubmitting ? "Đang gửi..." : "Gửi phản hồi"}
             </Button>
