@@ -3,16 +3,18 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider, CssBaseline, CircularProgress } from "@mui/material";
 import { StyledEngineProvider } from "@mui/material/styles";
 import { theme } from "@/theme/index";
-
 // Layouts
 import MainLayout from "@/layouts/MainLayout";
 import AuthLayout from "@/layouts/AuthLayout";
+import AdminLayout from "@/layouts/AdminLayout";
 
-// Lazy load components
 const DashboardPage = lazy(() => import("@/pages/dashboard/DashboardPage"));
 const FeedbackPage = lazy(() => import("@/pages/feedback/FeedbackPage"));
 const NotFoundPage = lazy(() => import("@/pages/static/NotFoundPage"));
 const AuthPage = lazy(() => import("@/pages/auth/AuthPage"));
+const FeedbackManagementPage = lazy(() => import("@/pages/feedback/FeedbackManagementPage"));
+const FeedbackDetailPage = lazy(() => import("@/pages/feedback/FeedbackDetailPage"));
+const AdminDashboardPage = lazy(() => import("@/pages/dashboard/AdminDashboardPage"));
 
 function App() {
   return (
@@ -28,10 +30,19 @@ function App() {
             <Routes>
               {/* Auth Routes - No Header/Footer */}
               <Route path="/auth" element={<AuthLayout />}>
+                <Route index element={<Navigate to="/auth/login" replace />} />
                 <Route path="login" element={<AuthPage />} />
                 <Route path="forgot-password" element={<div>Forgot Password Page</div>} />
                 <Route path="reset-password" element={<div>Reset Password Page</div>} />
                 <Route path="verify-otp" element={<div>Verify OTP Page</div>} />
+              </Route>
+
+              {/* Admin Routes - With Admin Header/Footer */}
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<Navigate to="/admin/feedbacks" replace />} />
+                <Route path="feedbacks" element={<FeedbackManagementPage />} />
+                {/* <Route path="dashboard" element={<div>Admin Dashboard Page</div>} /> */}
+                <Route path="dashboard" element={<AdminDashboardPage />} />
               </Route>
 
               {/* Main Routes - With Header/Footer */}
@@ -39,6 +50,7 @@ function App() {
                 <Route index element={<Navigate to="/feedback" replace />} />
                 <Route path="dashboard" element={<DashboardPage />} />
                 <Route path="feedback" element={<FeedbackPage />} />
+                <Route path="feedback/:id" element={<FeedbackDetailPage />} />
               </Route>
 
               {/* 404 Page - No Layout */}

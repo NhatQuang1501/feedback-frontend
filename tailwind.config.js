@@ -4,24 +4,70 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Primary colors từ theme
         primary: {
+          DEFAULT: "#ffec99",
           main: "#ffec99",
           light: "#fff1b8",
           dark: "#e6d486",
+          darker: "#c7a84b",
         },
+        // Secondary colors từ theme
         secondary: {
+          DEFAULT: "#333333",
           main: "#333333",
           light: "#666666",
           dark: "#1a1a1a",
         },
+        // Background colors từ theme
         background: {
           default: "#fffef7",
           paper: "#ffffff",
         },
-        yellow: {
-          400: "#facc15", // Màu vàng chính cho buttons
-          300: "#fde047", // Màu vàng hover
-          500: "#eab308", // Màu vàng đậm hơn nếu cần
+        // Text colors từ theme
+        text: {
+          primary: "#333333",
+          secondary: "#666666",
+        },
+        // Status colors từ theme
+        success: {
+          DEFAULT: "#4caf50",
+          main: "#4caf50",
+        },
+        error: {
+          DEFAULT: "#f44336",
+          main: "#f44336",
+        },
+        warning: {
+          DEFAULT: "#ff9800",
+          main: "#ff9800",
+        },
+        // Admin interface colors
+        admin: {
+          primary: "#2563eb", // Blue for admin
+          secondary: "#1e40af", // Dark blue
+          accent: "#3b82f6", // Light blue
+        },
+        // Feedback status colors
+        status: {
+          pending: "#f59e0b", // Orange - Chờ xử lý
+          processing: "#3b82f6", // Blue - Đang xử lý
+          resolved: "#10b981", // Green - Đã giải quyết
+          closed: "#6b7280", // Gray - Đã đóng
+        },
+        // Info colors
+        info: {
+          DEFAULT: "#0ea5e9",
+          main: "#0ea5e9",
+        },
+        amber: {
+          50: "#fff1b8", // primary.light
+          100: "#ffec99", // primary.main
+          200: "#f7e082", // biến thể hover
+          300: "#e6d486", // primary.dark
+          400: "#c7a84b", // primary.darker
+          500: "#b89b3e", // biến thể tối hơn hover/active
+          900: "#713f12", // màu chữ tối
         },
       },
       fontFamily: {

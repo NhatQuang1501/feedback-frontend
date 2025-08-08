@@ -26,3 +26,6 @@
     padding-right: 1.5rem !important;
   }
 }
+html {
+  overflow-y: scroll;
+}
