@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Box, Typography, Paper, Avatar } from "@mui/material";
+import { Box, Typography, Paper } from "@mui/material";
 
 const FeedbackComments = ({ comments, loading }) => {
   if (loading) {
@@ -53,13 +53,6 @@ const FeedbackComments = ({ comments, loading }) => {
         >
           <Box className="mb-2 flex items-center justify-between">
             <Box className="flex items-center gap-3">
-              <Avatar
-                className={`${
-                  comment.user.role === "admin" ? "bg-amber-600" : "bg-blue-600"
-                } h-10 w-10`}
-              >
-                {comment.user.full_name?.charAt(0) || "U"}
-              </Avatar>
               <Box>
                 <Typography variant="subtitle2" className="font-semibold text-gray-900">
                   {comment.user.full_name}

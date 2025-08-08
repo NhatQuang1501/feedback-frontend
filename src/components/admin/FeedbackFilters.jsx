@@ -6,7 +6,6 @@ import {
   Box,
   Chip,
   InputAdornment,
-  Button,
   Collapse,
   IconButton,
   Paper,
@@ -24,6 +23,7 @@ import FilterAltIcon from "@mui/icons-material/FilterAlt";
 import TextField from "@/components/common/TextField";
 import CheckboxGroup from "@/components/common/CheckboxGroup";
 import CustomSelect from "@/components/common/CustomSelect";
+import Button from "@/components/common/Button";
 
 const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalResults }) => {
   // Local state for advanced filters
@@ -184,9 +184,10 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
           </Typography>
           {activeFiltersCount > 0 && (
             <Button
-              onClick={clearAllFilters}
+              variant="text"
               size="small"
               startIcon={<ClearIcon />}
+              onClick={clearAllFilters}
               className="text-blue-600 hover:text-blue-800"
             >
               Xóa bộ lọc
@@ -221,10 +222,11 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
       {/* Advanced Filters Toggle */}
       <div className="flex items-center justify-between">
         <Button
+          variant="text"
           onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
           startIcon={<FilterAltIcon />}
           endIcon={showAdvancedFilters ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          className="text-gray-700 hover:bg-gray-100"
+          className="text-gray-700"
           size="medium"
         >
           Bộ lọc nâng cao
@@ -291,15 +293,15 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
               variant="outlined"
               size="large"
               onClick={clearAllFilters}
-              className={`h-[48px] min-w-[120px] rounded-xl border-amber-600 bg-white text-base font-semibold text-amber-400 normal-case shadow-md transition-all duration-200 ease-in-out hover:border-amber-700 hover:bg-amber-50 hover:shadow-md active:-translate-y-0.5`}
+              className="min-w-[120px]"
             >
               Đặt lại
             </Button>
             <Button
-              variant="contained"
+              variant="primary"
               size="large"
               onClick={applyAdvancedFilters}
-              className={`h-[48px] min-w-[150px] rounded-xl bg-amber-400 text-base font-semibold text-white normal-case shadow-md transition-all duration-200 ease-in-out hover:bg-amber-500 hover:shadow-md active:-translate-y-0.5`}
+              className="min-w-[150px]"
             >
               Áp dụng bộ lọc
             </Button>
