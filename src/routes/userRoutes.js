@@ -5,7 +5,7 @@ import { ROUTES } from "@/routes/routes";
 // const LoginPage = lazy(() => import("@/pages/auth/LoginPage"));
 // const HomePage = lazy(() => import("@/pages/home/HomePage"));
 const DashboardPage = lazy(() => import("@/pages/dashboard/DashboardPage"));
-const FeedbackPage = lazy(() => import("@/pages/feedback/FeedbackCreatePage"));
+const FeedbackPage = lazy(() => import("@/pages/feedback/user/FeedbackCreatePage"));
 const NotFoundPage = lazy(() => import("@/pages/static/NotFoundPage"));
 
 const userRoutes = [
