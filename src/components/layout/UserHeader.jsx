@@ -7,13 +7,29 @@ const UserHeader = () => {
   const location = useLocation();
 
   const isActive = (path) => {
+    // Xử lý đặc biệt cho /feedbacks và /feedbacks/create
+    if (path === "/feedbacks") {
+      return (
+        location.pathname === "/feedbacks" ||
+        (location.pathname.startsWith("/feedbacks") &&
+          !location.pathname.startsWith("/feedbacks/create"))
+      );
+    }
+    if (path === "/feedbacks/create") {
+      return location.pathname === "/feedbacks/create";
+    }
+    // Xử lý các trường hợp khác
     return location.pathname.startsWith(path);
   };
 
   const navigationItems = [
     {
-      label: "Phản hồi",
+      label: "Gửi phản hồi",
       path: "/feedbacks/create",
+    },
+    {
+      label: "Quản lý feedback",
+      path: "/feedbacks",
     },
     {
       label: "Dashboard",
