@@ -8,7 +8,6 @@ import MainLayout from "@/layouts/MainLayout";
 import AuthLayout from "@/layouts/AuthLayout";
 import AdminLayout from "@/layouts/AdminLayout";
 
-const DashboardPage = lazy(() => import("@/pages/dashboard/DashboardPage"));
 const FeedbackCreatePage = lazy(() => import("@/pages/feedback/FeedbackCreatePage"));
 const NotFoundPage = lazy(() => import("@/pages/static/NotFoundPage"));
 const AuthPage = lazy(() => import("@/pages/auth/AuthPage"));
@@ -48,7 +47,6 @@ function App() {
               {/* Main Routes */}
               <Route path="/" element={<MainLayout />}>
                 <Route index element={<Navigate to="/feedbacks/create" replace />} />
-                <Route path="dashboard" element={<DashboardPage />} />
                 <Route path="feedbacks/create" element={<FeedbackCreatePage />} />
                 <Route path="feedbacks/:id" element={<FeedbackDetailPage />} />
               </Route>
