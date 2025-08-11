@@ -21,6 +21,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  Paper,
 } from "@mui/material";
 import {
   MoreVert as MoreVertIcon,
@@ -37,7 +38,7 @@ import PropTypes from "prop-types";
 import { TypeBadge, PriorityBadge, StatusBadge } from "@/utils/customBadge";
 import { useNavigate } from "react-router-dom";
 
-const FeedbackList = ({ feedbacks, loading }) => {
+const FeedbackList = ({ feedbacks, loading, emptyMessage = "Không có phản hồi nào" }) => {
   const navigate = useNavigate();
   const [expandedId, setExpandedId] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -161,16 +162,13 @@ const FeedbackList = ({ feedbacks, loading }) => {
   }
 
   // No feedbacks found
-  if (feedbacks.length === 0) {
+  if (!loading && (!feedbacks || feedbacks.length === 0)) {
     return (
-      <div className="py-12 text-center">
-        <Typography variant="h6" className="mb-2 font-bold text-gray-600">
-          Không tìm thấy phản hồi nào
+      <Paper className="p-8 text-center">
+        <Typography variant="body1" className="text-gray-600">
+          {emptyMessage}
         </Typography>
-        <Typography variant="body2" className="text-gray-500">
-          Hãy thử thay đổi bộ lọc hoặc tìm kiếm với từ khóa khác
-        </Typography>
-      </div>
+      </Paper>
     );
   }
 
@@ -413,6 +411,7 @@ const FeedbackList = ({ feedbacks, loading }) => {
 FeedbackList.propTypes = {
   feedbacks: PropTypes.arrayOf(PropTypes.object).isRequired,
   loading: PropTypes.bool,
+  emptyMessage: PropTypes.string,
 };
 
 export default FeedbackList;

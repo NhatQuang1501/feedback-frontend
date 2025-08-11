@@ -11,8 +11,7 @@ import {
 } from "@/metadata/QuangMockData";
 import { ITEMS_PER_PAGE } from "@/utils/constants";
 
-const FeedbackManagementPage = () => {
-  // State management
+const AdminFeedbackManagementPage = () => {
   const [allFeedbacks] = useState(getAllFeedbacksWithDetails());
   const [filteredFeedbacks, setFilteredFeedbacks] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -127,4 +126,4 @@ const FeedbackManagementPage = () => {
   );
 };
 
-export default FeedbackManagementPage;
+export default AdminFeedbackManagementPage;

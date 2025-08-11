@@ -11,9 +11,12 @@ import AdminLayout from "@/layouts/AdminLayout";
 const FeedbackCreatePage = lazy(() => import("@/pages/feedback/FeedbackCreatePage"));
 const NotFoundPage = lazy(() => import("@/pages/static/NotFoundPage"));
 const AuthPage = lazy(() => import("@/pages/auth/AuthPage"));
-const FeedbackManagementPage = lazy(() => import("@/pages/feedback/FeedbackManagementPage"));
+const AdminFeedbackManagementPage = lazy(
+  () => import("@/pages/feedback/admin/AdminFeedbackManagementPage"),
+);
 const FeedbackDetailPage = lazy(() => import("@/pages/feedback/FeedbackDetailPage"));
 const AdminDashboardPage = lazy(() => import("@/pages/dashboard/AdminDashboardPage"));
+const UserFeedbackPage = lazy(() => import("@/pages/feedback/user/UserFeedbackPage"));
 
 function App() {
   return (
@@ -39,7 +42,7 @@ function App() {
               {/* Admin Routes */}
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<Navigate to="/admin/feedbacks" replace />} />
-                <Route path="feedbacks" element={<FeedbackManagementPage />} />
+                <Route path="feedbacks" element={<AdminFeedbackManagementPage />} />
                 {/* <Route path="dashboard" element={<div>Admin Dashboard Page</div>} /> */}
                 <Route path="dashboard" element={<AdminDashboardPage />} />
               </Route>
