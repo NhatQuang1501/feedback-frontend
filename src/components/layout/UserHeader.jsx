@@ -31,10 +31,6 @@ const UserHeader = () => {
       label: "Quản lý feedback",
       path: "/feedbacks",
     },
-    {
-      label: "Dashboard",
-      path: "/dashboard",
-    },
   ];
 
   return (

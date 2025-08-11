@@ -8,7 +8,7 @@ import MainLayout from "@/layouts/MainLayout";
 import AuthLayout from "@/layouts/AuthLayout";
 import AdminLayout from "@/layouts/AdminLayout";
 
-const FeedbackCreatePage = lazy(() => import("@/pages/feedback/FeedbackCreatePage"));
+const FeedbackCreatePage = lazy(() => import("@/pages/feedback/user/FeedbackCreatePage"));
 const NotFoundPage = lazy(() => import("@/pages/static/NotFoundPage"));
 const AuthPage = lazy(() => import("@/pages/auth/AuthPage"));
 const AdminFeedbackManagementPage = lazy(
@@ -52,6 +52,7 @@ function App() {
                 <Route index element={<Navigate to="/feedbacks/create" replace />} />
                 <Route path="feedbacks/create" element={<FeedbackCreatePage />} />
                 <Route path="feedbacks/:id" element={<FeedbackDetailPage />} />
+                <Route path="feedbacks" element={<UserFeedbackPage />} />
               </Route>
 
               {/* 404 Page */}
