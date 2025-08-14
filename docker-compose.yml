@@ -1,5 +1,4 @@
 services:
-  # Development server with hot reload
   frontend-dev:
     build:
       context: .
@@ -14,13 +13,13 @@ services:
     environment:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
     stdin_open: true
     tty: true
     command: npm run dev
     networks:
       - feedback-network
 
-  # Preview production build
   frontend-preview:
     build:
       context: .
