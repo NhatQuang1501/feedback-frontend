@@ -18,10 +18,12 @@ import RegisterForm from "./RegisterForm";
 const AuthTabs = ({
   onLogin,
   onRegister,
+  onGoogleLogin,
   loginLoading = false,
   registerLoading = false,
   loginError = null,
   registerError = null,
+  onClearError,
 }) => {
   // ==================== STATE ====================
   const [currentTab, setCurrentTab] = useState(0);
@@ -31,14 +33,24 @@ const AuthTabs = ({
   // ==================== HANDLERS ====================
   const handleTabChange = (event, newValue) => {
     setCurrentTab(newValue);
+    // Clear error when switching tabs
+    if (onClearError) {
+      onClearError();
+    }
   };
 
   const switchToRegister = () => {
     setCurrentTab(1);
+    if (onClearError) {
+      onClearError();
+    }
   };
 
   const switchToLogin = () => {
     setCurrentTab(0);
+    if (onClearError) {
+      onClearError();
+    }
   };
 
   // ==================== COMPONENTS ====================
@@ -164,18 +176,22 @@ const AuthTabs = ({
             <TabPanel value={currentTab} index={0}>
               <LoginForm
                 onLogin={onLogin}
+                onGoogleLogin={onGoogleLogin}
                 loading={loginLoading}
                 error={loginError}
                 onSwitchToRegister={switchToRegister}
+                onClearError={onClearError}
               />
             </TabPanel>
 
             <TabPanel value={currentTab} index={1}>
               <RegisterForm
                 onRegister={onRegister}
+                onGoogleLogin={onGoogleLogin}
                 loading={registerLoading}
                 error={registerError}
                 onSwitchToLogin={switchToLogin}
+                onClearError={onClearError}
               />
             </TabPanel>
           </CardContent>

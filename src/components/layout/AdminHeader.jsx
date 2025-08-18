@@ -1,5 +1,6 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
   AppBar,
   Toolbar,
@@ -17,9 +18,13 @@ import {
   AccountCircleOutlined as AccountIcon,
   ExitToAppOutlined as LogoutIcon,
 } from "@mui/icons-material";
+import { logoutUser } from "@/store/slices/authSlice";
 
 const AdminHeader = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const isActive = (path) => {
@@ -102,7 +107,11 @@ const AdminHeader = () => {
             <div className="flex items-center">
               <IconButton size="large" edge="end" onClick={handleProfileMenuOpen}>
                 <Avatar className="bg-primary text-secondary">
-                  <AccountIcon />
+                  {user?.full_name ? (
+                    user.full_name.charAt(0).toUpperCase()
+                  ) : (
+                    <AccountIcon />
+                  )}
                 </Avatar>
               </IconButton>
 
@@ -124,7 +133,18 @@ const AdminHeader = () => {
                   <AccountIcon className="h-5 w-5 text-gray-600" />
                   <span>Thông tin cá nhân</span>
                 </MenuItem>
-                <MenuItem onClick={handleProfileMenuClose} className="gap-3">
+                <MenuItem 
+                  onClick={async () => {
+                    try {
+                      await dispatch(logoutUser()).unwrap();
+                      navigate("/auth/login");
+                    } catch (error) {
+                      console.error("Logout failed:", error);
+                    }
+                    handleProfileMenuClose();
+                  }} 
+                  className="gap-3"
+                >
                   <LogoutIcon className="h-5 w-5 text-gray-600" />
                   <span>Đăng xuất</span>
                 </MenuItem>

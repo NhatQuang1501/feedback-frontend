@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Typography, Alert, Link, Divider, Box } from "@mui/material";
 import { Email, Lock } from "@mui/icons-material";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -15,7 +15,13 @@ import { usePasswordToggle } from "../../hooks/usePasswordToggle";
 import { validateLoginForm } from "../../utils/validation";
 
 // ==================== LOGIN FORM COMPONENT ====================
-const LoginForm = ({ onLogin, loading = false, error = null, onSwitchToRegister }) => {
+const LoginForm = ({
+  onLogin,
+  onGoogleLogin,
+  loading = false,
+  error = null,
+  onSwitchToRegister,
+}) => {
   // ==================== HOOKS ====================
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
   const { showPassword, togglePassword } = usePasswordToggle();
@@ -27,6 +33,44 @@ const LoginForm = ({ onLogin, loading = false, error = null, onSwitchToRegister 
     },
     validateLoginForm,
   );
+
+  // ==================== EFFECTS ====================
+  useEffect(() => {
+    // Initialize Google Sign-In when component mounts
+    if (typeof window.google !== "undefined") {
+      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+      if (clientId && clientId !== "your-google-client-id-here") {
+        console.log("Initializing Google OAuth2...");
+
+        // Use ID token flow for better security
+        window.google.accounts.id.initialize({
+          client_id: clientId,
+          callback: async (response) => {
+            console.log("Google ID token callback received:", response);
+
+            if (response.credential) {
+              try {
+                console.log("Sending ID token to backend...");
+                await onGoogleLogin(response.credential);
+              } catch (error) {
+                console.error("Error processing Google login:", error);
+                alert("Lỗi khi xử lý đăng nhập Google.");
+              }
+            } else {
+              console.error("No ID token received from Google");
+              alert("Không nhận được ID token từ Google.");
+            }
+          },
+          error_callback: (error) => {
+            console.error("Google ID token error:", error);
+            alert(`Lỗi Google OAuth: ${error.error || "Unknown error"}`);
+          },
+        });
+
+        console.log("Google ID token flow initialized successfully");
+      }
+    }
+  }, [onGoogleLogin]);
 
   // ==================== HANDLERS ====================
   const handleFormSubmit = async (e) => {
@@ -48,10 +92,6 @@ const LoginForm = ({ onLogin, loading = false, error = null, onSwitchToRegister 
 
   const handleForgotPasswordSuccess = (email) => {
     console.log("Email reset đã được gửi đến:", email);
-  };
-
-  const handleGoogleLogin = () => {
-    console.log("Google login clicked");
   };
 
   // ==================== RENDER ====================
@@ -138,7 +178,14 @@ const LoginForm = ({ onLogin, loading = false, error = null, onSwitchToRegister 
           {/* ==================== GOOGLE BUTTON ==================== */}
           <SocialButton
             icon={<GoogleIcon className="text-xl" />}
-            onClick={handleGoogleLogin}
+            onClick={() => {
+              if (window.google && window.google.accounts && window.google.accounts.id) {
+                console.log("Requesting Google ID token...");
+                window.google.accounts.id.prompt();
+              } else {
+                alert("Google OAuth chưa được khởi tạo. Vui lòng thử lại sau vài giây.");
+              }
+            }}
             className="w-full"
           >
             Đăng nhập với Google

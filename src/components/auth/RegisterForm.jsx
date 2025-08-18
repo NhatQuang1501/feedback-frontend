@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Typography, Alert, Divider, Grid } from "@mui/material";
 import { Email, Lock, Person } from "@mui/icons-material";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -14,7 +14,13 @@ import { useMultiplePasswordToggle } from "../../hooks/usePasswordToggle";
 import { validateRegisterForm } from "../../utils/validation";
 
 // ==================== REGISTER FORM COMPONENT ====================
-const RegisterForm = ({ onRegister, loading = false, error = null, onSwitchToLogin }) => {
+const RegisterForm = ({
+  onRegister,
+  onGoogleLogin,
+  loading = false,
+  error = null,
+  onSwitchToLogin,
+}) => {
   // ==================== HOOKS ====================
   const { passwordVisibility, togglePassword, getVisibility } = useMultiplePasswordToggle([
     "password",
@@ -31,12 +37,59 @@ const RegisterForm = ({ onRegister, loading = false, error = null, onSwitchToLog
     validateRegisterForm,
   );
 
+  // ==================== ERROR FORMATTING ====================
+  const formatError = (error) => {
+    if (!error) return null;
+
+    // Nếu error là object (từ API response)
+    if (typeof error === "object") {
+      // Trường hợp error có cấu trúc: { field: ["error message"] }
+      if (error.password2 || error.full_name || error.email || error.password) {
+        const errorMessages = [];
+
+        Object.entries(error).forEach(([field, messages]) => {
+          if (Array.isArray(messages)) {
+            messages.forEach((msg) => errorMessages.push(msg));
+          } else if (typeof messages === "string") {
+            errorMessages.push(messages);
+          }
+        });
+
+        return errorMessages.join(". ");
+      }
+
+      // Trường hợp error có message
+      if (error.message) {
+        return error.message;
+      }
+
+      // Trường hợp error có detail
+      if (error.detail) {
+        return error.detail;
+      }
+
+      // Fallback: convert object to string
+      return JSON.stringify(error);
+    }
+
+    // Nếu error đã là string
+    return error;
+  };
+
   // ==================== HANDLERS ====================
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     const success = await handleSubmit((data) => {
-      const { confirmPassword, ...registerData } = data;
+      // *** FIX: Map frontend field names to API field names ***
+      const registerData = {
+        full_name: data.fullName, // fullName -> full_name
+        email: data.email,
+        password: data.password,
+        password2: data.confirmPassword, // confirmPassword -> password2
+      };
+
+      console.log("Sending register data:", registerData); // Debug log
       return onRegister(registerData);
     });
 
@@ -45,8 +98,20 @@ const RegisterForm = ({ onRegister, loading = false, error = null, onSwitchToLog
     }
   };
 
-  const handleGoogleRegister = () => {
-    console.log("Google register clicked");
+  const handleGoogleRegister = async () => {
+    try {
+      console.log("Starting Google OAuth for registration...");
+
+      if (window.google && window.google.accounts && window.google.accounts.id) {
+        console.log("Requesting Google ID token for registration...");
+        window.google.accounts.id.prompt();
+      } else {
+        alert("Google OAuth chưa được khởi tạo. Vui lòng thử lại sau vài giây.");
+      }
+    } catch (error) {
+      console.error("Google register error:", error);
+      alert(`Lỗi đăng ký Google: ${error.message}`);
+    }
   };
 
   // ==================== RENDER ====================
@@ -55,7 +120,7 @@ const RegisterForm = ({ onRegister, loading = false, error = null, onSwitchToLog
       {/* ==================== ERROR ALERT ==================== */}
       {error && (
         <Alert severity="error" className="mb-6 rounded-lg">
-          {error}
+          {formatError(error)}
         </Alert>
       )}
 
