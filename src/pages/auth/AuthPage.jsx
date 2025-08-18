@@ -11,12 +11,10 @@ const AuthPage = () => {
 
   const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth);
 
-  // ==================== EFFECTS ====================
   useEffect(() => {
     document.title = "Đăng Nhập / Đăng Ký - Feedback Hub";
   }, []);
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       const from = location.state?.from?.pathname || "/";
@@ -24,20 +22,17 @@ const AuthPage = () => {
     }
   }, [isAuthenticated, navigate, location]);
 
-  // ==================== HANDLERS ====================
   const handleLogin = async (formData) => {
     try {
-      const result = await dispatch(loginUser(formData)).unwrap();
-      console.log("Login successful:", result);
+      await dispatch(loginUser(formData)).unwrap();
     } catch (error) {
-      console.error("Login failed:", error);
+      
     }
   };
 
   const handleRegister = async (formData) => {
     try {
-      const result = await dispatch(registerUser(formData)).unwrap();
-      console.log("Registration successful:", result);
+      await dispatch(registerUser(formData)).unwrap();
       // Chuyển sang màn hình OTP verification
       navigate("/auth/verify-otp", {
         state: {
@@ -46,16 +41,15 @@ const AuthPage = () => {
         },
       });
     } catch (error) {
-      console.error("Registration failed:", error);
+      
     }
   };
 
   const handleGoogleLogin = async (token, tokenType = "id_token") => {
     try {
-      const result = await dispatch(googleLogin(token)).unwrap();
-      console.log("Google login successful:", result);
+      await dispatch(googleLogin(token)).unwrap();
     } catch (error) {
-      console.error("Google login failed:", error);
+      
     }
   };
 
