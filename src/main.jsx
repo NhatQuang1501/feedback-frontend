@@ -4,13 +4,19 @@ import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { store } from "@/store";
 import App from "./App";
+import GoogleAuthProvider from "./components/auth/GoogleAuthProvider";
+import AuthGuard from "./components/auth/AuthGuard";
 import "./index.css";
 import "./styles/responsive.css";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-      <App />
+      <GoogleAuthProvider>
+        <AuthGuard>
+          <App />
+        </AuthGuard>
+      </GoogleAuthProvider>
     </Provider>
   </StrictMode>,
 );
