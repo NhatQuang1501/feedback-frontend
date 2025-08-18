@@ -25,12 +25,10 @@ const AuthTabs = ({
   registerError = null,
   onClearError,
 }) => {
-  // ==================== STATE ====================
   const [currentTab, setCurrentTab] = useState(0);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // ==================== HANDLERS ====================
   const handleTabChange = (event, newValue) => {
     setCurrentTab(newValue);
     // Clear error when switching tabs
@@ -53,7 +51,6 @@ const AuthTabs = ({
     }
   };
 
-  // ==================== COMPONENTS ====================
   const TabPanel = ({ children, value, index, ...other }) => {
     return (
       <div
@@ -83,10 +80,8 @@ const AuthTabs = ({
     );
   };
 
-  // ==================== RENDER ====================
   return (
     <div className="mx-auto w-full max-w-4xl">
-      {/* ==================== HEADER ==================== */}
       <div className="mb-8 text-center">
         <Typography
           variant="h3"
@@ -106,7 +101,6 @@ const AuthTabs = ({
         <div className="mx-auto mb-6 h-1 w-16 rounded-full bg-[#ffec99]"></div>
       </div>
 
-      {/* ==================== AUTH CARD ==================== */}
       <Paper
         elevation={6}
         className="overflow-hidden rounded-2xl border border-[#fff1b8]/30 bg-gradient-to-br from-white to-[#fffef7] shadow-lg transition-all duration-300 ease-in-out"
@@ -117,7 +111,6 @@ const AuthTabs = ({
             backgroundColor: "transparent",
           }}
         >
-          {/* ==================== TABS NAVIGATION ==================== */}
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
               value={currentTab}
@@ -171,7 +164,6 @@ const AuthTabs = ({
             </Tabs>
           </Box>
 
-          {/* ==================== TAB CONTENT ==================== */}
           <CardContent className="p-6 sm:p-8 lg:p-10">
             <TabPanel value={currentTab} index={0}>
               <LoginForm

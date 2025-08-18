@@ -9,5 +9,7 @@ export const authApi = {
   updateProfile: (payload) => http.patch("/profile/", payload),
   sendOtp: (email) => http.post("/send-verification-otp/", { email }),
   verifyOtp: (email, otp) => http.post("/verify-otp/", { email, otp }),
-  googleLogin: (payload) => http.post("/login/google/", payload),
+  googleLogin: (idToken) => http.post("/login/google/", { 
+    token: idToken  
+  }),
 };
