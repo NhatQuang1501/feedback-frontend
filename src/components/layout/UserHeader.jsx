@@ -1,10 +1,28 @@
-import React from "react";
-import { AppBar, Toolbar, Typography, Button, Container } from "@mui/material";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Container,
+  Avatar,
+  Menu,
+  MenuItem,
+  IconButton,
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { AccountCircleOutlined, ExitToAppOutlined } from "@mui/icons-material";
+import { logoutUser } from "@/store/slices/authSlice";
 
 const UserHeader = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const isActive = (path) => {
     // Xử lý đặc biệt cho /feedbacks và /feedbacks/create
@@ -32,6 +50,30 @@ const UserHeader = () => {
       path: "/feedbacks",
     },
   ];
+
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleProfileMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await dispatch(logoutUser()).unwrap();
+      navigate("/auth/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+    handleProfileMenuClose();
+  };
+
+  const handleProfile = () => {
+    // Navigate to profile page or show profile dialog
+    console.log("Profile clicked");
+    handleProfileMenuClose();
+  };
 
   return (
     <AppBar position="static" color="default" elevation={0} className="bg-white shadow-md">
@@ -75,15 +117,55 @@ const UserHeader = () => {
             {/* Auth Separator */}
             <div className="hidden h-6 w-px bg-gray-300 sm:block"></div>
 
-            <Button
-              component={Link}
-              to="/auth/login"
-              variant="contained"
-              size="medium"
-              className="bg-primary text-secondary shadow-primary/30 hover:bg-primary-dark hover:shadow-primary-dark/40 rounded-lg px-5 py-2.5 text-sm font-semibold normal-case shadow-md transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 sm:px-6 sm:py-3 sm:text-base"
-            >
-              Đăng nhập
-            </Button>
+            {isAuthenticated ? (
+              /* User Profile Menu */
+              <div className="flex items-center">
+                <IconButton size="large" edge="end" onClick={handleProfileMenuOpen}>
+                  <Avatar className="bg-primary text-secondary">
+                    {user?.full_name ? (
+                      user.full_name.charAt(0).toUpperCase()
+                    ) : (
+                      <AccountCircleOutlined />
+                    )}
+                  </Avatar>
+                </IconButton>
+
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleProfileMenuClose}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  className="mt-2"
+                >
+                  <MenuItem onClick={handleProfile} className="gap-3">
+                    <AccountCircleOutlined className="h-5 w-5 text-gray-600" />
+                    <span>Thông tin cá nhân</span>
+                  </MenuItem>
+                  <MenuItem onClick={handleLogout} className="gap-3">
+                    <ExitToAppOutlined className="h-5 w-5 text-gray-600" />
+                    <span>Đăng xuất</span>
+                  </MenuItem>
+                </Menu>
+              </div>
+            ) : (
+              /* Login Button */
+              <Button
+                component={Link}
+                to="/auth/login"
+                variant="contained"
+                size="medium"
+                className="bg-primary text-secondary shadow-primary/30 hover:bg-primary-dark hover:shadow-primary-dark/40 rounded-lg px-5 py-2.5 text-sm font-semibold normal-case shadow-md transition-all duration-200 ease-in-out hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 sm:px-6 sm:py-3 sm:text-base"
+              >
+                Đăng nhập
+              </Button>
+            )}
           </div>
         </Toolbar>
       </Container>
