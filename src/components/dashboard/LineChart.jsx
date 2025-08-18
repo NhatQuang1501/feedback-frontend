@@ -135,11 +135,11 @@ export default function LineChartWithSlider() {
   }, [filteredData, timelineData]);
 
   // Dimensions
-  const chartWidth = 820;
+  const chartWidth = 1060;
   const chartHeight = 350;
 
   // Make slider shorter than the chart (centered). Adjust this to taste.
-  const sliderWidth = 600;
+  const sliderWidth = 900;
 
   return (
     <Card sx={{ height: "100%" }}>
@@ -170,7 +170,7 @@ export default function LineChartWithSlider() {
             sx={{
               fontSize: "0.8rem",
               minWidth: 120,
-              fontWeight: 600,
+              fontWeight: 700,
             }}
           />
         </Stack>
@@ -225,7 +225,7 @@ export default function LineChartWithSlider() {
                   stroke: "#e0e0e0",
                 },
               }}
-              margin={{ left: 50, right: 20, top: 20, bottom: 50 }}
+              margin={{ left: 20, right: 80, top: 20, bottom: 20 }}
             />
           ) : (
             <Box
