@@ -1,122 +1,75 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { Box, Typography, Card, CardContent, Slider, Chip, Stack, Divider } from "@mui/material";
 import { Speed as SpeedIcon, TrendingUp as TrendingIcon } from "@mui/icons-material";
 import { LineChart } from "@mui/x-charts/LineChart";
-import { getAllDashboardFeedbacksWithDetails } from "@/metadata/DashboardMockData";
+import useContainerWidth from "@/hooks/useContainerWidth";
 
-export default function ProcessingSpeedAreaChart() {
+
+export default function ProcessingSpeedAreaChart({ data = [], dateRange, onDateRangeChange }) {
   const [timeRange, setTimeRange] = useState([0, 0]);
+  const wrapperRef = useRef(null);
+  const containerWidth = useContainerWidth(wrapperRef);
 
-  // Lấy tất cả feedback và sắp xếp theo thời gian
-  const allFeedbacks = useMemo(() => {
-    const feedbacks = getAllDashboardFeedbacksWithDetails();
-    return feedbacks
-      .filter((f) => f.submitted_at)
-      .sort((a, b) => new Date(a.submitted_at) - new Date(b.submitted_at));
-  }, []);
+  const processingSpeedData = useMemo(() => {
+    if (data.length === 0) return [];
 
-  // Tạo timeline data theo tháng từ sớm nhất đến muộn nhất
+    return data.map((item, index) => ({
+      month: item.month,
+      avgProcessingTime: item.avg_days,
+      total: 0, 
+      resolved: 0,
+      inProgress: 0,
+      new: 0, 
+      date: new Date(item.month.split('/').reverse().join('-') + "-01")
+    }));
+  }, [data]);
+
+ 
   const timelineData = useMemo(() => {
-    if (allFeedbacks.length === 0) return [];
+    if (processingSpeedData.length === 0) return [];
 
     const monthlyData = new Map();
 
-    allFeedbacks.forEach((feedback) => {
-      const date = new Date(feedback.submitted_at);
+    processingSpeedData.forEach((item) => {
+      const date = new Date(item.month.split('/').reverse().join('-') + "-01");
       const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-      const monthLabel = `${String(date.getMonth() + 1).padStart(2, "0")}/${date.getFullYear()}`;
+      const monthLabel = item.month;
 
       if (!monthlyData.has(monthKey)) {
         monthlyData.set(monthKey, {
           key: monthKey,
           label: monthLabel,
-          date: new Date(date.getFullYear(), date.getMonth(), 1),
+          date: date,
         });
       }
     });
 
     return Array.from(monthlyData.values()).sort((a, b) => a.date - b.date);
-  }, [allFeedbacks]);
+  }, [processingSpeedData]);
 
-  // Set initial range to show all data
+
   useEffect(() => {
     if (timelineData.length > 0) {
       setTimeRange([0, timelineData.length - 1]);
     }
-  }, [timelineData]);
+  }, [timelineData])
 
-  // Filtered data based on slider range
-  const filteredFeedbacks = useMemo(() => {
-    if (timelineData.length === 0) return allFeedbacks;
+
+  const filteredData = useMemo(() => {
+    if (timelineData.length === 0) return processingSpeedData;
 
     const startDate = timelineData[timeRange[0]]?.date;
     const endDate = timelineData[timeRange[1]]?.date;
 
-    if (!startDate || !endDate) return allFeedbacks;
+    if (!startDate || !endDate) return processingSpeedData;
 
-    return allFeedbacks.filter((feedback) => {
-      const feedbackDate = new Date(feedback.submitted_at);
-      return feedbackDate >= startDate && feedbackDate <= endDate;
+    return processingSpeedData.filter((item) => {
+      const itemDate = new Date(item.month.split('/').reverse().join('-') + "-01");
+      return itemDate >= startDate && itemDate <= endDate;
     });
-  }, [allFeedbacks, timelineData, timeRange]);
+  }, [processingSpeedData, timelineData, timeRange]);
 
-  // Tính toán tốc độ xử lý theo tháng
-  const processingSpeedData = useMemo(() => {
-    const monthlyStats = new Map();
 
-    // Nhóm feedback theo tháng
-    filteredFeedbacks.forEach((feedback) => {
-      const date = new Date(feedback.submitted_at);
-      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-      const monthLabel = `${String(date.getMonth() + 1).padStart(2, "0")}/${date.getFullYear()}`;
-
-      if (!monthlyStats.has(monthKey)) {
-        monthlyStats.set(monthKey, {
-          month: monthLabel,
-          total: 0,
-          resolved: 0,
-          inProgress: 0,
-          new: 0,
-          avgProcessingTime: 0,
-        });
-      }
-
-      const stats = monthlyStats.get(monthKey);
-      stats.total++;
-
-      // Phân loại theo trạng thái
-      const statusName = feedback.status?.name?.toLowerCase();
-      if (statusName === "resolved") stats.resolved++;
-      else if (statusName === "in progress") stats.inProgress++;
-      else if (statusName === "new") stats.new++;
-
-      // Tính thời gian xử lý (mock data - giả sử thời gian xử lý trung bình)
-      const processingTimes = {
-        urgent: 1.5, // 1.5 ngày
-        high: 3, // 3 ngày
-        medium: 7, // 7 ngày
-        low: 14, // 14 ngày
-      };
-
-      const priorityName = feedback.priority?.name?.toLowerCase();
-      const processingTime = processingTimes[priorityName] || 7;
-
-      // Cập nhật thời gian xử lý trung bình
-      const currentAvg = stats.avgProcessingTime;
-      const newAvg = (currentAvg * (stats.total - 1) + processingTime) / stats.total;
-      stats.avgProcessingTime = Math.round(newAvg * 10) / 10; // Làm tròn 1 chữ số thập phân
-    });
-
-    // Chuyển đổi thành array và sắp xếp theo thời gian
-    return Array.from(monthlyStats.values()).sort((a, b) => {
-      const [monthA, yearA] = a.month.split("/");
-      const [monthB, yearB] = b.month.split("/");
-      return (
-        new Date(parseInt(yearA), parseInt(monthA) - 1) -
-        new Date(parseInt(yearB), parseInt(monthB) - 1)
-      );
-    });
-  }, [filteredFeedbacks]);
 
   // Chart data for MUI X Charts
   const chartData = useMemo(() => {
@@ -202,7 +155,6 @@ export default function ProcessingSpeedAreaChart() {
     return { start, end, total, avgSpeed };
   }, [timelineData, timeRange, processingSpeedData]);
 
-  // Dimensions
   const chartWidth = 820;
   const chartHeight = 350;
   const sliderWidth = 600;
@@ -332,7 +284,7 @@ export default function ProcessingSpeedAreaChart() {
               color="text.secondary"
               sx={{ mb: 2, textAlign: "center", fontWeight: 500 }}
             >
-              📊 Tổng quan hiệu suất xử lý
+             Tổng quan hiệu suất xử lý
             </Typography>
             <Box
               sx={{
@@ -393,7 +345,7 @@ export default function ProcessingSpeedAreaChart() {
                   gap: 0.5,
                 }}
               >
-                📅 Khoảng thời gian
+                Khoảng thời gian
               </Typography>
             </Box>
 

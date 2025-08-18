@@ -14,10 +14,8 @@ export const useAuth = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Lấy state từ Redux
   const auth = useSelector((state) => state.auth);
 
-  // Actions
   const login = (formData) => dispatch(loginUser(formData));
   const register = (formData) => dispatch(registerUser(formData));
   const logout = () => dispatch(logoutUser());
@@ -25,16 +23,15 @@ export const useAuth = () => {
   const getProfile = () => dispatch(fetchProfile());
   const refresh = () => dispatch(refreshToken());
 
-  // Google OAuth action
+
   const googleAuth = (idToken) => dispatch(googleLogin(idToken));
 
-  // Helper functions
+
   const isAdmin = () => auth.user?.role?.name === "admin";
   const isUser = () => auth.user?.role?.name === "user";
   const hasRole = (role) => auth.user?.role?.name === role;
   const hasAnyRole = (roles) => roles.includes(auth.user?.role?.name);
 
-  // Navigation helpers
   const goToLogin = () => navigate("/auth/login");
   const goToRegister = () => navigate("/auth/register");
   const goToVerifyOTP = (email, message) => {
@@ -51,21 +48,18 @@ export const useAuth = () => {
   };
   const goToHome = () => navigate("/");
 
-  // Check if user can access a specific route
   const canAccess = (requiredRoles = []) => {
     if (!auth.isAuthenticated) return false;
     if (requiredRoles.length === 0) return true;
     return hasAnyRole(requiredRoles);
   };
 
-  // Google OAuth helpers
   const isGoogleOAuthAvailable = () => {
     return window.google && window.google.accounts;
   };
 
   const getGoogleUserInfo = (idToken) => {
     try {
-      // Decode JWT token để lấy thông tin user
       const base64Url = idToken.split(".")[1];
       const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
       const jsonPayload = decodeURIComponent(
@@ -86,7 +80,6 @@ export const useAuth = () => {
 
   const handleGoogleOAuthSuccess = async (idToken, onSuccess, onError) => {
     try {
-      // Lấy thông tin user từ Google token
       const googleUserInfo = getGoogleUserInfo(idToken);
 
       if (!googleUserInfo) {
@@ -96,7 +89,6 @@ export const useAuth = () => {
 
       console.log("Google user info:", googleUserInfo);
 
-      // Gửi ID token lên backend
       const result = await googleAuth(idToken);
 
       if (result.meta.requestStatus === "fulfilled") {

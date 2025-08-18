@@ -1,42 +1,46 @@
-  import React, { useMemo, useState, useEffect } from "react";
+  import React, { useMemo, useState, useEffect, useRef } from "react";
 import { Box, Typography, Card, CardContent, Slider, Chip, Stack } from "@mui/material";
 import { PriorityHigh as PriorityIcon, TrendingUp as TrendingIcon, CalendarToday as CalendarIcon } from "@mui/icons-material";
 import { PieChart } from "@mui/x-charts/PieChart";
-import { getAllDashboardFeedbacksWithDetails } from "@/metadata/DashboardMockData";
+import useContainerWidth from "@/hooks/useContainerWidth";
 
-export default function PriorityDonutChart() {
+
+export default function PriorityDonutChart({ data = [], dateRange, onDateRangeChange }) {
   const [timeRange, setTimeRange] = useState([0, 0]);
+  const wrapperRef = useRef(null);
+  const containerWidth = useContainerWidth(wrapperRef);
 
-  // Lấy tất cả feedback và sắp xếp theo thời gian
-  const allFeedbacks = useMemo(() => {
-    const feedbacks = getAllDashboardFeedbacksWithDetails();
-    return feedbacks
-      .filter((f) => f.submitted_at)
-      .sort((a, b) => new Date(a.submitted_at) - new Date(b.submitted_at));
-  }, []);
-
-  // Tạo timeline data theo tháng từ sớm nhất đến muộn nhất
+  const getPriorityColor = (priority) => {
+    const colors = {
+      low: "#4caf50",     
+      medium: "#ff9800",   
+      high: "#f44336",     
+      urgent: "#9c27b0"   
+    };
+    return colors[priority] || "#757575";
+  };
+// Tạo timeline data theo tháng từ sớm nhất đến muộn nhất
   const timelineData = useMemo(() => {
-    if (allFeedbacks.length === 0) return [];
+    if (data.length === 0) return [];
 
     const monthlyData = new Map();
 
-    allFeedbacks.forEach((feedback) => {
-      const date = new Date(feedback.submitted_at);
-      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-      const monthLabel = `${String(date.getMonth() + 1).padStart(2, "0")}/${date.getFullYear()}`;
+    data.forEach((item) => {
+      const currentDate = new Date();
+      const monthKey = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, "0")}`;
+      const monthLabel = `${String(currentDate.getMonth() + 1).padStart(2, "0")}/${currentDate.getFullYear()}`;
 
       if (!monthlyData.has(monthKey)) {
         monthlyData.set(monthKey, {
           key: monthKey,
           label: monthLabel,
-          date: new Date(date.getFullYear(), date.getMonth(), 1),
+          date: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
         });
       }
     });
 
     return Array.from(monthlyData.values()).sort((a, b) => a.date - b.date);
-  }, [allFeedbacks]);
+  }, [data]);
 
   // Set initial range to show all data
   useEffect(() => {
@@ -46,52 +50,32 @@ export default function PriorityDonutChart() {
   }, [timelineData]);
 
   // Filtered data based on slider range
-  const filteredFeedbacks = useMemo(() => {
-    if (timelineData.length === 0) return allFeedbacks;
+  const filteredData = useMemo(() => {
+    if (timelineData.length === 0) return data;
 
     const startDate = timelineData[timeRange[0]]?.date;
     const endDate = timelineData[timeRange[1]]?.date;
 
-    if (!startDate || !endDate) return allFeedbacks;
+    if (!startDate || !endDate) return data;
+    return data;
+  }, [data, timelineData, timeRange]);
 
-    return allFeedbacks.filter((feedback) => {
-      const feedbackDate = new Date(feedback.submitted_at);
-      return feedbackDate >= startDate && feedbackDate <= endDate;
-    });
-  }, [allFeedbacks, timelineData, timeRange]);
-
-  // Tính toán phân bố theo độ ưu tiên
   const priorityData = useMemo(() => {
-    const priorityStats = {
-      urgent: { count: 0, label: "Khẩn cấp", color: "#d32f2f" },
-      high: { count: 0, label: "Cao", color: "#ed6c02" },
-      medium: { count: 0, label: "Trung bình", color: "#1976d2" },
-      low: { count: 0, label: "Thấp", color: "#2e7d32" },
-    };
-
-    filteredFeedbacks.forEach((feedback) => {
-      const priorityName = feedback.priority?.name?.toLowerCase();
-      if (priorityName === "urgent") priorityStats.urgent.count++;
-      else if (priorityName === "high") priorityStats.high.count++;
-      else if (priorityName === "medium") priorityStats.medium.count++;
-      else if (priorityName === "low") priorityStats.low.count++;
-    });
-
-    const total = Object.values(priorityStats).reduce((sum, stat) => sum + stat.count, 0);
-
+    if (data.length === 0) return { data: [], total: 0 };
+    
+    const total = data.reduce((sum, item) => sum + item.count, 0);
+    
     return {
-      data: Object.entries(priorityStats)
-        .filter(([_, stat]) => stat.count > 0)
-        .map(([key, stat]) => ({
-          id: key,
-          label: `${stat.label} (${stat.count})`,
-          value: stat.count,
-          color: stat.color,
-          percentage: total > 0 ? ((stat.count / total) * 100).toFixed(1) : 0,
-        })),
+      data: data.map((item) => ({
+        id: item.priority,
+        label: `${item.display} (${item.count})`,
+        value: item.count,
+        color: getPriorityColor(item.priority),
+        percentage: total > 0 ? ((item.count / total) * 100).toFixed(1) : 0,
+      })),
       total,
     };
-  }, [filteredFeedbacks]);
+  }, [data]);
 
   // Chart data for MUI X Charts
   const chartData = useMemo(() => {
@@ -168,10 +152,10 @@ export default function PriorityDonutChart() {
     return { start, end, total: priorityData.total };
   }, [timelineData, timeRange, priorityData.total]);
 
-  // Dimensions
-  const chartWidth = 644;
-  const chartHeight = 400;
-  const sliderWidth = 600;
+   // Dimensions
+   const chartWidth = 644;
+   const chartHeight = 400;
+   const sliderWidth = 600;
 
   return (
     <Card sx={{ height: "100%" }}>
@@ -255,7 +239,7 @@ export default function PriorityDonutChart() {
               color="text.secondary"
               sx={{ mb: 2, textAlign: "center", fontWeight: 500 }}
             >
-              📊 Tổng quan mức độ ưu tiên
+              Tổng quan mức độ ưu tiên
             </Typography>
             <Box
               sx={{
@@ -316,7 +300,7 @@ export default function PriorityDonutChart() {
                   gap: 0.5,
                 }}
               >
-                📅 Khoảng thời gian
+                Khoảng thời gian
               </Typography>
             </Box>
 

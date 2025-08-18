@@ -33,7 +33,6 @@ const AuthPage = () => {
   const handleRegister = async (formData) => {
     try {
       await dispatch(registerUser(formData)).unwrap();
-      // Chuyển sang màn hình OTP verification
       navigate("/auth/verify-otp", {
         state: {
           email: formData.email,
@@ -57,7 +56,6 @@ const AuthPage = () => {
     dispatch(clearAuthError());
   };
 
-  // ==================== RENDER ====================
   return (
     <div>
       <AuthTabs

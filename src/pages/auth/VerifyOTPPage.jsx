@@ -28,7 +28,6 @@ const VerifyOTPPage = () => {
   const email = location.state?.email;
   const message = location.state?.message;
 
-  // ==================== EFFECTS ====================
   useEffect(() => {
     document.title = "Xác thực OTP - Feedback Hub";
 
@@ -62,7 +61,6 @@ const VerifyOTPPage = () => {
     }
   }, [error, dispatch]);
 
-  // ==================== HANDLERS ====================
   const handleOtpChange = (e) => {
     const value = e.target.value.replace(/\D/g, "").slice(0, 6);
     setOtp(value);
@@ -87,7 +85,7 @@ const VerifyOTPPage = () => {
     setResendLoading(true);
     try {
       await dispatch(sendOtp({ email })).unwrap();
-      setCountdown(60); // 60 seconds countdown
+      setCountdown(60); 
     } catch (error) {
       console.error("Resend OTP failed:", error);
     } finally {
@@ -99,7 +97,6 @@ const VerifyOTPPage = () => {
     navigate("/auth/login");
   };
 
-  // ==================== RENDER ====================
   if (!email) {
     return null;
   }

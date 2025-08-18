@@ -61,7 +61,7 @@ const RecentFeedbackTable = ({ feedbacks = [] }) => {
                   key={feedback.feedback_id}
                   className="border-b border-gray-200 transition-colors hover:bg-amber-50"
                 >
-                  {/* Cột Tiêu đề với mũi tên */}
+          
                   <TableCell className="px-4 py-3">
                     <Typography
                       variant="body2"
@@ -71,7 +71,7 @@ const RecentFeedbackTable = ({ feedbacks = [] }) => {
                     </Typography>
                   </TableCell>
 
-                  {/* Cột Người gửi */}
+       
                   <TableCell className="px-4 py-3">
                     <Typography variant="body2" className="font-medium text-gray-900">
                       {feedback.user?.full_name || "Không xác định"}
@@ -81,7 +81,6 @@ const RecentFeedbackTable = ({ feedbacks = [] }) => {
                     </Typography>
                   </TableCell>
 
-                  {/* Cột Ngày gửi */}
                   <TableCell className="px-4 py-3">
                     <Typography variant="body2" className="text-gray-900">
                       {new Date(feedback.submitted_at).toLocaleString("vi-VN", {
@@ -94,7 +93,7 @@ const RecentFeedbackTable = ({ feedbacks = [] }) => {
                     </Typography>
                   </TableCell>
 
-                  {/* Cột Loại */}
+
                   <TableCell className="px-4 py-3">
                     <TypeBadge
                       type={
@@ -107,7 +106,7 @@ const RecentFeedbackTable = ({ feedbacks = [] }) => {
                     />
                   </TableCell>
 
-                  {/* Cột Ưu tiên */}
+  
                   <TableCell className="px-4 py-3">
                     <PriorityBadge
                       priority={
@@ -120,7 +119,6 @@ const RecentFeedbackTable = ({ feedbacks = [] }) => {
                     />
                   </TableCell>
 
-                  {/* Cột Trạng thái */}
                   <TableCell className="px-3 py-3">
                     <StatusBadge
                       status={
@@ -137,7 +135,6 @@ const RecentFeedbackTable = ({ feedbacks = [] }) => {
                     />
                   </TableCell>
 
-                  {/* Cột ba chấm */}
                   <TableCell className="px-4 py-3">
                     <Typography variant="body2" className="cursor-pointer text-xl text-gray-600">
                       ⋮

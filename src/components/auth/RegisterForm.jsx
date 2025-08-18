@@ -103,9 +103,8 @@ const RegisterForm = ({
   const formatError = (error) => {
     if (!error) return null;
 
-    // Nếu error là object (từ API response)
+
     if (typeof error === "object") {
-      // Trường hợp error có cấu trúc: { field: ["error message"] }
       if (error.password2 || error.full_name || error.email || error.password) {
         const errorMessages = [];
 
@@ -120,7 +119,6 @@ const RegisterForm = ({
         return errorMessages.join(". ");
       }
 
-      // Trường hợp error có message
       if (error.message) {
         return error.message;
       }
@@ -130,11 +128,9 @@ const RegisterForm = ({
         return error.detail;
       }
 
-      // Fallback: convert object to string
       return JSON.stringify(error);
     }
 
-    // Nếu error đã là string
     return error;
   };
 
@@ -142,12 +138,11 @@ const RegisterForm = ({
     e.preventDefault();
 
     const success = await handleSubmit((data) => {
-      // *** FIX: Map frontend field names to API field names ***
       const registerData = {
-        full_name: data.fullName, // fullName -> full_name
+        full_name: data.fullName,
         email: data.email,
         password: data.password,
-        password2: data.confirmPassword, // confirmPassword -> password2
+        password2: data.confirmPassword,
       };
 
       return onRegister(registerData);

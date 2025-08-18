@@ -6,7 +6,6 @@ export const http = axios.create({
   timeout: 15000,
 });
 
-// Gắn access token (nếu có)
 http.interceptors.request.use((config) => {
   const access = localStorage.getItem("access_token");
   if (access) {
@@ -15,7 +14,6 @@ http.interceptors.request.use((config) => {
   return config;
 });
 
-// 401 → thử refresh một lần rồi retry
 let isRefreshing = false;
 let queue = [];
 
@@ -25,7 +23,6 @@ http.interceptors.response.use(
     const { response, config } = error || {};
     if (response?.status !== 401 || config?._retry) return Promise.reject(error);
 
-    // Hàng đợi request trong lúc refresh
     if (isRefreshing) {
       return new Promise((resolve) => {
         queue.push((newAccess) => {

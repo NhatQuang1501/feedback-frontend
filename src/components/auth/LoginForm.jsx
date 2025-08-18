@@ -194,8 +194,6 @@ const LoginForm = ({
           <div ref={googleBtnRef} className="w-full flex justify-center" />
         </div>
       </form>
-
-      {/* ==================== FORGOT PASSWORD DIALOG ==================== */}
       <ForgotPasswordDialog
         open={forgotPasswordOpen}
         onClose={handleForgotPasswordClose}

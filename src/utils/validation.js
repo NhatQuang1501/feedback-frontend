@@ -1,4 +1,4 @@
-// ==================== EMAIL VALIDATION ====================
+
 export const validateEmailAuth = (email) => {
   const errors = {};
 
@@ -13,7 +13,7 @@ export const validateEmailAuth = (email) => {
   return errors;
 };
 
-// ==================== PASSWORD VALIDATION ====================
+
 export const validatePassword = (password) => {
   const errors = {};
 
@@ -28,7 +28,7 @@ export const validatePassword = (password) => {
   return errors;
 };
 
-// ==================== STRONG PASSWORD VALIDATION ====================
+
 export const validateStrongPassword = (password) => {
   const errors = validatePassword(password);
 
@@ -39,7 +39,6 @@ export const validateStrongPassword = (password) => {
   return errors;
 };
 
-// ==================== NAME VALIDATION ====================
 export const validateName = (name, fieldName) => {
   const errors = {};
   const key = fieldName.toLowerCase();
@@ -55,7 +54,7 @@ export const validateName = (name, fieldName) => {
   return errors;
 };
 
-// ==================== FULL NAME VALIDATION ====================
+
 export const validateFullName = (fullName) => {
   const errors = {};
 
@@ -70,7 +69,7 @@ export const validateFullName = (fullName) => {
   return errors;
 };
 
-// ==================== CONFIRM PASSWORD VALIDATION ====================
+
 export const validateConfirmPassword = (password, confirmPassword) => {
   const errors = {};
 
@@ -83,7 +82,6 @@ export const validateConfirmPassword = (password, confirmPassword) => {
   return errors;
 };
 
-// ==================== LOGIN FORM VALIDATION ====================
 export const validateLoginForm = (formData) => {
   const errors = {
     ...validateEmailAuth(formData.email),
@@ -96,7 +94,6 @@ export const validateLoginForm = (formData) => {
   };
 };
 
-// ==================== REGISTER FORM VALIDATION ====================
 export const validateRegisterForm = (formData) => {
   const errors = {
     ...validateFullName(formData.fullName),
@@ -111,7 +108,7 @@ export const validateRegisterForm = (formData) => {
   };
 };
 
-// ==================== FORGOT PASSWORD VALIDATION ====================
+
 export const validateForgotPasswordForm = (email) => {
   const errors = validateEmailAuth(email);
 
@@ -121,7 +118,6 @@ export const validateForgotPasswordForm = (email) => {
   };
 };
 
-// ==================== FEEDBACK FORM VALIDATION ====================
 import { MAX_FILE_SIZE, ALLOWED_FILE_TYPES } from "./constants";
 
 export const validateEmail = (email) => {

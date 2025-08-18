@@ -1,45 +1,27 @@
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { Box, Typography, Card, CardContent, Slider, Chip, Stack, Divider } from "@mui/material";
 import { CalendarToday as CalendarIcon, TrendingUp as TrendingIcon } from "@mui/icons-material";
 import { LineChart } from "@mui/x-charts/LineChart";
-import { getAllDashboardFeedbacksWithDetails } from "@/metadata/DashboardMockData";
+import useContainerWidth from "@/hooks/useContainerWidth";
 
-export default function LineChartWithSlider() {
+
+export default function LineChartWithSlider({ data = [], dateRange, onDateRangeChange }) {
   const [timeRange, setTimeRange] = useState([0, 0]);
+  const wrapperRef = useRef(null);
+  const containerWidth = useContainerWidth(wrapperRef);
 
-  // Lấy tất cả feedback và sắp xếp theo thời gian
-  const allFeedbacks = useMemo(() => {
-    const feedbacks = getAllDashboardFeedbacksWithDetails();
-    return feedbacks
-      .filter((f) => f.submitted_at)
-      .sort((a, b) => new Date(a.submitted_at) - new Date(b.submitted_at));
-  }, []);
-
-  // Tạo timeline data theo tháng từ sớm nhất đến muộn nhất
   const timelineData = useMemo(() => {
-    if (allFeedbacks.length === 0) return [];
+    if (data.length === 0) return [];
+    
+    return data.map((item, index) => ({
+      key: item.month,
+      label: item.month,
+      value: item.count,
+      date: new Date(item.month + "-01") 
+    }));
+  }, [data]);
 
-    const monthlyData = new Map();
 
-    allFeedbacks.forEach((feedback) => {
-      const date = new Date(feedback.submitted_at);
-      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
-      const monthLabel = `${String(date.getMonth() + 1).padStart(2, "0")}/${date.getFullYear()}`;
-
-      if (!monthlyData.has(monthKey)) {
-        monthlyData.set(monthKey, {
-          key: monthKey,
-          label: monthLabel,
-          value: 0,
-          date: new Date(date.getFullYear(), date.getMonth(), 1),
-        });
-      }
-
-      monthlyData.get(monthKey).value++;
-    });
-
-    return Array.from(monthlyData.values()).sort((a, b) => a.date - b.date);
-  }, [allFeedbacks]);
 
   // Set initial range to show all data
   useEffect(() => {
@@ -257,7 +239,7 @@ export default function LineChartWithSlider() {
                 fontSize: "0.875rem",
               }}
             >
-              📅 Chọn khoảng thời gian hiển thị
+              Chọn khoảng thời gian hiển thị
             </Typography>
 
             {/* Outer container matches chart width and centers its children */}

@@ -5,13 +5,11 @@ const GoogleAuthProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Check if Google script is already loaded
     if (window.google && window.google.accounts) {
       setIsLoaded(true);
       return;
     }
 
-    // Load Google Identity Services script
     const script = document.createElement("script");
     script.src = "https://accounts.google.com/gsi/client";
     script.async = true;
@@ -27,13 +25,12 @@ const GoogleAuthProvider = ({ children }) => {
       setError("Failed to load Google Identity Services");
     };
 
-    // Add timeout
     const timeout = setTimeout(() => {
       if (!window.google) {
         console.warn("Google Identity Services loading timeout");
         setError("Google Identity Services loading timeout");
       }
-    }, 10000); // 10 seconds timeout
+    }, 10000);
 
     document.head.appendChild(script);
 
@@ -45,7 +42,7 @@ const GoogleAuthProvider = ({ children }) => {
     };
   }, []);
 
-  // Show loading state
+
   if (!isLoaded && !error) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -57,15 +54,12 @@ const GoogleAuthProvider = ({ children }) => {
     );
   }
 
-  // Show error state
   if (error) {
     console.warn(
       "Google Identity Services failed to load, but app will continue without Google OAuth",
     );
   }
 
-  // Render children regardless of Google script status
-  // The app will work without Google OAuth, just with reduced functionality
   return <>{children}</>;
 };
 
