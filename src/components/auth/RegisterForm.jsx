@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { Typography, Alert, Divider, Grid } from "@mui/material";
 import { Email, Lock, Person } from "@mui/icons-material";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -13,7 +13,6 @@ import { useForm } from "../../hooks/useForm";
 import { useMultiplePasswordToggle } from "../../hooks/usePasswordToggle";
 import { validateRegisterForm } from "../../utils/validation";
 
-// ==================== REGISTER FORM COMPONENT ====================
 const RegisterForm = ({
   onRegister,
   onGoogleLogin,
@@ -21,11 +20,12 @@ const RegisterForm = ({
   error = null,
   onSwitchToLogin,
 }) => {
-  // ==================== HOOKS ====================
   const { passwordVisibility, togglePassword, getVisibility } = useMultiplePasswordToggle([
     "password",
     "confirmPassword",
   ]);
+
+  const googleBtnRef = useRef(null);
 
   const { formData, errors, isSubmitting, handleChange, handleSubmit } = useForm(
     {
@@ -37,7 +37,69 @@ const RegisterForm = ({
     validateRegisterForm,
   );
 
-  // ==================== ERROR FORMATTING ====================
+  useEffect(() => {
+    let initialized = false;
+    const init = () => {
+      if (initialized) return;
+      initialized = true;
+      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+      if (clientId && typeof window !== "undefined" && window.google?.accounts?.id) {
+        try {
+          window.google.accounts.id.initialize({
+            client_id: clientId,
+            ux_mode: "popup",
+            auto_select: false,
+            cancel_on_tap_outside: false,
+            use_fedcm_for_prompt: true,
+            callback: async (response) => {
+              if (response?.credential) {
+                try {
+                  await onGoogleLogin(response.credential);
+                } catch (error) {
+                  alert("Lỗi khi xử lý đăng ký Google.");
+                }
+              } else {
+                alert("Không nhận được ID token từ Google.");
+              }
+            },
+            error_callback: (error) => {
+              alert(`Lỗi Google OAuth: ${error.error || "Unknown error"}`);
+            },
+          });
+          if (googleBtnRef.current) {
+            try {
+              window.google.accounts.id.renderButton(googleBtnRef.current, {
+                theme: "outline",
+                size: "large",
+                text: "continue_with",
+                shape: "pill",
+                logo_alignment: "left",
+              });
+            } catch (e) {
+              
+            }
+          }
+        } catch (e) {
+          
+        }
+      }
+    };
+
+    if (typeof window !== "undefined") {
+      if (window.google?.accounts?.id) {
+        init();
+      } else {
+        const interval = setInterval(() => {
+          if (window.google?.accounts?.id) {
+            clearInterval(interval);
+            init();
+          }
+        }, 200);
+        setTimeout(() => clearInterval(interval), 5000);
+      }
+    }
+  }, [onGoogleLogin]);
+
   const formatError = (error) => {
     if (!error) return null;
 
@@ -76,7 +138,6 @@ const RegisterForm = ({
     return error;
   };
 
-  // ==================== HANDLERS ====================
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
@@ -89,45 +150,35 @@ const RegisterForm = ({
         password2: data.confirmPassword, // confirmPassword -> password2
       };
 
-      console.log("Sending register data:", registerData); // Debug log
       return onRegister(registerData);
     });
 
     if (success) {
-      console.log("Registration successful");
     }
   };
 
   const handleGoogleRegister = async () => {
     try {
-      console.log("Starting Google OAuth for registration...");
-
       if (window.google && window.google.accounts && window.google.accounts.id) {
-        console.log("Requesting Google ID token for registration...");
         window.google.accounts.id.prompt();
       } else {
         alert("Google OAuth chưa được khởi tạo. Vui lòng thử lại sau vài giây.");
       }
     } catch (error) {
-      console.error("Google register error:", error);
       alert(`Lỗi đăng ký Google: ${error.message}`);
     }
   };
 
-  // ==================== RENDER ====================
   return (
     <div className="w-full">
-      {/* ==================== ERROR ALERT ==================== */}
       {error && (
         <Alert severity="error" className="mb-6 rounded-lg">
           {formatError(error)}
         </Alert>
       )}
 
-      {/* ==================== REGISTER FORM ==================== */}
       <form onSubmit={handleFormSubmit} className="w-full">
         <div className="space-y-6">
-          {/* ==================== FULL NAME FIELD ==================== */}
           <div className="space-y-1">
             <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
               Họ và tên
@@ -143,7 +194,6 @@ const RegisterForm = ({
             />
           </div>
 
-          {/* ==================== EMAIL FIELD ==================== */}
           <div className="space-y-1">
             <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
               Địa chỉ email
@@ -160,7 +210,6 @@ const RegisterForm = ({
             />
           </div>
 
-          {/* ==================== PASSWORD FIELD ==================== */}
           <div className="space-y-1">
             <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
               Mật khẩu
@@ -179,7 +228,6 @@ const RegisterForm = ({
             />
           </div>
 
-          {/* ==================== CONFIRM PASSWORD FIELD ==================== */}
           <div className="space-y-1">
             <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
               Xác nhận mật khẩu
@@ -198,14 +246,12 @@ const RegisterForm = ({
             />
           </div>
 
-          {/* ==================== SUBMIT BUTTON ==================== */}
           <div className="pt-4">
             <SubmitButton loading={loading || isSubmitting} className="w-full">
               Đăng Ký
             </SubmitButton>
           </div>
 
-          {/* ==================== DIVIDER ==================== */}
           <div className="py-2">
             <Divider className="relative">
               <Typography
@@ -217,16 +263,8 @@ const RegisterForm = ({
             </Divider>
           </div>
 
-          {/* ==================== GOOGLE BUTTON ==================== */}
-          <SocialButton
-            icon={<GoogleIcon className="text-xl" />}
-            onClick={handleGoogleRegister}
-            className="w-full"
-          >
-            Đăng ký với Google
-          </SocialButton>
+          <div ref={googleBtnRef} className="w-full flex justify-center" />
 
-          {/* ==================== TERMS ==================== */}
           <div className="pt-4">
             <Typography
               variant="body2"

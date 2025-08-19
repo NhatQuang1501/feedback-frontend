@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Typography, Alert, Link, Divider, Box } from "@mui/material";
 import { Email, Lock } from "@mui/icons-material";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -14,7 +14,6 @@ import { useForm } from "../../hooks/useForm";
 import { usePasswordToggle } from "../../hooks/usePasswordToggle";
 import { validateLoginForm } from "../../utils/validation";
 
-// ==================== LOGIN FORM COMPONENT ====================
 const LoginForm = ({
   onLogin,
   onGoogleLogin,
@@ -22,8 +21,8 @@ const LoginForm = ({
   error = null,
   onSwitchToRegister,
 }) => {
-  // ==================== HOOKS ====================
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
+  
   const { showPassword, togglePassword } = usePasswordToggle();
 
   const { formData, errors, isSubmitting, handleChange, handleSubmit } = useForm(
@@ -34,51 +33,78 @@ const LoginForm = ({
     validateLoginForm,
   );
 
-  // ==================== EFFECTS ====================
+  const initRef = useRef(false);
+  const googleBtnRef = useRef(null);
+
   useEffect(() => {
-    // Initialize Google Sign-In when component mounts
-    if (typeof window.google !== "undefined") {
+    // Guard against double init in React StrictMode
+    const init = () => {
+      if (initRef.current) return;
+      initRef.current = true;
       const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-      if (clientId && clientId !== "your-google-client-id-here") {
-        console.log("Initializing Google OAuth2...");
-
-        // Use ID token flow for better security
-        window.google.accounts.id.initialize({
-          client_id: clientId,
-          callback: async (response) => {
-            console.log("Google ID token callback received:", response);
-
-            if (response.credential) {
-              try {
-                console.log("Sending ID token to backend...");
-                await onGoogleLogin(response.credential);
-              } catch (error) {
-                console.error("Error processing Google login:", error);
-                alert("Lỗi khi xử lý đăng nhập Google.");
+      if (clientId && typeof window !== "undefined" && window.google?.accounts?.id) {
+        try {
+          window.google.accounts.id.initialize({
+            client_id: clientId,
+            ux_mode: "popup",
+            auto_select: false,
+            cancel_on_tap_outside: false,
+            use_fedcm_for_prompt: true,
+            callback: async (response) => {
+              if (response?.credential) {
+                try {
+                  await onGoogleLogin(response.credential);
+                } catch (error) {
+                  alert("Lỗi khi xử lý đăng nhập Google.");
+                }
+              } else {
+                alert("Không nhận được ID token từ Google.");
               }
-            } else {
-              console.error("No ID token received from Google");
-              alert("Không nhận được ID token từ Google.");
+            },
+            error_callback: (error) => {
+              alert(`Lỗi Google OAuth: ${error.error || "Unknown error"}`);
+            },
+          });
+          if (googleBtnRef.current) {
+            try {
+              window.google.accounts.id.renderButton(googleBtnRef.current, {
+                theme: "outline",
+                size: "large",
+                text: "continue_with",
+                shape: "pill",
+                logo_alignment: "left",
+              });
+            } catch (e) {
+              
             }
-          },
-          error_callback: (error) => {
-            console.error("Google ID token error:", error);
-            alert(`Lỗi Google OAuth: ${error.error || "Unknown error"}`);
-          },
-        });
+          }
+        } catch (e) {
+          
+        }
+      }
+    };
 
-        console.log("Google ID token flow initialized successfully");
+    // Defer init until google script is available
+    if (typeof window !== "undefined") {
+      if (window.google?.accounts?.id) {
+        init();
+      } else {
+        const interval = setInterval(() => {
+          if (window.google?.accounts?.id) {
+            clearInterval(interval);
+            init();
+          }
+        }, 200);
+        setTimeout(() => clearInterval(interval), 5000);
       }
     }
   }, [onGoogleLogin]);
 
-  // ==================== HANDLERS ====================
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     const success = await handleSubmit(onLogin);
     if (success) {
-      console.log("Login successful");
     }
   };
 
@@ -90,24 +116,18 @@ const LoginForm = ({
     setForgotPasswordOpen(false);
   };
 
-  const handleForgotPasswordSuccess = (email) => {
-    console.log("Email reset đã được gửi đến:", email);
-  };
+  const handleForgotPasswordSuccess = (email) => {};
 
-  // ==================== RENDER ====================
   return (
     <div className="w-full">
-      {/* ==================== ERROR ALERT ==================== */}
       {error && (
         <Alert severity="error" className="mb-6 rounded-lg">
           {error}
         </Alert>
       )}
 
-      {/* ==================== LOGIN FORM ==================== */}
       <form onSubmit={handleFormSubmit} className="w-full">
         <div className="space-y-6">
-          {/* ==================== EMAIL FIELD ==================== */}
           <div className="space-y-1">
             <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
               Địa chỉ email
@@ -124,7 +144,6 @@ const LoginForm = ({
             />
           </div>
 
-          {/* ==================== PASSWORD FIELD ==================== */}
           <div className="space-y-1">
             <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
               Mật khẩu
@@ -143,7 +162,6 @@ const LoginForm = ({
             />
           </div>
 
-          {/* ==================== FORGOT PASSWORD ==================== */}
           <div className="flex justify-end">
             <Link
               component="button"
@@ -156,14 +174,12 @@ const LoginForm = ({
             </Link>
           </div>
 
-          {/* ==================== SUBMIT BUTTON ==================== */}
           <div className="pt-2">
             <SubmitButton loading={loading || isSubmitting} className="w-full">
               Đăng Nhập
             </SubmitButton>
           </div>
 
-          {/* ==================== DIVIDER ==================== */}
           <div className="py-2">
             <Divider className="relative">
               <Typography
@@ -175,21 +191,7 @@ const LoginForm = ({
             </Divider>
           </div>
 
-          {/* ==================== GOOGLE BUTTON ==================== */}
-          <SocialButton
-            icon={<GoogleIcon className="text-xl" />}
-            onClick={() => {
-              if (window.google && window.google.accounts && window.google.accounts.id) {
-                console.log("Requesting Google ID token...");
-                window.google.accounts.id.prompt();
-              } else {
-                alert("Google OAuth chưa được khởi tạo. Vui lòng thử lại sau vài giây.");
-              }
-            }}
-            className="w-full"
-          >
-            Đăng nhập với Google
-          </SocialButton>
+          <div ref={googleBtnRef} className="w-full flex justify-center" />
         </div>
       </form>
 

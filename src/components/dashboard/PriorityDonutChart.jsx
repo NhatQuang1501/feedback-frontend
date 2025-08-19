@@ -1,6 +1,6 @@
-import React, { useMemo, useState, useEffect } from "react";
+  import React, { useMemo, useState, useEffect } from "react";
 import { Box, Typography, Card, CardContent, Slider, Chip, Stack } from "@mui/material";
-import { PriorityHigh as PriorityIcon, TrendingUp as TrendingIcon } from "@mui/icons-material";
+import { PriorityHigh as PriorityIcon, TrendingUp as TrendingIcon, CalendarToday as CalendarIcon } from "@mui/icons-material";
 import { PieChart } from "@mui/x-charts/PieChart";
 import { getAllDashboardFeedbacksWithDetails } from "@/metadata/DashboardMockData";
 
@@ -188,7 +188,7 @@ export default function PriorityDonutChart() {
           sx={{ mb: 2, gap: 3 }}
         >
           <Chip
-            icon={<PriorityIcon />}
+            icon={<CalendarIcon />}
             label={`${dateRangeInfo.start} - ${dateRangeInfo.end}`}
             variant="outlined"
             size="small"

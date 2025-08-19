@@ -4,7 +4,7 @@ import { Card, CardContent, Typography, Box } from "@mui/material";
 import { PieChart } from "@mui/x-charts/PieChart";
 
 export default function PieChartCard({ title, data }) {
-  const chartWidth = 644;
+  const chartWidth = 400;
   const chartHeight = 400;
 
   // Visual tuning

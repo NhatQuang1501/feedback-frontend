@@ -18,9 +18,7 @@ import SubmitButton from "../common/SubmitButton";
 import { useForm } from "../../hooks/useForm";
 import { validateForgotPasswordForm } from "../../utils/validation";
 
-// ==================== FORGOT PASSWORD DIALOG COMPONENT ====================
 const ForgotPasswordDialog = ({ open, onClose, onSuccess = null }) => {
-  // ==================== HOOKS ====================
   const { formData, errors, isSubmitting, handleChange, handleSubmit, resetForm } = useForm(
     { email: "" },
     (data) => validateForgotPasswordForm(data.email),
@@ -28,7 +26,6 @@ const ForgotPasswordDialog = ({ open, onClose, onSuccess = null }) => {
 
   const [success, setSuccess] = React.useState(false);
 
-  // ==================== HANDLERS ====================
   const handleClose = () => {
     resetForm();
     setSuccess(false);
@@ -62,7 +59,6 @@ const ForgotPasswordDialog = ({ open, onClose, onSuccess = null }) => {
     }
   };
 
-  // ==================== RENDER ====================
   return (
     <Dialog
       open={open}
@@ -75,7 +71,6 @@ const ForgotPasswordDialog = ({ open, onClose, onSuccess = null }) => {
       disableBackdropClick={isSubmitting}
       disableEscapeKeyDown={isSubmitting}
     >
-      {/* ==================== DIALOG TITLE ==================== */}
       <DialogTitle className="pt-6 pb-4 text-center">
         <div className="flex items-center justify-center gap-3">
           <Email className="text-3xl text-[#ffec99]" />
@@ -85,7 +80,6 @@ const ForgotPasswordDialog = ({ open, onClose, onSuccess = null }) => {
         </div>
       </DialogTitle>
 
-      {/* ==================== DIALOG CONTENT ==================== */}
       <DialogContent className="px-6 py-4">
         {!success ? (
           <form onSubmit={handleFormSubmit} className="w-full">
@@ -143,7 +137,6 @@ const ForgotPasswordDialog = ({ open, onClose, onSuccess = null }) => {
         )}
       </DialogContent>
 
-      {/* ==================== DIALOG ACTIONS ==================== */}
       <DialogActions className="justify-between p-6 pt-4">
         {!success ? (
           <div className="flex w-full justify-between gap-4">
