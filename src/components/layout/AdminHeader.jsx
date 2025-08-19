@@ -113,10 +113,6 @@ const AdminHeader = () => {
                 }}
                 className="mt-2"
               >
-                <MenuItem onClick={handleProfileMenuClose} className="gap-3">
-                  <AccountIcon className="h-5 w-5 text-gray-600" />
-                  <span>Thông tin cá nhân</span>
-                </MenuItem>
                 <MenuItem
                   onClick={async () => {
                     try {

@@ -30,7 +30,7 @@ export const fetchFeedbacks = createAsyncThunk(
   async (params, { rejectWithValue }) => {
     try {
       const response = await feedbackApi.getFeedbacks(params);
-      return response.data;
+      return response;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Có lỗi xảy ra khi tải danh sách phản hồi");
     }

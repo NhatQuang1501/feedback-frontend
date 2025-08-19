@@ -11,13 +11,14 @@ import {
   Box,
 } from "@mui/material";
 import { TypeBadge, PriorityBadge, StatusBadge } from "@/components/common/CustomBadge";
+import { getTypeInfo, getPriorityInfo, getStatusInfo } from "@/utils/constants";
 
 const RecentFeedbackTable = ({ feedbacks = [] }) => {
   return (
     <Paper elevation={2} className="overflow-hidden rounded-lg bg-white px-6" sx={{ width: 1490 }}>
       <Box className="border-b border-gray-200 bg-white p-3">
         <Typography className="mb-2 text-center text-base font-bold text-gray-900">
-          Top 10 Phản Hồi Gần Đây
+         Phản Hồi Gần Đây
         </Typography>
       </Box>
 
@@ -74,65 +75,35 @@ const RecentFeedbackTable = ({ feedbacks = [] }) => {
        
                   <TableCell className="px-4 py-3">
                     <Typography variant="body2" className="font-medium text-gray-900">
-                      {feedback.user?.full_name || "Không xác định"}
+                      {feedback.user_full_name || "Không xác định"}
                     </Typography>
                     <Typography variant="caption" className="text-gray-500">
-                      {feedback.user?.email || "N/A"}
+                      {feedback.user_email || "N/A"}
                     </Typography>
                   </TableCell>
 
                   <TableCell className="px-4 py-3">
                     <Typography variant="body2" className="text-gray-900">
-                      {new Date(feedback.submitted_at).toLocaleString("vi-VN", {
+                      {feedback.created_at ? new Date(feedback.created_at).toLocaleString("vi-VN", {
                         hour: "2-digit",
                         minute: "2-digit",
                         day: "2-digit",
                         month: "2-digit",
                         year: "numeric",
-                      })}
+                      }) : "N/A"}
                     </Typography>
                   </TableCell>
 
-
                   <TableCell className="px-4 py-3">
-                    <TypeBadge
-                      type={
-                        feedback.type?.name === "Bug"
-                          ? "report"
-                          : feedback.type?.name === "Feature Request"
-                            ? "feedback"
-                            : "other"
-                      }
-                    />
+                    <TypeBadge type={getTypeInfo(feedback.type_display).value} />
                   </TableCell>
 
-  
                   <TableCell className="px-4 py-3">
-                    <PriorityBadge
-                      priority={
-                        feedback.priority?.name === "Urgent" || feedback.priority?.name === "High"
-                          ? "high"
-                          : feedback.priority?.name === "Medium"
-                            ? "medium"
-                            : "low"
-                      }
-                    />
+                    <PriorityBadge priority={getPriorityInfo(feedback.priority_display).value} />
                   </TableCell>
 
                   <TableCell className="px-3 py-3">
-                    <StatusBadge
-                      status={
-                        feedback.status?.name === "New"
-                          ? "pending"
-                          : feedback.status?.name === "In Progress"
-                            ? "processing"
-                            : feedback.status?.name === "Resolved"
-                              ? "resolved"
-                              : feedback.status?.name === "Closed"
-                                ? "closed"
-                                : "pending"
-                      }
-                    />
+                    <StatusBadge status={getStatusInfo(feedback.status_display).value} />
                   </TableCell>
 
                   <TableCell className="px-4 py-3">

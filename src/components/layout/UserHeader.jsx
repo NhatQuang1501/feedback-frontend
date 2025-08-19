@@ -144,10 +144,6 @@ const UserHeader = () => {
                   }}
                   className="mt-2"
                 >
-                  <MenuItem onClick={handleProfile} className="gap-3">
-                    <AccountCircleOutlined className="h-5 w-5 text-gray-600" />
-                    <span>Thông tin cá nhân</span>
-                  </MenuItem>
                   <MenuItem onClick={handleLogout} className="gap-3">
                     <ExitToAppOutlined className="h-5 w-5 text-gray-600" />
                     <span>Đăng xuất</span>
