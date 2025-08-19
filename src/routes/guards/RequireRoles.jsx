@@ -37,9 +37,9 @@ const RequireRoles = ({ roles = [], children, fallbackPath = "/" }) => {
             startIcon={<Home />}
             onClick={() => {
               if (userRole === "admin") {
-                window.location.href = "/admin/dashboard";
+                window.location.href = "/admin/feedbacks/";
               } else {
-                window.location.href = "/feedbacks/create";
+                window.location.href = "/feedbacks/";
               }
             }}
             className="bg-primary text-secondary hover:bg-primary-dark"

@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { Box, Typography, Button } from "@mui/material";
-import { Lock, AdminPanelSettings } from "@mui/icons-material";
+import { AdminPanelSettings } from "@mui/icons-material";
 
 const RequireUserRole = ({ children }) => {
   const { user, isAuthenticated, isAdmin } = useSelector((state) => state.auth);
@@ -30,7 +30,7 @@ const RequireUserRole = ({ children }) => {
           <Button
             variant="contained"
             startIcon={<AdminPanelSettings />}
-            onClick={() => (window.location.href = "/admin/dashboard")}
+            onClick={() => (window.location.href = "/admin/feedbacks")}
             className="bg-primary text-secondary hover:bg-primary-dark"
           >
             Về khu vực Admin

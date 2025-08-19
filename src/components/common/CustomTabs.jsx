@@ -26,7 +26,7 @@ TabPanel.propTypes = {
 
 function a11yProps(index) {
   return {
-    id: `custom-tab-${index}`,
+    "id": `custom-tab-${index}`,
     "aria-controls": `custom-tabpanel-${index}`,
   };
 }
@@ -51,12 +51,12 @@ const CustomTabs = ({
           aria-label="custom tabs"
           sx={{
             "& .MuiTab-root": {
-              textTransform: "none",
-              fontSize: { xs: "0.875rem", sm: "1rem" },
-              fontWeight: 500,
-              minHeight: { xs: 48, sm: 56 },
-              padding: { xs: "8px 12px", sm: "12px 16px" },
-              color: "#6b7280",
+              "textTransform": "none",
+              "fontSize": { xs: "0.875rem", sm: "1rem" },
+              "fontWeight": 500,
+              "minHeight": { xs: 48, sm: 56 },
+              "padding": { xs: "8px 12px", sm: "12px 16px" },
+              "color": "#6b7280",
               "&:hover": {
                 backgroundColor: "rgba(255, 236, 153, 0.04)",
                 color: "#374151",

@@ -1,90 +1,45 @@
-import React, { useState, useEffect } from "react";
-import { Typography, Paper } from "@mui/material";
-import FeedbackFilters from "@/components/admin/FeedbackFilters";
+import React from "react";
+import { Typography, Paper, Box } from "@mui/material";
+import FeedbackFilters from "@/components/feedback/FeedbackFilters";
 import FeedbackList from "@/components/feedback/FeedbackList";
 import Pagination from "@/components/common/Pagination";
-import {
-  getAllFeedbacksWithDetails,
-  filterFeedbacks,
-  sortFeedbacks,
-  paginateFeedbacks,
-} from "@/metadata/QuangMockData";
-import { ITEMS_PER_PAGE } from "@/utils/constants";
+import { useFeedbackList, useExportFeedback } from "@/hooks/useFeedback";
 
 const AdminFeedbackManagementPage = () => {
-  const [allFeedbacks] = useState(getAllFeedbacksWithDetails());
-  const [filteredFeedbacks, setFilteredFeedbacks] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [paginatedData, setPaginatedData] = useState({
-    data: [],
-    totalItems: 0,
-    totalPages: 0,
-    currentPage: 1,
-    hasNextPage: false,
-    hasPrevPage: false,
-  });
+  const {
+    feedbacks,
+    totalItems,
+    currentPage,
+    isLoading,
+    filters,
+    handleFilterChange,
+    handlePageChange,
+    itemsPerPage,
+    totalPages,
+  } = useFeedbackList();
 
-  // Filter states
-  const [filters, setFilters] = useState({
-    search: "",
-    type: "all",
-    priority: "all",
-    status: "all",
-  });
+  const { isExporting, exportStatus, exportUrl, startExport, downloadFile } = useExportFeedback();
 
-  // Sort and pagination states
-  const [sortBy, setSortBy] = useState("submitted_at_desc");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(ITEMS_PER_PAGE);
-
-  // Apply filters, sort, and pagination
-  useEffect(() => {
-    const applyFilters = async () => {
-      setLoading(true);
-
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 300));
-        let filtered = filterFeedbacks(allFeedbacks, filters);
-        filtered = sortFeedbacks(filtered, sortBy);
-        setFilteredFeedbacks(filtered);
-        const paginated = paginateFeedbacks(filtered, currentPage, itemsPerPage);
-        setPaginatedData(paginated);
-      } catch (error) {
-        console.error("Error applying filters:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    applyFilters();
-  }, [allFeedbacks, filters, sortBy, currentPage, itemsPerPage]);
-
-  // Reset to first page when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filters, sortBy, itemsPerPage]);
-
-  // Event handlers
-  const handleFilterChange = (newFilters) => {
-    setFilters(newFilters);
+  // Xử lý export feedback
+  const handleExport = () => {
+    startExport({
+      status: filters.status,
+      type: filters.type,
+      priority: filters.priority,
+      q: filters.q,
+      sort: filters.sort,
+    });
   };
 
-  const handleSortChange = (newSortBy) => {
-    setSortBy(newSortBy);
-  };
-
-  const handlePageChange = (page) => {
-    setCurrentPage(page);
-  };
-
-  const handleItemsPerPageChange = (newItemsPerPage) => {
-    setItemsPerPage(newItemsPerPage);
+  // Xử lý download file
+  const handleDownload = () => {
+    downloadFile();
   };
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
       {/* Page Header */}
-      <div className="mb-8 text-center">
+      <div className="relative mb-8 text-center">
         <Typography variant="h1" className="mb-4 text-4xl font-bold text-gray-900">
           Quản Lý Phản Hồi
         </Typography>
@@ -95,31 +50,32 @@ const AdminFeedbackManagementPage = () => {
 
       {/* Filters */}
       <Paper className="p-6 shadow-sm">
-        <FeedbackFilters
-          filters={filters}
-          onFilterChange={handleFilterChange}
-          sortBy={sortBy}
-          onSortChange={handleSortChange}
-          totalResults={filteredFeedbacks.length}
-        />
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+          <FeedbackFilters
+            filters={filters}
+            onFilterChange={handleFilterChange}
+            sortBy={filters.sort}
+            onSortChange={(sort) => handleFilterChange("sort", sort)}
+            totalResults={totalItems}
+          />
+        </Box>
       </Paper>
 
       {/* Feedback List */}
       <Paper className="p-6 shadow-sm">
-        <FeedbackList feedbacks={paginatedData.data} loading={loading} />
+        <FeedbackList feedbacks={feedbacks} loading={isLoading} />
       </Paper>
 
       {/* Pagination */}
-      {paginatedData.totalPages > 1 && (
+      {totalPages > 1 && (
         <Pagination
-          currentPage={paginatedData.currentPage}
-          totalPages={paginatedData.totalPages}
-          totalItems={paginatedData.totalItems}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={totalItems}
           itemsPerPage={itemsPerPage}
-          hasNextPage={paginatedData.hasNextPage}
-          hasPrevPage={paginatedData.hasPrevPage}
+          hasNextPage={currentPage < totalPages}
+          hasPrevPage={currentPage > 1}
           onPageChange={handlePageChange}
-          onItemsPerPageChange={handleItemsPerPageChange}
         />
       )}
     </div>

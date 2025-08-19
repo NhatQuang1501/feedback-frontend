@@ -23,7 +23,7 @@ export default [
       react,
       "react-hooks": reactHooks,
       "react-refresh": reactRefresh,
-      import: importPlugin,
+      "import": importPlugin,
     },
     rules: {
       ...js.configs.recommended.rules,

@@ -113,8 +113,8 @@ export default {
           textShadow: "1px 1px 2px rgba(0, 0, 0, 0.1)",
         },
         ".input-black-border": {
-          borderColor: "#000000",
-          borderWidth: "2px",
+          "borderColor": "#000000",
+          "borderWidth": "2px",
           "&:hover": {
             borderColor: "#000000",
           },
@@ -147,7 +147,7 @@ export default {
           },
           "&:focus": {
             "@apply border-black outline-none": {},
-            boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.1)",
+            "boxShadow": "0 0 0 1px rgba(0, 0, 0, 0.1)",
           },
           "&.error": {
             "@apply border-red-500": {},

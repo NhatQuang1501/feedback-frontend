@@ -1,13 +1,13 @@
 import axios from "axios";
 
-export const http = axios.create({
+export const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api",
   withCredentials: false,
   timeout: 15000,
 });
 
 // Gắn access token (nếu có)
-http.interceptors.request.use((config) => {
+axiosInstance.interceptors.request.use((config) => {
   const access = localStorage.getItem("access_token");
   if (access) {
     config.headers.Authorization = `Bearer ${access}`;
@@ -19,7 +19,7 @@ http.interceptors.request.use((config) => {
 let isRefreshing = false;
 let queue = [];
 
-http.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (res) => res,
   async (error) => {
     const { response, config } = error || {};
@@ -31,7 +31,7 @@ http.interceptors.response.use(
         queue.push((newAccess) => {
           config.headers.Authorization = `Bearer ${newAccess}`;
           config._retry = true;
-          resolve(http(config));
+          resolve(axiosInstance(config));
         });
       });
     }
@@ -41,7 +41,7 @@ http.interceptors.response.use(
       const refresh = localStorage.getItem("refresh_token");
       if (!refresh) throw new Error("No refresh token");
 
-      const { data } = await http.post("/token/refresh/", { refresh });
+      const { data } = await axiosInstance.post("/token/refresh/", { refresh });
       localStorage.setItem("access_token", data.access);
 
       queue.forEach((cb) => cb(data.access));
@@ -49,7 +49,7 @@ http.interceptors.response.use(
 
       config.headers.Authorization = `Bearer ${data.access}`;
       config._retry = true;
-      return http(config);
+      return axiosInstance(config);
     } catch (e) {
       localStorage.removeItem("access_token");
       localStorage.removeItem("refresh_token");
@@ -58,7 +58,7 @@ http.interceptors.response.use(
     } finally {
       isRefreshing = false;
     }
-  }
+  },
 );
 
-export default http;
+export default axiosInstance;

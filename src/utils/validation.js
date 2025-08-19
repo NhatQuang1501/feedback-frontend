@@ -1,4 +1,4 @@
-// ==================== EMAIL VALIDATION ====================
+// Email validation
 export const validateEmailAuth = (email) => {
   const errors = {};
 
@@ -13,7 +13,7 @@ export const validateEmailAuth = (email) => {
   return errors;
 };
 
-// ==================== PASSWORD VALIDATION ====================
+// Password validation
 export const validatePassword = (password) => {
   const errors = {};
 
@@ -28,7 +28,7 @@ export const validatePassword = (password) => {
   return errors;
 };
 
-// ==================== STRONG PASSWORD VALIDATION ====================
+// Strong password validation
 export const validateStrongPassword = (password) => {
   const errors = validatePassword(password);
 
@@ -39,7 +39,7 @@ export const validateStrongPassword = (password) => {
   return errors;
 };
 
-// ==================== NAME VALIDATION ====================
+// Name validation
 export const validateName = (name, fieldName) => {
   const errors = {};
   const key = fieldName.toLowerCase();
@@ -55,7 +55,7 @@ export const validateName = (name, fieldName) => {
   return errors;
 };
 
-// ==================== FULL NAME VALIDATION ====================
+// Full name validation
 export const validateFullName = (fullName) => {
   const errors = {};
 
@@ -70,7 +70,7 @@ export const validateFullName = (fullName) => {
   return errors;
 };
 
-// ==================== CONFIRM PASSWORD VALIDATION ====================
+// Confirm password validation
 export const validateConfirmPassword = (password, confirmPassword) => {
   const errors = {};
 
@@ -83,7 +83,7 @@ export const validateConfirmPassword = (password, confirmPassword) => {
   return errors;
 };
 
-// ==================== LOGIN FORM VALIDATION ====================
+// Login form validation
 export const validateLoginForm = (formData) => {
   const errors = {
     ...validateEmailAuth(formData.email),
@@ -96,7 +96,7 @@ export const validateLoginForm = (formData) => {
   };
 };
 
-// ==================== REGISTER FORM VALIDATION ====================
+// Register form validation
 export const validateRegisterForm = (formData) => {
   const errors = {
     ...validateFullName(formData.fullName),
@@ -111,7 +111,7 @@ export const validateRegisterForm = (formData) => {
   };
 };
 
-// ==================== FORGOT PASSWORD VALIDATION ====================
+// Forgot password validation
 export const validateForgotPasswordForm = (email) => {
   const errors = validateEmailAuth(email);
 
@@ -121,9 +121,7 @@ export const validateForgotPasswordForm = (email) => {
   };
 };
 
-// ==================== FEEDBACK FORM VALIDATION ====================
-import { MAX_FILE_SIZE, ALLOWED_FILE_TYPES } from "./constants";
-
+// Feedback form validation
 export const validateEmail = (email) => {
   const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
   return emailRegex.test(email);
@@ -145,51 +143,39 @@ export const validateFileType = (file, allowedTypes) => {
   return allowedTypes.includes(file.type);
 };
 
-export const validateFeedbackForm = (formData) => {
+export const validateFeedbackForm = (data) => {
   const errors = {};
+  let isValid = true;
 
-  // Name
-  if (!validateRequired(formData.fullName)) {
-    errors.fullName = "Vui lòng nhập họ tên";
-  }
-  // Email
-  if (!validateRequired(formData.email)) {
-    errors.email = "Vui lòng nhập email";
-  } else if (!validateEmail(formData.email)) {
-    errors.email = "Email không hợp lệ";
-  }
-  // Title
-  if (!validateRequired(formData.title)) {
-    errors.title = "Vui lòng nhập tiêu đề";
-  } else if (!validateMinLength(formData.title, 5)) {
+  // Validate title
+  if (!data.title || data.title.trim() === "") {
+    errors.title = "Tiêu đề không được để trống";
+    isValid = false;
+  } else if (data.title.length < 5) {
     errors.title = "Tiêu đề phải có ít nhất 5 ký tự";
-  }
-  // Feedback content
-  if (!validateRequired(formData.content)) {
-    errors.content = "Vui lòng nhập nội dung phản hồi";
-  } else if (!validateMinLength(formData.content, 10)) {
-    errors.content = "Nội dung phản hồi phải có ít nhất 10 ký tự";
-  }
-  // Type
-  if (!validateRequired(formData.type)) {
-    errors.type = "Vui lòng chọn loại phản hồi";
-  }
-  // Priority
-  if (!validateRequired(formData.priority)) {
-    errors.priority = "Vui lòng chọn mức độ ưu tiên";
-  }
-  // File
-  if (formData.file) {
-    if (!validateFileSize(formData.file, MAX_FILE_SIZE)) {
-      errors.file = "Kích thước file không được vượt quá 5MB";
-    }
-    if (!validateFileType(formData.file, ALLOWED_FILE_TYPES)) {
-      errors.file = "Định dạng file không hợp lệ";
-    }
+    isValid = false;
   }
 
-  return {
-    isValid: Object.keys(errors).length === 0,
-    errors,
-  };
+  // Validate content
+  if (!data.content || data.content.trim() === "") {
+    errors.content = "Nội dung không được để trống";
+    isValid = false;
+  } else if (data.content.length < 10) {
+    errors.content = "Nội dung phải có ít nhất 10 ký tự";
+    isValid = false;
+  }
+
+  // Validate type
+  if (!data.type) {
+    errors.type = "Vui lòng chọn loại phản hồi";
+    isValid = false;
+  }
+
+  // Validate priority
+  if (!data.priority) {
+    errors.priority = "Vui lòng chọn mức độ ưu tiên";
+    isValid = false;
+  }
+
+  return { isValid, errors };
 };
