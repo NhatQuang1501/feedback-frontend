@@ -1,14 +1,27 @@
 export const FEEDBACK_TYPES = [
-  { value: "feedback", label: "Góp ý" },
-  { value: "report", label: "Báo lỗi" },
-  { value: "other", label: "Khác" },
+  { value: "suggestion", label: "Góp ý", color: "suggestion" },
+  { value: "bug", label: "Lỗi", color: "bug" },
+  { value: "other", label: "Khác", color: "other" },
 ];
 
 export const PRIORITY_LEVELS = [
-  { value: "low", label: "Thấp" },
-  { value: "medium", label: "Trung bình" },
-  { value: "high", label: "Cao" },
+  { value: "low", label: "Thấp", color: "low" },
+  { value: "medium", label: "Trung bình", color: "medium" },
+  { value: "high", label: "Cao", color: "high" },
 ];
+
+export const FEEDBACK_STATUS = [
+  { value: "pending", label: "Chờ xử lý", color: "pending" },
+  { value: "processing", label: "Đang xử lý", color: "processing" },
+  { value: "resolved", label: "Đã xử lý", color: "resolved" },
+];
+
+export const SORT_OPTIONS = [
+  { value: "newest", label: "Mới nhất" },
+  { value: "oldest", label: "Cũ nhất" },
+];
+
+export const ITEMS_PER_PAGE = 10;
 
 export const ALLOWED_FILE_TYPES = [
   "image/jpeg",
@@ -18,27 +31,57 @@ export const ALLOWED_FILE_TYPES = [
   "application/msword",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
 ];
+
 export const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
-// Admin feedback status
-export const FEEDBACK_STATUS = [
-  { value: "pending", label: "Chờ xử lý", color: "status-pending" },
-  { value: "processing", label: "Đang xử lý", color: "status-processing" },
-  { value: "resolved", label: "Đã giải quyết", color: "status-resolved" },
-  { value: "closed", label: "Đã đóng", color: "status-closed" },
-];
+// Value mapping
+export const getTypeInfo = (typeDisplay) => {
+  const mapping = {
+    "Góp ý": "suggestion",
+    "Lỗi": "bug",
+    "Khác": "other",
+  };
 
-// User roles
-export const USER_ROLES = [
-  { value: "user", label: "Người dùng" },
-  { value: "admin", label: "Quản trị viên" },
-];
+  const value = mapping[typeDisplay] || typeDisplay;
+  return (
+    FEEDBACK_TYPES.find((type) => type.value === value) || {
+      value,
+      label: typeDisplay,
+      color: "default",
+    }
+  );
+};
 
-// Admin settings
-export const ITEMS_PER_PAGE = 10;
+export const getPriorityInfo = (priorityDisplay) => {
+  const mapping = {
+    "Thấp": "low",
+    "Trung bình": "medium",
+    "Cao": "high",
+  };
 
-// Sort options for admin
-export const SORT_OPTIONS = [
-  { value: "submitted_at_desc", label: "Mới nhất" },
-  { value: "submitted_at_asc", label: "Cũ nhất" },
-];
+  const value = mapping[priorityDisplay] || priorityDisplay;
+  return (
+    PRIORITY_LEVELS.find((priority) => priority.value === value) || {
+      value,
+      label: priorityDisplay,
+      color: "default",
+    }
+  );
+};
+
+export const getStatusInfo = (statusDisplay) => {
+  const mapping = {
+    "Chờ xử lý": "pending",
+    "Đang xử lý": "processing",
+    "Đã xử lý": "resolved",
+  };
+
+  const value = mapping[statusDisplay] || statusDisplay;
+  return (
+    FEEDBACK_STATUS.find((status) => status.value === value) || {
+      value,
+      label: statusDisplay,
+      color: "default",
+    }
+  );
+};

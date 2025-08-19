@@ -120,12 +120,12 @@ const AuthTabs = ({
               textColor="primary"
               sx={{
                 "& .MuiTab-root": {
-                  textTransform: "none",
-                  fontSize: { xs: "0.875rem", sm: "1rem" },
-                  fontWeight: 500,
-                  minHeight: { xs: 56, sm: 64 },
-                  padding: { xs: "8px 12px", sm: "12px 16px" },
-                  color: "#6b7280",
+                  "textTransform": "none",
+                  "fontSize": { xs: "0.875rem", sm: "1rem" },
+                  "fontWeight": 500,
+                  "minHeight": { xs: 56, sm: 64 },
+                  "padding": { xs: "8px 12px", sm: "12px 16px" },
+                  "color": "#6b7280",
                   "&:hover": {
                     backgroundColor: "rgba(255, 236, 153, 0.04)",
                     color: "#374151",

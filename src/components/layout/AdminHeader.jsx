@@ -11,10 +11,8 @@ import {
   Menu,
   MenuItem,
   IconButton,
-  Badge,
 } from "@mui/material";
 import {
-  NotificationsOutlined as NotificationsIcon,
   AccountCircleOutlined as AccountIcon,
   ExitToAppOutlined as LogoutIcon,
 } from "@mui/icons-material";
@@ -90,16 +88,6 @@ const AdminHeader = () => {
 
           {/* Right side items */}
           <div className="flex items-center gap-3 sm:gap-6">
-            {/* Notifications */}
-            <IconButton
-              size="large"
-              className="hover:text-primary text-gray-600 transition-colors duration-200"
-            >
-              <Badge badgeContent={3} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-
             {/* Auth Separator */}
             <div className="hidden h-6 w-px bg-gray-300 sm:block"></div>
 
@@ -107,11 +95,7 @@ const AdminHeader = () => {
             <div className="flex items-center">
               <IconButton size="large" edge="end" onClick={handleProfileMenuOpen}>
                 <Avatar className="bg-primary text-secondary">
-                  {user?.full_name ? (
-                    user.full_name.charAt(0).toUpperCase()
-                  ) : (
-                    <AccountIcon />
-                  )}
+                  {user?.full_name ? user.full_name.charAt(0).toUpperCase() : <AccountIcon />}
                 </Avatar>
               </IconButton>
 
@@ -133,7 +117,7 @@ const AdminHeader = () => {
                   <AccountIcon className="h-5 w-5 text-gray-600" />
                   <span>Thông tin cá nhân</span>
                 </MenuItem>
-                <MenuItem 
+                <MenuItem
                   onClick={async () => {
                     try {
                       await dispatch(logoutUser()).unwrap();
@@ -142,7 +126,7 @@ const AdminHeader = () => {
                       console.error("Logout failed:", error);
                     }
                     handleProfileMenuClose();
-                  }} 
+                  }}
                   className="gap-3"
                 >
                   <LogoutIcon className="h-5 w-5 text-gray-600" />

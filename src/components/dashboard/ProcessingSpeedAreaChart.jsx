@@ -92,7 +92,6 @@ export default function ProcessingSpeedAreaChart() {
 
       // Tính thời gian xử lý (mock data - giả sử thời gian xử lý trung bình)
       const processingTimes = {
-        urgent: 1.5, // 1.5 ngày
         high: 3, // 3 ngày
         medium: 7, // 7 ngày
         low: 14, // 14 ngày
@@ -427,7 +426,7 @@ export default function ProcessingSpeedAreaChart() {
                   max={Math.max(0, timelineData.length - 1)}
                   step={1}
                   sx={{
-                    height: 12,
+                    "height": 12,
                     "& .MuiSlider-track": {
                       height: 8,
                       background: "linear-gradient(90deg, #4caf50 0%, #66bb6a 50%, #81c784 100%)",
@@ -442,12 +441,12 @@ export default function ProcessingSpeedAreaChart() {
                       border: "1px solid #c8e6c9",
                     },
                     "& .MuiSlider-thumb": {
-                      width: 24,
-                      height: 24,
-                      backgroundColor: "#4caf50",
-                      border: "4px solid #fff",
-                      boxShadow: "0 4px 12px rgba(76, 175, 80, 0.4)",
-                      transition: "all 0.2s ease-in-out",
+                      "width": 24,
+                      "height": 24,
+                      "backgroundColor": "#4caf50",
+                      "border": "4px solid #fff",
+                      "boxShadow": "0 4px 12px rgba(76, 175, 80, 0.4)",
+                      "transition": "all 0.2s ease-in-out",
                       "&:hover": {
                         boxShadow: "0 6px 16px rgba(76, 175, 80, 0.5)",
                         transform: "scale(1.15)",

@@ -10,7 +10,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import { TypeBadge, PriorityBadge, StatusBadge } from "@/utils/customBadge";
+import { TypeBadge, PriorityBadge, StatusBadge } from "@/components/common/CustomBadge";
 
 const RecentFeedbackTable = ({ feedbacks = [] }) => {
   return (

@@ -12,7 +12,7 @@ const ProtectedRoute = () => {
     return (
       <Box className="flex h-screen items-center justify-center">
         <div className="text-center">
-          <CircularProgress className="mb-4 text-primary" />
+          <CircularProgress className="text-primary mb-4" />
           <p className="text-gray-600">Đang kiểm tra xác thực...</p>
         </div>
       </Box>
