@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { CardContent, Typography, Alert, Snackbar, Box, TextareaAutosize } from "@mui/material";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { CardContent, Typography, Alert, Box, TextareaAutosize } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { submitFeedback, resetSubmitState } from "@/store/slices/feedbackSlice";
 import { FEEDBACK_TYPES, PRIORITY_LEVELS } from "@/utils/constants";
 import { validateFeedbackForm } from "@/utils/validation";
 import FileUpload from "./FileUpload";
@@ -11,14 +10,17 @@ import TextField from "@/components/common/TextField";
 import CustomSelect from "@/components/common/CustomSelect";
 import ConfirmDialog from "@/components/common/ConfirmDialog";
 import Button from "@/components/common/Button";
+import { feedbackApi } from "@/api/feedbackApi";
+import { useToast } from "@/components/common/Toast";
 
 const FeedbackForm = () => {
-  const dispatch = useDispatch();
-  const { isSubmitting, submitSuccess, submitError } = useSelector((state) => state.feedback);
+  const { user } = useSelector((state) => state.auth);
+  const { showToast } = useToast();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(null);
 
   const [formData, setFormData] = useState({
-    fullName: "",
-    email: "",
     title: "",
     content: "",
     type: "",
@@ -27,29 +29,37 @@ const FeedbackForm = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const [showSuccess, setShowSuccess] = useState(false);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [confirmDialogType, setConfirmDialogType] = useState("submit");
   const [confirmAction, setConfirmAction] = useState(null);
 
-  useEffect(() => {
-    if (submitSuccess) {
-      setShowSuccess(true);
-      setFormData({
-        fullName: "",
-        email: "",
-        title: "",
-        content: "",
-        type: "",
-        priority: "",
-        attachments: [],
-      });
-      setErrors({});
-    }
-  }, [submitSuccess]);
+  // Chuyển đổi constants thành mapping với ID
+  const typeIdMapping = {
+    suggestion: 1,
+    bug: 2,
+    other: 3,
+  };
+
+  const priorityIdMapping = {
+    low: 1,
+    medium: 2,
+    high: 3,
+  };
+
+  // Hàm chuyển đổi chữ cái đầu thành chữ hoa
+  const capitalizeFirstLetter = (string) => {
+    if (!string) return "";
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
 
   const handleInputChange = (field) => (event) => {
-    const value = event.target.value;
+    let value = event.target.value;
+
+    // Tự động viết hoa chữ cái đầu cho tiêu đề và nội dung
+    if (field === "title" || field === "content") {
+      value = capitalizeFirstLetter(value);
+    }
+
     setFormData((prev) => ({
       ...prev,
       [field]: value,
@@ -113,28 +123,36 @@ const FeedbackForm = () => {
 
   const handleSubmit = async () => {
     setErrors({});
+    setIsSubmitting(true);
+    setSubmitError(null);
 
-    const submitData = {
-      ...formData,
-      attachments: formData.attachments.map((file) => ({
-        name: file.name,
-        size: file.size,
-        type: file.type,
-        content: file.base64,
-      })),
-    };
+    // Tạo FormData để gửi dữ liệu và file
+    const formDataToSubmit = new FormData();
+    formDataToSubmit.append("title", formData.title);
+    formDataToSubmit.append("content", formData.content);
+    formDataToSubmit.append("type_id", typeIdMapping[formData.type]);
+    formDataToSubmit.append("priority_id", priorityIdMapping[formData.priority]);
+
+    // Thêm các file đính kèm
+    formData.attachments.forEach((file) => {
+      formDataToSubmit.append("files", file);
+    });
 
     try {
-      await dispatch(submitFeedback(submitData)).unwrap();
+      await feedbackApi.createFeedback(formDataToSubmit);
+      showToast("Phản hồi của bạn đã được gửi thành công!", "success");
+      handleReset();
     } catch (error) {
       console.error("Submit error:", error);
+      setSubmitError("Có lỗi xảy ra khi gửi phản hồi");
+      showToast("Có lỗi xảy ra khi gửi phản hồi. Vui lòng thử lại!", "error");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleReset = () => {
     setFormData({
-      fullName: "",
-      email: "",
       title: "",
       content: "",
       type: "",
@@ -144,14 +162,6 @@ const FeedbackForm = () => {
     setErrors({});
   };
 
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-    setShowSuccess(false);
-    dispatch(resetSubmitState());
-  };
-
   return (
     <>
       <CardContent className="p-6 sm:p-8 lg:p-10">
@@ -159,7 +169,7 @@ const FeedbackForm = () => {
           {/* Error Alert */}
           {submitError && (
             <Alert severity="error" className="mb-4">
-              Có lỗi xảy ra khi gửi phản hồi. Vui lòng thử lại!
+              {submitError}
             </Alert>
           )}
 
@@ -178,40 +188,19 @@ const FeedbackForm = () => {
                 <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
                   Họ và tên
                 </Typography>
-                <TextField
-                  fullWidth
-                  placeholder="Nhập họ và tên của bạn"
-                  value={formData.fullName}
-                  onChange={handleInputChange("fullName")}
-                  error={!!errors.fullName}
-                  helperText={errors.fullName}
-                  variant="outlined"
-                  className="bg-gray-50/50 [&_.MuiOutlinedInput-input]:pl-4 [&_.MuiOutlinedInput-root]:h-14 [&_.MuiOutlinedInput-root]:text-base"
-                  InputProps={{
-                    className:
-                      "rounded-lg border border-gray-300 hover:border-primary-main focus:border-primary-dark",
-                  }}
-                />
+                <div className="flex h-14 items-center rounded-lg border border-gray-300 bg-gray-50/50 px-4 text-base text-gray-900">
+                  <Typography className="font-medium">
+                    {user?.full_name || "Không xác định"}
+                  </Typography>
+                </div>
               </div>
               <div className="space-y-1">
                 <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
                   Email
                 </Typography>
-                <TextField
-                  fullWidth
-                  type="email"
-                  placeholder="yourname@example.com"
-                  value={formData.email}
-                  onChange={handleInputChange("email")}
-                  error={!!errors.email}
-                  helperText={errors.email}
-                  variant="outlined"
-                  className="bg-gray-50/50 [&_.MuiOutlinedInput-input]:pl-4 [&_.MuiOutlinedInput-root]:h-14 [&_.MuiOutlinedInput-root]:text-base"
-                  InputProps={{
-                    className:
-                      "rounded-lg border border-gray-300 hover:border-primary-main focus:border-primary-dark",
-                  }}
-                />
+                <div className="flex h-14 items-center rounded-lg border border-gray-300 bg-gray-50/50 px-4 text-base text-gray-500">
+                  <Typography>{user?.email || "Không xác định"}</Typography>
+                </div>
               </div>
             </div>
           </Box>
@@ -293,7 +282,7 @@ const FeedbackForm = () => {
                       ? "border-red-500 focus:border-red-500 focus:ring focus:ring-red-200"
                       : "border-gray-300 hover:border-amber-600 focus:border-amber-600 focus:ring focus:ring-amber-100"
                   }`}
-                  style={{ minHeight: "50px", resize: "vertical" }}
+                  style={{ minHeight: "120px", resize: "vertical" }}
                 />
                 <Typography
                   variant="caption"
@@ -365,18 +354,6 @@ const FeedbackForm = () => {
         type={confirmDialogType}
         loading={isSubmitting && confirmDialogType === "submit"}
       />
-
-      {/* Success Snackbar */}
-      <Snackbar
-        open={showSuccess}
-        autoHideDuration={6000}
-        onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert onClose={handleCloseSnackbar} severity="success" className="w-full">
-          Phản hồi của bạn đã được gửi thành công! Cảm ơn bạn đã đóng góp ý kiến.
-        </Alert>
-      </Snackbar>
     </>
   );
 };

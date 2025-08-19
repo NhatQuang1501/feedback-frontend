@@ -1,4 +1,4 @@
-import http from "./httpClient";
+import http from "./axiosInstance";
 
 export const authApi = {
   register: (payload) => http.post("/register/", payload),

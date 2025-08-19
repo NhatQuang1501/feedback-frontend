@@ -334,7 +334,7 @@ export default function PriorityDonutChart({ data = [], dateRange, onDateRangeCh
                   max={Math.max(0, timelineData.length - 1)}
                   step={1}
                   sx={{
-                    height: 12,
+                    "height": 12,
                     "& .MuiSlider-track": {
                       height: 8,
                       background: "linear-gradient(90deg, #d32f2f 0%, #ed6c02 50%, #1976d2 100%)",
@@ -349,12 +349,12 @@ export default function PriorityDonutChart({ data = [], dateRange, onDateRangeCh
                       border: "1px solid #ffcc02",
                     },
                     "& .MuiSlider-thumb": {
-                      width: 24,
-                      height: 24,
-                      backgroundColor: "#d32f2f",
-                      border: "4px solid #fff",
-                      boxShadow: "0 4px 12px rgba(211, 47, 47, 0.4)",
-                      transition: "all 0.2s ease-in-out",
+                      "width": 24,
+                      "height": 24,
+                      "backgroundColor": "#d32f2f",
+                      "border": "4px solid #fff",
+                      "boxShadow": "0 4px 12px rgba(211, 47, 47, 0.4)",
+                      "transition": "all 0.2s ease-in-out",
                       "&:hover": {
                         boxShadow: "0 6px 16px rgba(211, 47, 47, 0.5)",
                         transform: "scale(1.15)",

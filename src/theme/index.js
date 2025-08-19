@@ -205,15 +205,15 @@ export const theme = createTheme({
           boxShadow: "none",
         },
         containedPrimary: {
-          backgroundColor: "#ffec99",
-          color: "#333333",
+          "backgroundColor": "#ffec99",
+          "color": "#333333",
           "&:hover": {
             backgroundColor: "#e6d486",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
           },
         },
         outlined: {
-          borderWidth: "1px",
+          "borderWidth": "1px",
           "&:hover": {
             borderWidth: "1px",
             boxShadow: "0 2px 4px rgba(0, 0, 0, 0.05)",
@@ -225,7 +225,7 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           "& .MuiOutlinedInput-root": {
-            borderRadius: "8px",
+            "borderRadius": "8px",
             "& .MuiOutlinedInput-notchedOutline": {
               borderColor: "rgba(0, 0, 0, 0.23)",
               borderWidth: "1px",
@@ -245,7 +245,7 @@ export const theme = createTheme({
     MuiSelect: {
       styleOverrides: {
         root: {
-          borderRadius: "8px",
+          "borderRadius": "8px",
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: "rgba(0, 0, 0, 0.23)",
             borderWidth: "1px",

@@ -10,26 +10,26 @@ const RoleBasedRedirect = ({ children }) => {
   useEffect(() => {
     if (initialized && isAuthenticated && user) {
       const currentPath = location.pathname;
-      
+
       // If user is on auth pages, redirect based on role
-      if (currentPath.startsWith('/auth')) {
+      if (currentPath.startsWith("/auth")) {
         if (isAdmin) {
-          navigate('/admin/dashboard', { replace: true });
+          navigate("/admin/feedbacks", { replace: true });
         } else {
-          navigate('/feedbacks/create', { replace: true });
+          navigate("/feedbacks/create", { replace: true });
         }
         return;
       }
-      
+
       // Prevent regular users from accessing admin routes
-      if (!isAdmin && currentPath.startsWith('/admin')) {
-        navigate('/feedbacks/create', { replace: true });
+      if (!isAdmin && currentPath.startsWith("/admin")) {
+        navigate("/feedbacks/create", { replace: true });
         return;
       }
-      
+
       // Prevent admin from accessing user routes (except auth routes)
-      if (isAdmin && !currentPath.startsWith('/admin') && !currentPath.startsWith('/auth')) {
-        navigate('/admin/dashboard', { replace: true });
+      if (isAdmin && !currentPath.startsWith("/admin") && !currentPath.startsWith("/auth")) {
+        navigate("/admin/feedbacks", { replace: true });
         return;
       }
     }

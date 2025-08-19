@@ -80,10 +80,10 @@ const FormField = ({
             },
           },
           "& .MuiInputBase-input": {
-            paddingLeft: startIcon ? "8px" : "16px", // Padding cho text input
-            paddingRight: type === "password" ? "8px" : "16px",
-            fontSize: "1rem",
-            lineHeight: "1.5",
+            "paddingLeft": startIcon ? "8px" : "16px", // Padding cho text input
+            "paddingRight": type === "password" ? "8px" : "16px",
+            "fontSize": "1rem",
+            "lineHeight": "1.5",
             "&::placeholder": {
               color: "#9ca3af",
               opacity: 1,
@@ -91,13 +91,13 @@ const FormField = ({
             },
           },
           "& .MuiFormLabel-root": {
-            fontSize: "0.875rem",
-            fontWeight: 500,
-            backgroundColor: "white",
-            padding: "0 4px",
-            color: "#374151",
+            "fontSize": "0.875rem",
+            "fontWeight": 500,
+            "backgroundColor": "white",
+            "padding": "0 4px",
+            "color": "#374151",
             // Điều chỉnh vị trí label để không overlap với icon
-            transform: startIcon
+            "transform": startIcon
               ? "translate(60px, -9px) scale(1)"
               : "translate(16px, -9px) scale(1)",
             "&.MuiInputLabel-shrink": {
@@ -113,10 +113,10 @@ const FormField = ({
             },
           },
           "& .MuiFormHelperText-root": {
-            fontSize: "0.75rem",
-            marginTop: "6px",
-            marginLeft: "16px",
-            color: "#6b7280",
+            "fontSize": "0.75rem",
+            "marginTop": "6px",
+            "marginLeft": "16px",
+            "color": "#6b7280",
             "&.Mui-error": {
               color: "#ef4444",
             },

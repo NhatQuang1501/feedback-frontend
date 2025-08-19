@@ -27,10 +27,10 @@ const SocialButton = ({
       disabled={disabled}
       className={buttonClasses}
       sx={{
-        textTransform: "none",
-        fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+        "textTransform": "none",
+        "fontFamily": '"Roboto", "Helvetica", "Arial", sans-serif',
         "& .MuiButton-startIcon": {
-          marginRight: "8px",
+          "marginRight": "8px",
           "& > *:nth-of-type(1)": {
             fontSize: "1.2rem",
           },

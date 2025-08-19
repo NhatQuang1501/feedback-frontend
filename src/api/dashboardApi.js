@@ -1,4 +1,4 @@
-import http from "./httpClient";
+import http from "./axiosInstance";
 
 export const dashboardApi = {
   getOverviewStats: () => http.get("feedbacks/dashboard/overview/"),

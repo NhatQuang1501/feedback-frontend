@@ -272,7 +272,7 @@ export default function LineChartWithSlider({ data = [], dateRange, onDateRangeC
                   max={Math.max(0, timelineData.length - 1)}
                   step={1}
                   sx={{
-                    height: 8,
+                    "height": 8,
                     "& .MuiSlider-track": {
                       height: 6,
                       background: "linear-gradient(90deg, #1976d2 0%, #42a5f5 100%)",
@@ -284,11 +284,11 @@ export default function LineChartWithSlider({ data = [], dateRange, onDateRangeC
                       opacity: 1,
                     },
                     "& .MuiSlider-thumb": {
-                      width: 20,
-                      height: 20,
-                      backgroundColor: "#1976d2",
-                      border: "3px solid #fff",
-                      boxShadow: "0 2px 8px rgba(25, 118, 210, 0.3)",
+                      "width": 20,
+                      "height": 20,
+                      "backgroundColor": "#1976d2",
+                      "border": "3px solid #fff",
+                      "boxShadow": "0 2px 8px rgba(25, 118, 210, 0.3)",
                       "&:hover": {
                         boxShadow: "0 4px 12px rgba(25, 118, 210, 0.4)",
                         transform: "scale(1.1)",

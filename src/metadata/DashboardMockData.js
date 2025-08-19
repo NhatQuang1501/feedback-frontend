@@ -1059,7 +1059,6 @@ export const getFeedbackStatusDistribution = () => {
 export const getFeedbackPriorityDistribution = () => {
   const stats = getDashboardStats();
   return [
-    { id: "urgent", label: "Khẩn cấp", value: stats.urgent },
     { id: "high", label: "Cao", value: stats.high },
     { id: "medium", label: "Trung bình", value: stats.medium },
     { id: "low", label: "Thấp", value: stats.low },
