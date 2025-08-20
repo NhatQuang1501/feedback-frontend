@@ -6,7 +6,19 @@ export const registerUser = createAsyncThunk("auth/register", async (form, { rej
     const { data } = await authApi.register(form);
     return data;
   } catch (e) {
-    return rejectWithValue(e?.response?.data || "Đăng ký thất bại");
+    if (e?.response?.status === 400) {
+      if (e?.response?.data?.email) {
+        return rejectWithValue("Email đã tồn tại. Vui lòng sử dụng email khác.");
+      } else if (e?.response?.data?.password) {
+        return rejectWithValue("Mật khẩu không đủ mạnh. Vui lòng chọn mật khẩu khác.");
+      } else {
+        return rejectWithValue("Dữ liệu đăng ký không hợp lệ. Vui lòng kiểm tra lại.");
+      }
+    } else if (e?.response?.status >= 500) {
+      return rejectWithValue("Lỗi hệ thống. Vui lòng thử lại sau.");
+    } else {
+      return rejectWithValue("Đăng ký thất bại. Vui lòng thử lại.");
+    }
   }
 });
 
@@ -17,7 +29,15 @@ export const loginUser = createAsyncThunk("auth/login", async (form, { rejectWit
     if (data.refresh) localStorage.setItem("refresh_token", data.refresh);
     return data;
   } catch (e) {
-    return rejectWithValue(e?.response?.data || "Đăng nhập thất bại");
+    if (e?.response?.status === 401) {
+      return rejectWithValue("Sai tài khoản hoặc mật khẩu. Vui lòng kiểm tra lại.");
+    } else if (e?.response?.status === 400) {
+      return rejectWithValue("Dữ liệu đăng nhập không hợp lệ. Vui lòng kiểm tra lại.");
+    } else if (e?.response?.status >= 500) {
+      return rejectWithValue("Lỗi hệ thống. Vui lòng thử lại sau.");
+    } else {
+      return rejectWithValue("Đăng nhập thất bại. Vui lòng thử lại.");
+    }
   }
 });
 
@@ -30,7 +50,15 @@ export const googleLogin = createAsyncThunk(
       if (data.refresh) localStorage.setItem("refresh_token", data.refresh);
       return data;
     } catch (e) {
-      return rejectWithValue(e?.response?.data || "Google đăng nhập thất bại");
+      if (e?.response?.status === 400) {
+        return rejectWithValue("Token Google không hợp lệ. Vui lòng thử lại.");
+      } else if (e?.response?.status === 401) {
+        return rejectWithValue("Xác thực Google thất bại. Vui lòng thử lại.");
+      } else if (e?.response?.status >= 500) {
+        return rejectWithValue("Lỗi hệ thống. Vui lòng thử lại sau.");
+      } else {
+        return rejectWithValue("Đăng nhập Google thất bại. Vui lòng thử lại.");
+      }
     }
   },
 );

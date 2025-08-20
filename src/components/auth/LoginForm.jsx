@@ -20,18 +20,32 @@ const LoginForm = ({
   loading = false,
   error = null,
   onSwitchToRegister,
+  onClearError,
 }) => {
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
 
   const { showPassword, togglePassword } = usePasswordToggle();
 
-  const { formData, errors, isSubmitting, handleChange, handleSubmit } = useForm(
+  const { formData, errors, isSubmitting, handleChange, handleSubmit, resetForm } = useForm(
     {
       email: "",
       password: "",
     },
     validateLoginForm,
   );
+
+
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        if (onClearError) {
+          onClearError();
+        }
+      }, 5000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [error, onClearError]);
 
   const initRef = useRef(false);
   const googleBtnRef = useRef(null);
@@ -117,9 +131,14 @@ const LoginForm = ({
   return (
     <div className="w-full">
       {error && (
-        <Alert severity="error" className="mb-6 rounded-lg">
-          {error}
-        </Alert>
+        <div className="mb-6 rounded-lg border-l-4 border-red-500 bg-red-50 p-4">
+          <div className="text-sm font-medium text-red-800">
+            {error}
+          </div>
+          <div className="text-xs text-red-600 mt-1">
+            Vui lòng kiểm tra lại thông tin và thử lại
+          </div>
+        </div>
       )}
 
       <form onSubmit={handleFormSubmit} className="w-full">

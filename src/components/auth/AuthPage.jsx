@@ -29,7 +29,8 @@ const AuthPage = () => {
   const handleLogin = async (formData) => {
     try {
       await dispatch(loginUser(formData)).unwrap();
-    } catch (error) {}
+    } catch (error) {
+    }
   };
 
   const handleRegister = async (formData) => {
