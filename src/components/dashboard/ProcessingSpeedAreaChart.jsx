@@ -67,16 +67,16 @@ export default function ProcessingSpeedAreaChart({ data = [], dateRange, onDateR
 
   // Chart data for MUI X Charts
   const chartData = useMemo(() => {
-    if (processingSpeedData.length === 0) return { xAxisData: [], seriesData: [] };
+    if (filteredData.length === 0) return { xAxisData: [], seriesData: [] };
 
     return {
-      xAxisData: processingSpeedData.map((item) => item.month),
-      seriesData: processingSpeedData.map((item) => item.avgProcessingTime),
-      resolvedData: processingSpeedData.map((item) =>
+      xAxisData: filteredData.map((item) => item.month),
+      seriesData: filteredData.map((item) => item.avgProcessingTime),
+      resolvedData: filteredData.map((item) =>
         item.total > 0 ? Math.round((item.resolved / item.total) * 100) : 0,
       ),
     };
-  }, [processingSpeedData]);
+  }, [filteredData]);
 
   // Slider marks
   const sliderMarks = useMemo(() => {
