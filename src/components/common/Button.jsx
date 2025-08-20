@@ -28,7 +28,7 @@ const Button = ({
       case "danger":
         return "bg-red-600 text-white hover:bg-red-700 active:bg-red-800 shadow-md hover:shadow-lg";
       case "success":
-        return "bg-green-600 text-white hover:bg-green-700 active:bg-green-800 shadow-md hover:shadow-lg";
+        return "bg-green-500 text-white hover:bg-green-600 active:bg-green-700 shadow-md hover:shadow-lg";
       case "text":
         return "bg-transparent text-amber-600 hover:bg-amber-50 active:bg-amber-100";
       default:

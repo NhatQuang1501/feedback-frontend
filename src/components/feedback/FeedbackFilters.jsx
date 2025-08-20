@@ -7,6 +7,7 @@ import {
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
   Clear as ClearIcon,
+  Sort as SortIcon,
 } from "@mui/icons-material";
 import {
   FEEDBACK_TYPES,
@@ -160,11 +161,11 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
       {/* Advanced Filters Toggle and Sort */}
       <div className="flex items-center justify-between">
         <Button
-          variant="text"
+          variant="outlined"
           onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
           startIcon={<FilterAltIcon />}
           endIcon={showAdvancedFilters ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-          className="text-gray-700"
+          className="border-2 border-gray-300 bg-white text-gray-700 hover:border-amber-500 hover:bg-amber-50 hover:text-amber-600"
           size="medium"
         >
           Bộ lọc nâng cao
@@ -172,6 +173,7 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
 
         {/* Sort options - đã chuyển xuống ngang hàng với bộ lọc nâng cao, căn phải */}
         <div className="flex items-center gap-2">
+          <SortIcon className="text-gray-500" />
           <CustomSelect
             value={sortBy}
             onChange={(e) => onSortChange(e.target.value)}

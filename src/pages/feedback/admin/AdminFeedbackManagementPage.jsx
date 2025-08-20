@@ -1,9 +1,10 @@
 import React from "react";
-import { Typography, Paper, Box } from "@mui/material";
+import { Typography, Paper } from "@mui/material";
 import FeedbackFilters from "@/components/feedback/FeedbackFilters";
 import FeedbackList from "@/components/feedback/FeedbackList";
 import Pagination from "@/components/common/Pagination";
-import { useFeedbackList, useExportFeedback } from "@/hooks/useFeedback";
+import { useFeedbackList } from "@/hooks/useFeedback";
+import ExportButton from "@/components/common/ExportButton";
 
 const AdminFeedbackManagementPage = () => {
   const {
@@ -17,24 +18,6 @@ const AdminFeedbackManagementPage = () => {
     itemsPerPage,
     totalPages,
   } = useFeedbackList();
-
-  const { isExporting, exportStatus, exportUrl, startExport, downloadFile } = useExportFeedback();
-
-  // Xử lý export feedback
-  const handleExport = () => {
-    startExport({
-      status: filters.status,
-      type: filters.type,
-      priority: filters.priority,
-      q: filters.q,
-      sort: filters.sort,
-    });
-  };
-
-  // Xử lý download file
-  const handleDownload = () => {
-    downloadFile();
-  };
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
@@ -50,7 +33,7 @@ const AdminFeedbackManagementPage = () => {
 
       {/* Filters */}
       <Paper className="p-6 shadow-sm">
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+        <div className="flex justify-between">
           <FeedbackFilters
             filters={filters}
             onFilterChange={handleFilterChange}
@@ -58,15 +41,27 @@ const AdminFeedbackManagementPage = () => {
             onSortChange={(sort) => handleFilterChange("sort", sort)}
             totalResults={totalItems}
           />
-        </Box>
+        </div>
+
+        <div className="flex justify-end">
+          <ExportButton
+            filters={{
+              status: filters.status,
+              type: filters.type,
+              priority: filters.priority,
+              q: filters.q,
+              sort: filters.sort,
+            }}
+            disabled={isLoading || totalItems === 0}
+          />
+        </div>
       </Paper>
 
       {/* Feedback List */}
-      <Paper className="p-6 shadow-sm">
+      <Paper className="p-6 shadow-md">
         <FeedbackList feedbacks={feedbacks} loading={isLoading} />
       </Paper>
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <Pagination
           currentPage={currentPage}

@@ -1,19 +1,16 @@
 import axiosInstance from "./axiosInstance";
 
 export const feedbackApi = {
-  // Lấy danh sách feedback với filter và phân trang
   getFeedbacks: async (params) => {
     const response = await axiosInstance.get("/feedbacks/", { params });
     return response.data;
   },
 
-  // Lấy chi tiết một feedback
   getFeedbackDetail: async (feedbackId) => {
     const response = await axiosInstance.get(`/feedbacks/${feedbackId}/`);
     return response.data;
   },
 
-  // Tạo feedback mới
   createFeedback: async (formData) => {
     const response = await axiosInstance.post("/feedbacks/create/", formData, {
       headers: {
@@ -23,7 +20,6 @@ export const feedbackApi = {
     return response.data;
   },
 
-  // Cập nhật trạng thái feedback
   updateFeedbackStatus: async (feedbackId, statusId) => {
     const response = await axiosInstance.put(`/feedbacks/${feedbackId}/status/`, {
       status_id: statusId,
@@ -31,15 +27,20 @@ export const feedbackApi = {
     return response.data;
   },
 
-  // Export feedback ra CSV
-  exportFeedbacks: (filters) => axiosInstance.post("/feedbacks/export/", filters),
+  exportFeedbacks: async (filters) => {
+    const response = await axiosInstance.post("/feedbacks/export/", filters);
+    return response.data;
+  },
 
-  // Kiểm tra trạng thái export
-  checkExportStatus: (taskId) => axiosInstance.get(`/feedbacks/export/${taskId}/status/`),
+  checkExportStatus: async (taskId) => {
+    const response = await axiosInstance.get(`/feedbacks/export/${taskId}/status/`);
+    return response.data;
+  },
 
-  // Download CSV
-  downloadCsv: (csvId) =>
-    axiosInstance.get(`/feedbacks/export/download/${csvId}/`, {
+  downloadCsv: async (csvId) => {
+    const response = await axiosInstance.get(`/feedbacks/export/download/${csvId}/`, {
       responseType: "blob",
-    }),
+    });
+    return response;
+  },
 };
