@@ -57,7 +57,6 @@ const RecentFeedbackTable = ({ feedbacks = [] }) => {
                   Trạng thái
                 </TableCell>
                 <TableCell width="5%" className="px-4 py-3 font-semibold text-gray-900">
-                  {/* Cột ba chấm */}
                 </TableCell>
               </TableRow>
             </TableHead>
