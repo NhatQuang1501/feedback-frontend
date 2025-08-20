@@ -8,10 +8,15 @@ import {
   TableRow,
   Paper,
   Typography,
+  Button as MuiButton,
   Box,
 } from "@mui/material";
 import { TypeBadge, PriorityBadge, StatusBadge } from "@/components/common/CustomBadge";
 import { getTypeInfo, getPriorityInfo, getStatusInfo } from "@/utils/constants";
+import { Visibility as VisibilityIcon } from "@mui/icons-material";
+import { Link } from "react-router-dom";
+
+const detailUrlPrefix = "/admin/feedbacks/";
 
 const RecentFeedbackTable = ({ feedbacks = [] }) => {
   return (
@@ -107,9 +112,23 @@ const RecentFeedbackTable = ({ feedbacks = [] }) => {
                   </TableCell>
 
                   <TableCell className="px-4 py-3">
-                    <Typography variant="body2" className="cursor-pointer text-xl text-gray-600">
-                      ⋮
-                    </Typography>
+                    <MuiButton
+                      size="small"
+                      variant="text"
+                      startIcon={<VisibilityIcon />}
+                      component={Link}
+                      to={`${detailUrlPrefix}${feedback.feedback_id}`}
+                      className="min-w-0 p-1 hover:bg-transparent"
+                      sx={{
+                        "&:hover": {
+                          "backgroundColor": "transparent",
+                          "& .MuiSvgIcon-root": {
+                            color: "#1976d2",
+                            transition: "color 0.3s ease",
+                          },
+                        },
+                      }}
+                    ></MuiButton>
                   </TableCell>
                 </TableRow>
               ))}
