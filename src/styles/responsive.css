@@ -1,0 +1,210 @@
+/* Responsive improvements for AuthTabs */
+
+/* Smooth scaling for all elements */
+* {
+  box-sizing: border-box;
+}
+
+/* Prevent horizontal scroll */
+html,
+body {
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Improve Material-UI TextField responsiveness */
+.MuiTextField-root {
+  transition: all 0.2s ease-in-out;
+}
+
+.MuiOutlinedInput-root {
+  transition: all 0.2s ease-in-out;
+}
+
+.MuiInputLabel-root {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Smooth button interactions */
+.MuiButton-root {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.MuiButton-root:hover {
+  transform: translateY(-1px);
+}
+
+.MuiButton-root:active {
+  transform: translateY(0);
+}
+
+/* Improve tab transitions */
+.MuiTab-root {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Card hover effects */
+.MuiCard-root {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Responsive breakpoints */
+@media (max-width: 600px) {
+  /* Mobile optimizations */
+  .MuiTextField-root .MuiOutlinedInput-root {
+    font-size: 14px;
+  }
+
+  .MuiTextField-root .MuiInputLabel-root {
+    font-size: 14px;
+  }
+
+  .MuiButton-root {
+    font-size: 14px;
+    min-height: 44px; /* Better touch targets */
+  }
+
+  .MuiTab-root {
+    font-size: 14px;
+    min-height: 56px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 960px) {
+  /* Tablet optimizations */
+  .MuiTextField-root .MuiOutlinedInput-root {
+    font-size: 15px;
+  }
+
+  .MuiTextField-root .MuiInputLabel-root {
+    font-size: 15px;
+  }
+
+  .MuiButton-root {
+    font-size: 15px;
+    min-height: 46px;
+  }
+
+  .MuiTab-root {
+    font-size: 15px;
+    min-height: 60px;
+  }
+}
+
+@media (min-width: 960px) {
+  /* Desktop optimizations */
+  .MuiTextField-root .MuiOutlinedInput-root {
+    font-size: 16px;
+  }
+
+  .MuiTextField-root .MuiInputLabel-root {
+    font-size: 16px;
+  }
+
+  .MuiButton-root {
+    font-size: 16px;
+    min-height: 48px;
+  }
+
+  .MuiTab-root {
+    font-size: 16px;
+    min-height: 64px;
+  }
+}
+
+/* Prevent zoom on iOS when focusing inputs */
+@media screen and (max-width: 767px) {
+  input[type="email"],
+  input[type="password"],
+  input[type="text"],
+  input[type="tel"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
+/* Smooth animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-tab-panel {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Loading spinner improvements */
+.MuiCircularProgress-root {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Focus improvements */
+.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-width: 2px;
+  transition:
+    border-color 0.2s ease-in-out,
+    border-width 0.2s ease-in-out;
+}
+
+/* Error state improvements */
+.MuiOutlinedInput-root.Mui-error .MuiOutlinedInput-notchedOutline {
+  border-width: 2px;
+  transition: border-color 0.2s ease-in-out;
+}
+
+/* Hover improvements */
+.MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  transition: border-color 0.2s ease-in-out;
+}
+
+/* Divider improvements */
+.MuiDivider-root {
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* Alert improvements */
+.MuiAlert-root {
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Link improvements */
+.MuiLink-root {
+  transition: color 0.2s ease-in-out;
+}
+
+.MuiLink-root:hover {
+  text-decoration: underline;
+}
+
+/* Typography improvements */
+.MuiTypography-root {
+  transition: color 0.2s ease-in-out;
+}
+
+/* Container improvements */
+.MuiContainer-root {
+  transition: padding 0.2s ease-in-out;
+}
+
+/* Card content improvements */
+.MuiCardContent-root {
+  transition: padding 0.2s ease-in-out;
+}
