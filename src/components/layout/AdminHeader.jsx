@@ -123,7 +123,7 @@ const AdminHeader = () => {
                     }
                     handleProfileMenuClose();
                   }}
-                  className="gap-3"
+                  className="gap-3 px-3 py-2 text-sm"
                 >
                   <LogoutIcon className="h-5 w-5 text-gray-600" />
                   <span>Đăng xuất</span>

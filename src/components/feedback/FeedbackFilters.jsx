@@ -127,7 +127,7 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
               size="small"
               startIcon={<ClearIcon />}
               onClick={clearAllFilters}
-              className="ml-2 text-blue-600 hover:text-blue-800"
+              className="px ml-2 text-blue-600 hover:text-blue-800"
             >
               Xóa bộ lọc
             </Button>
@@ -149,7 +149,7 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
             </InputAdornment>
           ),
           endAdornment: searchInput && (
-            <InputAdornment position="end">
+            <InputAdornment position="end" class="p-2">
               <IconButton size="small" onClick={clearSearch} edge="end">
                 <ClearIcon fontSize="small" />
               </IconButton>
@@ -252,7 +252,7 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
               label={`Tìm kiếm: "${filters.q}"`}
               size="small"
               onDelete={clearSearch}
-              className="bg-blue-50 text-blue-800"
+              className="bg-blue-50 p-4 text-blue-800"
             />
           )}
 
@@ -270,7 +270,7 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
                     setAdvancedFilters({ ...advancedFilters, type: updatedTypes });
                     onFilterChange("type", updatedTypes);
                   }}
-                  className="bg-green-50 text-green-800"
+                  className="bg-green-50 p-4 text-green-800"
                 />
               );
             })}
@@ -291,7 +291,7 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
                     setAdvancedFilters({ ...advancedFilters, priority: updatedPriorities });
                     onFilterChange("priority", updatedPriorities);
                   }}
-                  className="bg-yellow-50 text-yellow-800"
+                  className="bg-yellow-50 p-4 text-yellow-800"
                 />
               );
             })}
@@ -310,7 +310,7 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
                     setAdvancedFilters({ ...advancedFilters, status: updatedStatuses });
                     onFilterChange("status", updatedStatuses);
                   }}
-                  className="bg-purple-50 text-purple-800"
+                  className="bg-purple-50 p-4 text-purple-800"
                 />
               );
             })}
