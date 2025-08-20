@@ -22,7 +22,7 @@ const LoginForm = ({
   onSwitchToRegister,
 }) => {
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
-  
+
   const { showPassword, togglePassword } = usePasswordToggle();
 
   const { formData, errors, isSubmitting, handleChange, handleSubmit } = useForm(
@@ -74,13 +74,9 @@ const LoginForm = ({
                 shape: "pill",
                 logo_alignment: "left",
               });
-            } catch (e) {
-              
-            }
+            } catch (e) {}
           }
-        } catch (e) {
-          
-        }
+        } catch (e) {}
       }
     };
 
@@ -191,7 +187,7 @@ const LoginForm = ({
             </Divider>
           </div>
 
-          <div ref={googleBtnRef} className="w-full flex justify-center" />
+          <div ref={googleBtnRef} className="flex w-full justify-center" />
         </div>
       </form>
       <ForgotPasswordDialog

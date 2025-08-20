@@ -25,9 +25,7 @@ const AuthPage = () => {
   const handleLogin = async (formData) => {
     try {
       await dispatch(loginUser(formData)).unwrap();
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const handleRegister = async (formData) => {
@@ -39,17 +37,13 @@ const AuthPage = () => {
           message: "Vui lòng kiểm tra email để xác thực tài khoản",
         },
       });
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const handleGoogleLogin = async (token, tokenType = "id_token") => {
     try {
       await dispatch(googleLogin(token)).unwrap();
-    } catch (error) {
-      
-    }
+    } catch (error) {}
   };
 
   const handleClearError = () => {

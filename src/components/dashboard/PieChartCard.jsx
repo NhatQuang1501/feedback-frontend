@@ -47,10 +47,10 @@ export default function PieChartCard({ title, data = [] }) {
             <PieChart
               series={[
                 {
-                  data: data.map(item => ({
+                  data: data.map((item) => ({
                     id: item.type,
                     label: item.display,
-                    value: item.count
+                    value: item.count,
                   })),
                   innerRadius,
                   paddingAngle,

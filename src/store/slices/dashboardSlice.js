@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { dashboardApi } from "@/api/dashboardApi";
 
-
 export const fetchOverviewStats = createAsyncThunk(
   "dashboard/fetchOverviewStats",
   async (_, { rejectWithValue }) => {
@@ -11,9 +10,8 @@ export const fetchOverviewStats = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error?.response?.data?.error || "Không thể tải thống kê");
     }
-  }
+  },
 );
-
 
 export const fetchFeedbacksByMonth = createAsyncThunk(
   "dashboard/fetchFeedbacksByMonth",
@@ -24,7 +22,7 @@ export const fetchFeedbacksByMonth = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error?.response?.data?.error || "Không thể tải xu hướng");
     }
-  }
+  },
 );
 
 export const fetchFeedbackTypes = createAsyncThunk(
@@ -36,9 +34,8 @@ export const fetchFeedbackTypes = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error?.response?.data?.error || "Không thể tải loại phản hồi");
     }
-  }
+  },
 );
-
 
 export const fetchPriorityDistribution = createAsyncThunk(
   "dashboard/fetchPriorityDistribution",
@@ -49,7 +46,7 @@ export const fetchPriorityDistribution = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error?.response?.data?.error || "Không thể tải phân bố ưu tiên");
     }
-  }
+  },
 );
 
 export const fetchHandlingSpeed = createAsyncThunk(
@@ -61,9 +58,8 @@ export const fetchHandlingSpeed = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error?.response?.data?.error || "Không thể tải tốc độ xử lý");
     }
-  }
+  },
 );
-
 
 export const fetchRecentFeedbacks = createAsyncThunk(
   "dashboard/fetchRecentFeedbacks",
@@ -74,7 +70,7 @@ export const fetchRecentFeedbacks = createAsyncThunk(
     } catch (error) {
       return rejectWithValue(error?.response?.data?.error || "Không thể tải phản hồi gần đây");
     }
-  }
+  },
 );
 
 const dashboardSlice = createSlice({
@@ -109,7 +105,7 @@ const dashboardSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+
       // Feedbacks by Month
       .addCase(fetchFeedbacksByMonth.pending, (state) => {
         state.loading = true;
@@ -122,7 +118,7 @@ const dashboardSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+
       // Feedback Types
       .addCase(fetchFeedbackTypes.pending, (state) => {
         state.loading = true;
@@ -135,7 +131,7 @@ const dashboardSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+
       // Priority Distribution
       .addCase(fetchPriorityDistribution.pending, (state) => {
         state.loading = true;
@@ -148,7 +144,7 @@ const dashboardSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+
       // Handling Speed
       .addCase(fetchHandlingSpeed.pending, (state) => {
         state.loading = true;
@@ -161,7 +157,7 @@ const dashboardSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      
+
       // Recent Feedbacks
       .addCase(fetchRecentFeedbacks.pending, (state) => {
         state.loading = true;

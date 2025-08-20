@@ -4,7 +4,6 @@ import { CalendarToday as CalendarIcon, TrendingUp as TrendingIcon } from "@mui/
 import { LineChart } from "@mui/x-charts/LineChart";
 import useContainerWidth from "@/hooks/useContainerWidth";
 
-
 export default function LineChartWithSlider({ data = [], dateRange, onDateRangeChange }) {
   const [timeRange, setTimeRange] = useState([0, 0]);
   const wrapperRef = useRef(null);
@@ -12,16 +11,14 @@ export default function LineChartWithSlider({ data = [], dateRange, onDateRangeC
 
   const timelineData = useMemo(() => {
     if (data.length === 0) return [];
-    
+
     return data.map((item, index) => ({
       key: item.month,
       label: item.month,
       value: item.count,
-      date: new Date(item.month + "-01") 
+      date: new Date(item.month + "-01"),
     }));
   }, [data]);
-
-
 
   // Set initial range to show all data
   useEffect(() => {

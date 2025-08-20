@@ -75,13 +75,9 @@ const RegisterForm = ({
                 shape: "pill",
                 logo_alignment: "left",
               });
-            } catch (e) {
-              
-            }
+            } catch (e) {}
           }
-        } catch (e) {
-          
-        }
+        } catch (e) {}
       }
     };
 
@@ -102,7 +98,6 @@ const RegisterForm = ({
 
   const formatError = (error) => {
     if (!error) return null;
-
 
     if (typeof error === "object") {
       if (error.password2 || error.full_name || error.email || error.password) {
@@ -258,7 +253,7 @@ const RegisterForm = ({
             </Divider>
           </div>
 
-          <div ref={googleBtnRef} className="w-full flex justify-center" />
+          <div ref={googleBtnRef} className="flex w-full justify-center" />
 
           <div className="pt-4">
             <Typography

@@ -10,10 +10,8 @@ import {
 } from "@mui/material";
 import { Email, ArrowBack } from "@mui/icons-material";
 
-
 import FormField from "../common/FormField";
 import SubmitButton from "../common/SubmitButton";
-
 
 import { useForm } from "../../hooks/useForm";
 import { validateForgotPasswordForm } from "../../utils/validation";
@@ -36,7 +34,6 @@ const ForgotPasswordDialog = ({ open, onClose, onSuccess = null }) => {
     e.preventDefault();
 
     const submitSuccess = await handleSubmit(async (data) => {
-
       await new Promise((resolve) => setTimeout(resolve, 2000));
 
       console.log("Gửi email reset password đến:", data.email);

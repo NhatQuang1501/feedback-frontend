@@ -23,7 +23,7 @@ const RecentFeedbackTable = ({ feedbacks = [] }) => {
     <Paper elevation={2} className="overflow-hidden rounded-lg bg-white px-6" sx={{ width: 1490 }}>
       <Box className="border-b border-gray-200 bg-white p-3">
         <Typography className="mb-2 text-center text-base font-bold text-gray-900">
-         Phản Hồi Gần Đây
+          Phản Hồi Gần Đây
         </Typography>
       </Box>
 
@@ -67,7 +67,6 @@ const RecentFeedbackTable = ({ feedbacks = [] }) => {
                   key={feedback.feedback_id}
                   className="border-b border-gray-200 transition-colors hover:bg-amber-50"
                 >
-          
                   <TableCell className="px-4 py-3">
                     <Typography
                       variant="body2"
@@ -77,7 +76,6 @@ const RecentFeedbackTable = ({ feedbacks = [] }) => {
                     </Typography>
                   </TableCell>
 
-       
                   <TableCell className="px-4 py-3">
                     <Typography variant="body2" className="font-medium text-gray-900">
                       {feedback.user_full_name || "Không xác định"}
@@ -89,13 +87,15 @@ const RecentFeedbackTable = ({ feedbacks = [] }) => {
 
                   <TableCell className="px-4 py-3">
                     <Typography variant="body2" className="text-gray-900">
-                      {feedback.created_at ? new Date(feedback.created_at).toLocaleString("vi-VN", {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                      }) : "N/A"}
+                      {feedback.created_at
+                        ? new Date(feedback.created_at).toLocaleString("vi-VN", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                          })
+                        : "N/A"}
                     </Typography>
                   </TableCell>
 

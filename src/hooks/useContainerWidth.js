@@ -6,14 +6,14 @@ export default function useContainerWidth(ref) {
   useEffect(() => {
     const el = ref?.current;
     if (!el) return;
-    
+
     const ro = new ResizeObserver(([entry]) => {
       setWidth(entry.contentRect.width);
     });
-    
+
     ro.observe(el);
     setWidth(el.getBoundingClientRect().width);
-    
+
     return () => ro.disconnect();
   }, [ref]);
 

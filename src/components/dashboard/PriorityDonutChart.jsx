@@ -1,9 +1,12 @@
-  import React, { useMemo, useState, useEffect, useRef } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { Box, Typography, Card, CardContent, Slider, Chip, Stack } from "@mui/material";
-import { PriorityHigh as PriorityIcon, TrendingUp as TrendingIcon, CalendarToday as CalendarIcon } from "@mui/icons-material";
+import {
+  PriorityHigh as PriorityIcon,
+  TrendingUp as TrendingIcon,
+  CalendarToday as CalendarIcon,
+} from "@mui/icons-material";
 import { PieChart } from "@mui/x-charts/PieChart";
 import useContainerWidth from "@/hooks/useContainerWidth";
-
 
 export default function PriorityDonutChart({ data = [], dateRange, onDateRangeChange }) {
   const [timeRange, setTimeRange] = useState([0, 0]);
@@ -12,14 +15,14 @@ export default function PriorityDonutChart({ data = [], dateRange, onDateRangeCh
 
   const getPriorityColor = (priority) => {
     const colors = {
-      low: "#4caf50",     
-      medium: "#ff9800",   
-      high: "#f44336",     
-      urgent: "#9c27b0"   
+      low: "#4caf50",
+      medium: "#ff9800",
+      high: "#f44336",
+      urgent: "#9c27b0",
     };
     return colors[priority] || "#757575";
   };
-// Tạo timeline data theo tháng từ sớm nhất đến muộn nhất
+  // Tạo timeline data theo tháng từ sớm nhất đến muộn nhất
   const timelineData = useMemo(() => {
     if (data.length === 0) return [];
 
@@ -62,9 +65,9 @@ export default function PriorityDonutChart({ data = [], dateRange, onDateRangeCh
 
   const priorityData = useMemo(() => {
     if (data.length === 0) return { data: [], total: 0 };
-    
+
     const total = data.reduce((sum, item) => sum + item.count, 0);
-    
+
     return {
       data: data.map((item) => ({
         id: item.priority,
@@ -152,10 +155,10 @@ export default function PriorityDonutChart({ data = [], dateRange, onDateRangeCh
     return { start, end, total: priorityData.total };
   }, [timelineData, timeRange, priorityData.total]);
 
-   // Dimensions
-   const chartWidth = 644;
-   const chartHeight = 400;
-   const sliderWidth = 600;
+  // Dimensions
+  const chartWidth = 644;
+  const chartHeight = 400;
+  const sliderWidth = 600;
 
   return (
     <Card sx={{ height: "100%" }}>

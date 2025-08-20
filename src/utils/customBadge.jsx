@@ -7,31 +7,29 @@ import {
   Cancel as CancelIcon,
 } from "@mui/icons-material";
 
-
 const COLORS = {
   TYPE: {
-    feedback: "#8b5cf6", 
-    report: "#3b82f6", 
+    feedback: "#8b5cf6",
+    report: "#3b82f6",
     other: "#6b7280",
     default: "#6b7280",
   },
   // Mức độ ưu tiên
   PRIORITY: {
-    high: "#ef4444", 
-    medium: "#c7a84b", 
+    high: "#ef4444",
+    medium: "#c7a84b",
     low: "#16a34a",
     default: "#6b7280",
   },
   // Trạng thái
   STATUS: {
-    pending: "#c7a84b", 
-    processing: "#3b82f6", 
-    resolved: "#16a34a", 
-    closed: "#6b7280", 
-    default: "#6b7280", 
+    pending: "#c7a84b",
+    processing: "#3b82f6",
+    resolved: "#16a34a",
+    closed: "#6b7280",
+    default: "#6b7280",
   },
 };
-
 
 export const TypeBadge = ({ type }) => {
   const color = COLORS.TYPE[type] || COLORS.TYPE.default;
@@ -61,7 +59,6 @@ export const PriorityBadge = ({ priority }) => {
     </Badge>
   );
 };
-
 
 export const StatusBadge = ({ status }) => {
   const color = COLORS.STATUS[status] || COLORS.STATUS.default;

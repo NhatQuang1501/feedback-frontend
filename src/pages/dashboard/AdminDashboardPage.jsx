@@ -26,25 +26,25 @@ import {
 
 export default function AdminDashboardPage() {
   const dispatch = useDispatch();
-  const { 
-    overviewStats, 
-    feedbacksByMonth, 
-    feedbackTypes, 
-    priorityDistribution, 
+  const {
+    overviewStats,
+    feedbacksByMonth,
+    feedbackTypes,
+    priorityDistribution,
     handlingSpeed,
     recentFeedbacks,
-    loading, 
-    error 
+    loading,
+    error,
   } = useSelector((state) => state.dashboard);
 
   // Tính toán date range mặc định (5 tháng gần nhất)
   const getDefaultDateRange = () => {
     const today = new Date();
     const fiveMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 5, 1);
-    
+
     return {
-      from: fiveMonthsAgo.toISOString().split('T')[0],
-      to: today.toISOString().split('T')[0]
+      from: fiveMonthsAgo.toISOString().split("T")[0],
+      to: today.toISOString().split("T")[0],
     };
   };
 
@@ -60,14 +60,14 @@ export default function AdminDashboardPage() {
     const params = {
       from: dateRange.from,
       to: dateRange.to,
-      order: "asc"
+      order: "asc",
     };
-    
+
     dispatch(fetchFeedbacksByMonth(params));
     dispatch(fetchFeedbackTypes(params));
     dispatch(fetchPriorityDistribution(params));
     dispatch(fetchHandlingSpeed(params));
-    
+
     // Load recent feedbacks (10 items đầu tiên)
     dispatch(fetchRecentFeedbacks({ page_size: 10, page: 1 }));
   }, [dispatch, dateRange]);
@@ -150,36 +150,45 @@ export default function AdminDashboardPage() {
           </Grid>
         </Grid>
         <Box sx={{ height: 50, mb: 0 }} />
-          {/* Biểu đồ đầu tiên - Line Chart và Pie Chart */}
-        <Grid container spacing={1} sx={{ mb: 6 }} columns={{ xs: 12, sm: 12, md: 12, lg: 15 }} justifyContent="center">
+        {/* Biểu đồ đầu tiên - Line Chart và Pie Chart */}
+        <Grid
+          container
+          spacing={1}
+          sx={{ mb: 6 }}
+          columns={{ xs: 12, sm: 12, md: 12, lg: 15 }}
+          justifyContent="center"
+        >
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <LineChartWithSlider 
+            <LineChartWithSlider
               data={feedbacksByMonth}
               dateRange={dateRange}
               onDateRangeChange={setDateRange}
             />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <PieChartCard
-              title="Loại phản hồi"
-              data={feedbackTypes}
-            />
+            <PieChartCard title="Loại phản hồi" data={feedbackTypes} />
           </Grid>
         </Grid>
         {/* Khoảng cách giữa 2 hàng chart */}
         <Box sx={{ height: 50, mb: 0 }} />
 
         {/* Biểu đồ thứ hai - Area Chart và Donut Chart */}
-        <Grid container spacing={1} sx={{ mb: 6 }} columns={{ xs: 12, sm: 12, md: 12, lg: 15 }} justifyContent="center">
-        <Grid item xs={12} sm={12} md={6} lg={6}>
-            <ProcessingSpeedAreaChart 
+        <Grid
+          container
+          spacing={1}
+          sx={{ mb: 6 }}
+          columns={{ xs: 12, sm: 12, md: 12, lg: 15 }}
+          justifyContent="center"
+        >
+          <Grid item xs={12} sm={12} md={6} lg={6}>
+            <ProcessingSpeedAreaChart
               data={handlingSpeed}
               dateRange={dateRange}
               onDateRangeChange={setDateRange}
             />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
-            <PriorityDonutChart 
+            <PriorityDonutChart
               data={priorityDistribution}
               dateRange={dateRange}
               onDateRangeChange={setDateRange}
@@ -188,11 +197,11 @@ export default function AdminDashboardPage() {
         </Grid>
         <Box sx={{ height: 50, mb: 0 }} />
         <Grid container spacing={3}>
-        <Grid item xs={12}>
+          <Grid item xs={12}>
             <RecentFeedbackTable feedbacks={recentFeedbacks?.data || []} />
           </Grid>
         </Grid>
       </Box>
-    </>   
+    </>
   );
 }

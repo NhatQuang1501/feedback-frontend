@@ -15,9 +15,9 @@ export const feedbackApi = {
 
   // Tạo feedback mới
   createFeedback: async (formData) => {
-    const response = await axiosInstance.post('/feedbacks/create/', formData, {
+    const response = await axiosInstance.post("/feedbacks/create/", formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        "Content-Type": "multipart/form-data",
       },
     });
     return response.data;
@@ -25,12 +25,9 @@ export const feedbackApi = {
 
   // Cập nhật trạng thái feedback
   updateFeedbackStatus: async (feedbackId, statusId) => {
-    const response = await axiosInstance.put(
-      `/feedbacks/${feedbackId}/status/`,
-      {
-        status_id: statusId,
-      }
-    );
+    const response = await axiosInstance.put(`/feedbacks/${feedbackId}/status/`, {
+      status_id: statusId,
+    });
     return response.data;
   },
 

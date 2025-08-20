@@ -23,9 +23,7 @@ export const useAuth = () => {
   const getProfile = () => dispatch(fetchProfile());
   const refresh = () => dispatch(refreshToken());
 
-
   const googleAuth = (idToken) => dispatch(googleLogin(idToken));
-
 
   const isAdmin = () => auth.user?.role?.name === "admin";
   const isUser = () => auth.user?.role?.name === "user";

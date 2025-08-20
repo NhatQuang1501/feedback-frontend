@@ -4,7 +4,6 @@ import { Speed as SpeedIcon, TrendingUp as TrendingIcon } from "@mui/icons-mater
 import { LineChart } from "@mui/x-charts/LineChart";
 import useContainerWidth from "@/hooks/useContainerWidth";
 
-
 export default function ProcessingSpeedAreaChart({ data = [], dateRange, onDateRangeChange }) {
   const [timeRange, setTimeRange] = useState([0, 0]);
   const wrapperRef = useRef(null);
@@ -16,22 +15,21 @@ export default function ProcessingSpeedAreaChart({ data = [], dateRange, onDateR
     return data.map((item, index) => ({
       month: item.month,
       avgProcessingTime: item.avg_days,
-      total: 0, 
+      total: 0,
       resolved: 0,
       inProgress: 0,
-      new: 0, 
-      date: new Date(item.month.split('/').reverse().join('-') + "-01")
+      new: 0,
+      date: new Date(item.month.split("/").reverse().join("-") + "-01"),
     }));
   }, [data]);
 
- 
   const timelineData = useMemo(() => {
     if (processingSpeedData.length === 0) return [];
 
     const monthlyData = new Map();
 
     processingSpeedData.forEach((item) => {
-      const date = new Date(item.month.split('/').reverse().join('-') + "-01");
+      const date = new Date(item.month.split("/").reverse().join("-") + "-01");
       const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
       const monthLabel = item.month;
 
@@ -47,13 +45,11 @@ export default function ProcessingSpeedAreaChart({ data = [], dateRange, onDateR
     return Array.from(monthlyData.values()).sort((a, b) => a.date - b.date);
   }, [processingSpeedData]);
 
-
   useEffect(() => {
     if (timelineData.length > 0) {
       setTimeRange([0, timelineData.length - 1]);
     }
-  }, [timelineData])
-
+  }, [timelineData]);
 
   const filteredData = useMemo(() => {
     if (timelineData.length === 0) return processingSpeedData;
@@ -64,12 +60,10 @@ export default function ProcessingSpeedAreaChart({ data = [], dateRange, onDateR
     if (!startDate || !endDate) return processingSpeedData;
 
     return processingSpeedData.filter((item) => {
-      const itemDate = new Date(item.month.split('/').reverse().join('-') + "-01");
+      const itemDate = new Date(item.month.split("/").reverse().join("-") + "-01");
       return itemDate >= startDate && itemDate <= endDate;
     });
   }, [processingSpeedData, timelineData, timeRange]);
-
-
 
   // Chart data for MUI X Charts
   const chartData = useMemo(() => {
@@ -284,7 +278,7 @@ export default function ProcessingSpeedAreaChart({ data = [], dateRange, onDateR
               color="text.secondary"
               sx={{ mb: 2, textAlign: "center", fontWeight: 500 }}
             >
-             Tổng quan hiệu suất xử lý
+              Tổng quan hiệu suất xử lý
             </Typography>
             <Box
               sx={{

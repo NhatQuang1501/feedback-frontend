@@ -85,7 +85,7 @@ const VerifyOTPPage = () => {
     setResendLoading(true);
     try {
       await dispatch(sendOtp({ email })).unwrap();
-      setCountdown(60); 
+      setCountdown(60);
     } catch (error) {
       console.error("Resend OTP failed:", error);
     } finally {
