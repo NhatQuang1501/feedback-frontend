@@ -8,6 +8,7 @@ import {
   fetchProfile,
   refreshToken,
   googleLogin,
+  clearAuth,
 } from "@/store/slices/authSlice";
 
 export const useAuth = () => {
@@ -20,8 +21,9 @@ export const useAuth = () => {
   const register = (formData) => dispatch(registerUser(formData));
   const logout = () => dispatch(logoutUser());
   const clearError = () => dispatch(clearAuthError());
-  const getProfile = () => dispatch(fetchProfile());
+  const getProfile = () => dispatch(fetchProfile()); // Khôi phục getProfile
   const refresh = () => dispatch(refreshToken());
+  const clearAuthState = () => dispatch(clearAuth());
 
   const googleAuth = (idToken) => dispatch(googleLogin(idToken));
 
@@ -109,9 +111,10 @@ export const useAuth = () => {
     register,
     logout,
     clearError,
-    getProfile,
+    getProfile, // Khôi phục
     refresh,
     googleAuth,
+    clearAuthState,
 
     // Helpers
     isAdmin,
