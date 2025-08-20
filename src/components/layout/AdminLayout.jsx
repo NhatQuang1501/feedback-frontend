@@ -8,11 +8,11 @@ import AdminHeader from "./AdminHeader";
 const AdminLayout = () => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
 
-  // Kiểm tra quyền admin
+
   const userRole = user?.role?.name;
   const isAdmin = userRole === "admin";
 
-  // Nếu không phải admin, hiển thị trang từ chối
+
   if (!isAdmin) {
     return (
       <Box className="flex min-h-screen items-center justify-center bg-gray-50">

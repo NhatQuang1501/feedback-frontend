@@ -9,7 +9,7 @@ import Footer from "@/components/layout/Footer";
 const MainLayout = () => {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
 
-  // Kiểm tra nếu admin cố vào user area
+
   const userRole = user?.role?.name;
   const isAdmin = userRole === "admin";
 
