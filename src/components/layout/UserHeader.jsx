@@ -144,7 +144,7 @@ const UserHeader = () => {
                   }}
                   className="mt-2"
                 >
-                  <MenuItem onClick={handleLogout} className="gap-3">
+                  <MenuItem onClick={handleLogout} className="gap-3 px-3 py-2 text-sm">
                     <ExitToAppOutlined className="h-5 w-5 text-gray-600" />
                     <span>Đăng xuất</span>
                   </MenuItem>

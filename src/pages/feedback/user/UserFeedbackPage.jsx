@@ -180,29 +180,29 @@ const UserFeedbackPage = () => {
   };
 
   // Xử lý thay đổi trang cho tab Tất cả
-  const handleAllPageChange = (event, value) => {
-    setAllFeedbacksPage(value);
+  const handleAllPageChange = (page) => {
+    setAllFeedbacksPage(page);
     setAllFeedbacksFilters((prev) => ({
       ...prev,
-      page: value,
+      page: page,
     }));
   };
 
   // Xử lý thay đổi trang cho tab Đang xử lý
-  const handlePendingPageChange = (event, value) => {
-    setPendingFeedbacksPage(value);
+  const handlePendingPageChange = (page) => {
+    setPendingFeedbacksPage(page);
     setPendingFeedbacksFilters((prev) => ({
       ...prev,
-      page: value,
+      page: page,
     }));
   };
 
   // Xử lý thay đổi trang cho tab Đã giải quyết
-  const handleResolvedPageChange = (event, value) => {
-    setResolvedFeedbacksPage(value);
+  const handleResolvedPageChange = (page) => {
+    setResolvedFeedbacksPage(page);
     setResolvedFeedbacksFilters((prev) => ({
       ...prev,
-      page: value,
+      page: page,
     }));
   };
 
@@ -237,16 +237,20 @@ const UserFeedbackPage = () => {
             feedbacks={allFeedbacks}
             loading={loading}
             emptyMessage="Bạn chưa gửi phản hồi nào"
-            detailUrlPrefix="/feedbacks/" // Đường dẫn đúng cho người dùng
+            detailUrlPrefix="/feedbacks/"
           />
-          {allFeedbacksCount > 0 && (
-            <Box className="flex justify-center pt-4">
-              <Pagination
-                count={Math.ceil(allFeedbacksCount / allFeedbacksFilters.page_size)}
-                page={allFeedbacksPage}
-                onChange={handleAllPageChange}
-              />
-            </Box>
+          {Math.ceil(allFeedbacksCount / allFeedbacksFilters.page_size) > 1 && (
+            <Pagination
+              currentPage={allFeedbacksPage}
+              totalPages={Math.ceil(allFeedbacksCount / allFeedbacksFilters.page_size)}
+              totalItems={allFeedbacksCount}
+              itemsPerPage={allFeedbacksFilters.page_size}
+              hasNextPage={
+                allFeedbacksPage < Math.ceil(allFeedbacksCount / allFeedbacksFilters.page_size)
+              }
+              hasPrevPage={allFeedbacksPage > 1}
+              onPageChange={handleAllPageChange}
+            />
           )}
         </div>
       ),
@@ -267,16 +271,21 @@ const UserFeedbackPage = () => {
             feedbacks={pendingFeedbacks}
             loading={loading}
             emptyMessage="Không có phản hồi nào đang xử lý"
-            detailUrlPrefix="/feedbacks/" // Đường dẫn đúng cho người dùng
+            detailUrlPrefix="/feedbacks/"
           />
-          {pendingFeedbacksCount > 0 && (
-            <Box className="flex justify-center pt-4">
-              <Pagination
-                count={Math.ceil(pendingFeedbacksCount / pendingFeedbacksFilters.page_size)}
-                page={pendingFeedbacksPage}
-                onChange={handlePendingPageChange}
-              />
-            </Box>
+          {Math.ceil(pendingFeedbacksCount / pendingFeedbacksFilters.page_size) > 1 && (
+            <Pagination
+              currentPage={pendingFeedbacksPage}
+              totalPages={Math.ceil(pendingFeedbacksCount / pendingFeedbacksFilters.page_size)}
+              totalItems={pendingFeedbacksCount}
+              itemsPerPage={pendingFeedbacksFilters.page_size}
+              hasNextPage={
+                pendingFeedbacksPage <
+                Math.ceil(pendingFeedbacksCount / pendingFeedbacksFilters.page_size)
+              }
+              hasPrevPage={pendingFeedbacksPage > 1}
+              onPageChange={handlePendingPageChange}
+            />
           )}
         </div>
       ),
@@ -299,14 +308,19 @@ const UserFeedbackPage = () => {
             emptyMessage="Chưa có phản hồi nào được giải quyết"
             detailUrlPrefix="/feedbacks/"
           />
-          {resolvedFeedbacksCount > 0 && (
-            <Box className="flex justify-center pt-4">
-              <Pagination
-                count={Math.ceil(resolvedFeedbacksCount / resolvedFeedbacksFilters.page_size)}
-                page={resolvedFeedbacksPage}
-                onChange={handleResolvedPageChange}
-              />
-            </Box>
+          {Math.ceil(resolvedFeedbacksCount / resolvedFeedbacksFilters.page_size) > 1 && (
+            <Pagination
+              currentPage={resolvedFeedbacksPage}
+              totalPages={Math.ceil(resolvedFeedbacksCount / resolvedFeedbacksFilters.page_size)}
+              totalItems={resolvedFeedbacksCount}
+              itemsPerPage={resolvedFeedbacksFilters.page_size}
+              hasNextPage={
+                resolvedFeedbacksPage <
+                Math.ceil(resolvedFeedbacksCount / resolvedFeedbacksFilters.page_size)
+              }
+              hasPrevPage={resolvedFeedbacksPage > 1}
+              onPageChange={handleResolvedPageChange}
+            />
           )}
         </div>
       ),

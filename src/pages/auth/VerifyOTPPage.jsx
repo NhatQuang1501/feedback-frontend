@@ -13,6 +13,9 @@ import {
 } from "@mui/material";
 import { Email, ArrowBack } from "@mui/icons-material";
 import { verifyOtp, sendOtp, clearAuthError } from "@/store/slices/authSlice";
+import FormField from "@/components/common/FormField";
+import LockIcon from "@mui/icons-material/Lock";
+import SummitButton from "@/components/common/SubmitButton";
 
 const VerifyOTPPage = () => {
   const dispatch = useDispatch();
@@ -103,100 +106,113 @@ const VerifyOTPPage = () => {
 
   return (
     <Container maxWidth="sm" className="py-8">
-      <Box className="from-primary-light via-background-default to-secondary-light/10 flex min-h-screen items-center justify-center bg-gradient-to-br">
-        <Paper
-          elevation={6}
-          className="w-full overflow-hidden rounded-2xl border border-[#fff1b8]/30 bg-gradient-to-br from-white to-[#fffef7] p-8 shadow-lg transition-all duration-300 ease-in-out"
+      <div className="mb-8 text-center">
+        <Typography
+          variant="h3"
+          component="h1"
+          align="center"
+          className="text-shadow mb-2 text-[1.75rem] leading-tight font-bold text-[#ffec99] sm:text-[2.25rem] md:text-[2.75rem]"
         >
-          {/* Header */}
-          <div className="mb-8 text-center">
-            <Typography variant="h4" component="h1" className="mb-2 font-bold text-gray-900">
-              Xác thực Email
+          Feedback Hub
+        </Typography>
+        <Typography
+          variant="subtitle1"
+          align="center"
+          className="mx-auto mb-3 max-w-xl text-[0.9rem] leading-relaxed text-gray-600 sm:text-[1rem]"
+        >
+          Hệ thống quản lý phản hồi người dùng
+        </Typography>
+        <div className="mx-auto mb-6 h-1 w-16 rounded-full bg-[#ffec99]"></div>
+      </div>
+      <Paper
+        elevation={0}
+        className="w-full overflow-hidden rounded-2xl border border-[#fff1b8]/30 bg-gradient-to-br from-white to-[#fffef7] p-8 transition-all duration-300 ease-in-out"
+      >
+        {/* Header */}
+        <div className="mb-8 text-center">
+          <Typography variant="h6" component="h1" className="mb-2 font-bold text-gray-900">
+            Xác thực Email
+          </Typography>
+          <Typography variant="body1" className="text-gray-600">
+            {message || "Vui lòng nhập mã OTP đã được gửi đến email của bạn"}
+          </Typography>
+        </div>
+
+        {/* Email Display */}
+        <Box className="mb-6 flex items-center justify-center rounded-lg border border-gray-300 bg-gray-50 p-3">
+          <Email className="mr-2 text-gray-500" />
+          <Typography variant="body1" className="font-medium text-gray-700">
+            {email}
+          </Typography>
+        </Box>
+
+        {/* Error Alert */}
+        {error && (
+          <Alert severity="error" className="mb-6" onClose={() => dispatch(clearAuthError())}>
+            {typeof error === "string" ? error : "Xác thực thất bại. Vui lòng thử lại."}
+          </Alert>
+        )}
+
+        {/* OTP Form */}
+        <form onSubmit={handleVerifyOTP} className="space-y-6">
+          <div>
+            <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
+              Mã OTP (6 số)
             </Typography>
-            <Typography variant="body1" className="text-gray-600">
-              {message || "Vui lòng nhập mã OTP đã được gửi đến email của bạn"}
-            </Typography>
+            <FormField
+              name="otp"
+              placeholder="Nhập mã OTP"
+              value={otp}
+              onChange={handleOtpChange}
+              startIcon={<LockIcon className="text-xl text-gray-500" />}
+              inputProps={{
+                maxLength: 6,
+                pattern: "[0-9]*",
+                inputMode: "numeric",
+              }}
+              className="[&_.MuiOutlinedInput-input::placeholder]:text-left [&_.MuiOutlinedInput-input::placeholder]:text-gray-400"
+            />
           </div>
+          {/* Submit Button */}
+          <SummitButton
+            type="submit"
+            loading={isLoading}
+            disabled={otp.length !== 6 || isLoading}
+            className="bg-primary text-secondary hover:bg-primary-dark"
+          >
+            {isLoading ? <CircularProgress size={24} className="text-white" /> : "Xác thực"}
+          </SummitButton>
+        </form>
 
-          {/* Email Display */}
-          <Box className="mb-6 flex items-center justify-center rounded-lg bg-gray-50 p-4">
-            <Email className="mr-2 text-gray-500" />
-            <Typography variant="body1" className="font-medium text-gray-700">
-              {email}
-            </Typography>
-          </Box>
+        {/* Resend OTP */}
+        <div className="mt-6 text-center">
+          <Typography variant="body2" className="text-gray-600">
+            Không nhận được mã?{" "}
+            {countdown > 0 ? (
+              <span className="font-medium text-gray-500">Gửi lại sau {countdown}s</span>
+            ) : (
+              <Button
+                onClick={handleResendOTP}
+                disabled={resendLoading}
+                className="border-none bg-transparent p-0 font-medium text-[#e6d486] transition-colors duration-200 hover:text-[#ffec99] hover:underline"
+              >
+                {resendLoading ? "Đang gửi..." : "Gửi lại"}
+              </Button>
+            )}
+          </Typography>
+        </div>
 
-          {/* Error Alert */}
-          {error && (
-            <Alert severity="error" className="mb-6" onClose={() => dispatch(clearAuthError())}>
-              {typeof error === "string" ? error : "Xác thực thất bại. Vui lòng thử lại."}
-            </Alert>
-          )}
-
-          {/* OTP Form */}
-          <form onSubmit={handleVerifyOTP} className="space-y-6">
-            <div>
-              <Typography variant="subtitle2" className="mb-2 font-medium text-gray-700">
-                Mã OTP (6 số)
-              </Typography>
-              <TextField
-                fullWidth
-                value={otp}
-                onChange={handleOtpChange}
-                placeholder="Nhập mã OTP"
-                variant="outlined"
-                inputProps={{
-                  maxLength: 6,
-                  pattern: "[0-9]*",
-                  inputMode: "numeric",
-                }}
-                className="[&_.MuiOutlinedInput-input]:text-center [&_.MuiOutlinedInput-input]:font-mono [&_.MuiOutlinedInput-input]:text-lg"
-              />
-            </div>
-
-            {/* Submit Button */}
-            <Button
-              type="submit"
-              variant="contained"
-              fullWidth
-              size="large"
-              disabled={otp.length !== 6 || isLoading}
-              className="bg-primary text-secondary hover:bg-primary-dark"
-            >
-              {isLoading ? <CircularProgress size={24} className="text-white" /> : "Xác thực"}
-            </Button>
-          </form>
-
-          {/* Resend OTP */}
-          <div className="mt-6 text-center">
-            <Typography variant="body2" className="text-gray-600">
-              Không nhận được mã?{" "}
-              {countdown > 0 ? (
-                <span className="font-medium text-gray-500">Gửi lại sau {countdown}s</span>
-              ) : (
-                <Button
-                  onClick={handleResendOTP}
-                  disabled={resendLoading}
-                  className="border-none bg-transparent p-0 font-medium text-[#e6d486] transition-colors duration-200 hover:text-[#ffec99] hover:underline"
-                >
-                  {resendLoading ? "Đang gửi..." : "Gửi lại"}
-                </Button>
-              )}
-            </Typography>
-          </div>
-
-          {/* Back to Login */}
-          <div className="mt-6 text-center">
-            <Button
-              onClick={handleBackToLogin}
-              startIcon={<ArrowBack />}
-              className="text-gray-600 hover:text-gray-800"
-            >
-              Quay lại đăng nhập
-            </Button>
-          </div>
-        </Paper>
-      </Box>
+        {/* Back to Login */}
+        <div className="mt-6 text-center">
+          <Button
+            onClick={handleBackToLogin}
+            startIcon={<ArrowBack />}
+            className="text-gray-600 hover:text-gray-800"
+          >
+            Quay lại đăng nhập
+          </Button>
+        </div>
+      </Paper>
     </Container>
   );
 };

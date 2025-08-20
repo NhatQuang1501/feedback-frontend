@@ -102,8 +102,8 @@ const AuthTabs = ({
       </div>
 
       <Paper
-        elevation={6}
-        className="overflow-hidden rounded-2xl border border-[#fff1b8]/30 bg-gradient-to-br from-white to-[#fffef7] shadow-lg transition-all duration-300 ease-in-out"
+        elevation={0}
+        className="overflow-hidden rounded-2xl border border-[#fff1b8]/30 bg-gradient-to-br from-white to-[#fffef7] transition-all duration-300 ease-in-out"
       >
         <Card
           sx={{
