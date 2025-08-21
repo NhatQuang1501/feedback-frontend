@@ -37,7 +37,6 @@ const FeedbackList = ({
       minute: "2-digit",
     }).format(date);
 
-    // Kết hợp định dạng thẩm mỹ hơn
     return (
       <div className="flex flex-col">
         <span className="font-medium">{dateFormat}</span>
@@ -97,7 +96,6 @@ const FeedbackList = ({
     );
   }
 
-  // No feedbacks found
   if (!loading && (!feedbacks || !Array.isArray(feedbacks) || feedbacks.length === 0)) {
     return (
       <Paper className="p-8 text-center">
@@ -108,7 +106,6 @@ const FeedbackList = ({
     );
   }
 
-  // Đảm bảo feedbacks là một mảng
   const feedbackArray = Array.isArray(feedbacks) ? feedbacks : [];
 
   return (

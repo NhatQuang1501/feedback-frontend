@@ -33,58 +33,47 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
     sort: sortBy || "newest",
   });
 
-  // State for search input with immediate update in UI
   const [searchInput, setSearchInput] = useState(filters.q || "");
 
-  // Debounce search input to prevent too many API calls
   const debouncedSearchTerm = useDebounce(searchInput, 500);
 
-  // State for showing/hiding advanced filters
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
-  // Effect to update search filter when debounced term changes
   useEffect(() => {
     if (debouncedSearchTerm !== filters.q) {
       onFilterChange("q", debouncedSearchTerm);
     }
   }, [debouncedSearchTerm, onFilterChange, filters.q]);
 
-  // Handle search input change
   const handleSearchChange = (e) => {
     setSearchInput(e.target.value);
   };
 
-  // Handle checkbox filter change
   const handleCheckboxChange = (field, value) => {
     setAdvancedFilters((prev) => {
       const currentValues = [...prev[field]];
       const index = currentValues.indexOf(value);
 
       if (index === -1) {
-        // Add the value if not present
         return { ...prev, [field]: [...currentValues, value] };
       } else {
-        // Remove the value if already present
         currentValues.splice(index, 1);
         return { ...prev, [field]: currentValues };
       }
     });
   };
 
-  // Apply advanced filters
   const applyAdvancedFilters = () => {
     onFilterChange("type", advancedFilters.type);
     onFilterChange("priority", advancedFilters.priority);
     onFilterChange("status", advancedFilters.status);
   };
 
-  // Clear search
   const clearSearch = () => {
     setSearchInput("");
     onFilterChange("q", "");
   };
 
-  // Clear all filters
   const clearAllFilters = () => {
     setSearchInput("");
     setAdvancedFilters({
@@ -100,7 +89,6 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
     onSortChange("newest");
   };
 
-  // Count active filters
   const activeFiltersCount =
     (filters.type && filters.type.length ? 1 : 0) +
     (filters.priority && filters.priority.length ? 1 : 0) +
@@ -109,7 +97,6 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
 
   return (
     <div className="w-full space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <FilterIcon className="text-gray-600" />
@@ -135,7 +122,6 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
         </div>
       </div>
 
-      {/* Search Bar */}
       <TextField
         fullWidth
         placeholder="Tìm kiếm theo tiêu đề, nội dung, người gửi..."
@@ -158,7 +144,6 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
         }}
       />
 
-      {/* Advanced Filters Toggle and Sort */}
       <div className="flex items-center justify-between">
         <Button
           variant="outlined"
@@ -171,7 +156,6 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
           Bộ lọc nâng cao
         </Button>
 
-        {/* Sort options - đã chuyển xuống ngang hàng với bộ lọc nâng cao, căn phải */}
         <div className="flex items-center gap-2">
           <SortIcon className="text-gray-500" />
           <CustomSelect
@@ -185,7 +169,6 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
         </div>
       </div>
 
-      {/* Advanced Filters */}
       <Collapse in={showAdvancedFilters} timeout="auto">
         <Paper elevation={0} className="border border-gray-200 p-4">
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -241,7 +224,6 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
         </Paper>
       </Collapse>
 
-      {/* Active Filters Display */}
       {activeFiltersCount > 0 && (
         <Box className="flex flex-wrap gap-2 border-t border-gray-200 pt-4">
           <Typography variant="body2" className="mr-2 text-gray-600">

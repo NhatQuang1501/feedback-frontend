@@ -11,18 +11,12 @@ import { getTypeInfo, getPriorityInfo, getStatusInfo } from "@/utils/constants";
 import { formatDate } from "@/utils/formatters";
 import Button from "@/components/common/Button";
 import { feedbackApi } from "@/api/feedbackApi";
-
-const STATUS = {
-  pending: { id: 1, name: "pending", display: "Chờ xử lý" },
-  processing: { id: 2, name: "processing", display: "Đang xử lý" },
-  resolved: { id: 3, name: "resolved", display: "Đã xử lý" },
-};
+import STATUS from "@/utils/constants";
 
 const FeedbackDetailHeader = ({ feedback, isAdmin, onStatusChange }) => {
   const [loading, setLoading] = useState(false);
   const [currentStatus, setCurrentStatus] = useState(feedback.status_display);
 
-  // Xác định trạng thái hiện tại dựa vào state nội bộ (cho phép cập nhật ngay không cần reload)
   const statusName = getStatusInfo(currentStatus).value;
 
   let nextStatus = null;
@@ -35,10 +29,8 @@ const FeedbackDetailHeader = ({ feedback, isAdmin, onStatusChange }) => {
       setLoading(true);
       await feedbackApi.updateFeedbackStatus(feedback.feedback_id, nextStatus.id);
 
-      // Cập nhật state nội bộ thay vì reload trang
       setCurrentStatus(nextStatus.display);
 
-      // Gọi callback (có thể dùng để hiển thị toast, không cần reload data)
       if (onStatusChange) {
         onStatusChange(nextStatus.name);
       }

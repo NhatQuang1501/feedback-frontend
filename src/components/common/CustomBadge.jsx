@@ -3,32 +3,26 @@ import PropTypes from "prop-types";
 import Badge from "@/components/common/Badge";
 import { FEEDBACK_TYPES, PRIORITY_LEVELS, FEEDBACK_STATUS } from "@/utils/constants";
 
-// Màu sắc cho các loại badge
 const COLORS = {
-  // Loại phản hồi
   TYPE: {
-    suggestion: "#8b5cf6", // Tím
-    bug: "#ef4444", // Đỏ
-    other: "#6b7280", // Xám
+    suggestion: "#8b5cf6",
+    bug: "#ef4444",
+    other: "#6b7280",
   },
-  // Mức độ ưu tiên
   PRIORITY: {
-    high: "#ef4444", // Đỏ
-    medium: "#c7a84b", // Vàng
-    low: "#4b5563", // Xám
+    high: "#ef4444",
+    medium: "#c7a84b",
+    low: "#4b5563",
   },
-  // Trạng thái
   STATUS: {
-    pending: "#fbbf24", // Vàng sáng
-    processing: "#3b82f6", // Xanh dương
-    resolved: "#16a34a", // Xanh lá
+    pending: "#fbbf24",
+    processing: "#3b82f6",
+    resolved: "#16a34a",
   },
 };
 
-// Màu mặc định nếu không tìm thấy
-const DEFAULT_COLOR = "#6b7280"; // Xám
+const DEFAULT_COLOR = "#6b7280";
 
-// Badge cho loại phản hồi
 export const TypeBadge = ({ type }) => {
   const color = COLORS.TYPE[type] || DEFAULT_COLOR;
   const label = FEEDBACK_TYPES.find((item) => item.value === type)?.label || type;
@@ -40,7 +34,6 @@ export const TypeBadge = ({ type }) => {
   );
 };
 
-// Badge cho mức độ ưu tiên
 export const PriorityBadge = ({ priority }) => {
   const color = COLORS.PRIORITY[priority] || DEFAULT_COLOR;
   const label = PRIORITY_LEVELS.find((item) => item.value === priority)?.label || priority;
@@ -52,7 +45,6 @@ export const PriorityBadge = ({ priority }) => {
   );
 };
 
-// Badge cho trạng thái
 export const StatusBadge = ({ status }) => {
   const color = COLORS.STATUS[status] || DEFAULT_COLOR;
   const label = FEEDBACK_STATUS.find((item) => item.value === status)?.label || status;
@@ -64,7 +56,6 @@ export const StatusBadge = ({ status }) => {
   );
 };
 
-// PropTypes
 TypeBadge.propTypes = {
   type: PropTypes.string,
 };

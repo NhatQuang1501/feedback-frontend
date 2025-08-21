@@ -24,7 +24,7 @@ const AuthGuard = ({ children }) => {
         // No tokens, clear auth state
         dispatch(clearAuth());
       }
-      
+
       dispatch(setInitialized());
     };
 

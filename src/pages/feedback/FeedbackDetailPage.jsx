@@ -13,7 +13,6 @@ const FeedbackDetailPage = () => {
   const [loading, setLoading] = useState(true);
   const { showToast } = useToast();
 
-  // Lấy user từ redux
   const { user } = useSelector((state) => state.auth);
   const isAdmin = user?.role?.name === "admin";
 

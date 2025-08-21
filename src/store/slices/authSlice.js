@@ -35,7 +35,6 @@ export const googleLogin = createAsyncThunk(
   },
 );
 
-// Khôi phục fetchProfile
 export const fetchProfile = createAsyncThunk("auth/me", async (_, { rejectWithValue }) => {
   try {
     const { data } = await authApi.me();
@@ -177,7 +176,7 @@ const authSlice = createSlice({
         // Handle backend response format: { user: {...}, permissions: {...} }
         const userData = a.payload.user || a.payload;
         const permissions = a.payload.permissions || {};
-        
+
         s.user = userData;
         s.isAdmin = permissions.is_admin || userData?.role?.name === "admin";
         s.isAuthenticated = true;

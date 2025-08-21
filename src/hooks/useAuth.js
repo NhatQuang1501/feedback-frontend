@@ -21,7 +21,7 @@ export const useAuth = () => {
   const register = (formData) => dispatch(registerUser(formData));
   const logout = () => dispatch(logoutUser());
   const clearError = () => dispatch(clearAuthError());
-  const getProfile = () => dispatch(fetchProfile()); // Khôi phục getProfile
+  const getProfile = () => dispatch(fetchProfile());
   const refresh = () => dispatch(refreshToken());
   const clearAuthState = () => dispatch(clearAuth());
 
@@ -111,7 +111,7 @@ export const useAuth = () => {
     register,
     logout,
     clearError,
-    getProfile, // Khôi phục
+    getProfile,
     refresh,
     googleAuth,
     clearAuthState,

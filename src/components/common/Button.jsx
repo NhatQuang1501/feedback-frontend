@@ -16,7 +16,6 @@ const Button = ({
   children,
   ...rest
 }) => {
-  // Xác định các class dựa trên variant
   const getVariantClasses = () => {
     switch (variant) {
       case "primary":
@@ -36,7 +35,6 @@ const Button = ({
     }
   };
 
-  // Xác định các class dựa trên kích thước
   const getSizeClasses = () => {
     switch (size) {
       case "small":
@@ -50,7 +48,6 @@ const Button = ({
     }
   };
 
-  // Xác định các class cho trạng thái disabled
   const getDisabledClasses = () => {
     if (variant === "outlined") {
       return "border-gray-300 bg-gray-100 text-gray-400 shadow-none";
@@ -58,7 +55,6 @@ const Button = ({
     return "bg-gray-100 text-gray-400 shadow-none";
   };
 
-  // Kết hợp tất cả các class
   const buttonClasses = `
     ${getVariantClasses()}
     ${getSizeClasses()}
@@ -70,7 +66,6 @@ const Button = ({
     ${className}
   `;
 
-  // Xử lý icon khi loading
   const renderStartIcon = () => {
     if (loading) {
       return (

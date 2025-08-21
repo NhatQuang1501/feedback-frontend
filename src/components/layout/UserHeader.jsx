@@ -25,7 +25,6 @@ const UserHeader = () => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const isActive = (path) => {
-    // Xử lý đặc biệt cho /feedbacks và /feedbacks/create
     if (path === "/feedbacks") {
       return (
         location.pathname === "/feedbacks" ||
@@ -36,7 +35,6 @@ const UserHeader = () => {
     if (path === "/feedbacks/create") {
       return location.pathname === "/feedbacks/create";
     }
-    // Xử lý các trường hợp khác
     return location.pathname.startsWith(path);
   };
 
@@ -69,17 +67,10 @@ const UserHeader = () => {
     handleProfileMenuClose();
   };
 
-  const handleProfile = () => {
-    // Navigate to profile page or show profile dialog
-    console.log("Profile clicked");
-    handleProfileMenuClose();
-  };
-
   return (
     <AppBar position="static" color="default" elevation={0} className="bg-white shadow-md">
       <Container maxWidth="lg" className="mx-auto">
         <Toolbar className="flex px-4 py-3">
-          {/* Logo & Brand */}
           <Typography
             variant="h5"
             component={Link}
@@ -89,7 +80,6 @@ const UserHeader = () => {
             FeedbackHub
           </Typography>
 
-          {/* Main Navigation - Now on the left */}
           <div className="hidden gap-6 sm:flex lg:gap-8">
             {navigationItems.map((item) => (
               <Button
@@ -109,16 +99,12 @@ const UserHeader = () => {
             ))}
           </div>
 
-          {/* Spacer to push the right items to the end */}
           <div className="flex-grow"></div>
 
-          {/* Right side items */}
           <div className="flex items-center gap-3 sm:gap-6">
-            {/* Auth Separator */}
             <div className="hidden h-6 w-px bg-gray-300 sm:block"></div>
 
             {isAuthenticated ? (
-              /* User Profile Menu */
               <div className="flex items-center">
                 <IconButton size="large" edge="end" onClick={handleProfileMenuOpen}>
                   <Avatar className="bg-primary text-secondary">
@@ -151,7 +137,6 @@ const UserHeader = () => {
                 </Menu>
               </div>
             ) : (
-              /* Login Button */
               <Button
                 component={Link}
                 to="/auth/login"

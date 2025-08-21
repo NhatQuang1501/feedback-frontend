@@ -50,7 +50,7 @@ function App() {
 
                   {/* Protected Routes */}
                   <Route element={<ProtectedRoute />}>
-                    {/* Admin Routes - Require admin role */}
+                    {/* Admin Routes */}
                     <Route
                       path="/admin"
                       element={
@@ -65,7 +65,7 @@ function App() {
                       <Route path="dashboard" element={<AdminDashboardPage />} />
                     </Route>
 
-                    {/* User Routes - Require user role (block admin access) */}
+                    {/* User Routes */}
                     <Route
                       path="/"
                       element={

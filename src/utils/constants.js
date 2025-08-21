@@ -16,6 +16,12 @@ export const FEEDBACK_STATUS = [
   { value: "resolved", label: "Đã xử lý", color: "resolved" },
 ];
 
+export const STATUS = {
+  pending: { id: 1, name: "pending", display: "Chờ xử lý" },
+  processing: { id: 2, name: "processing", display: "Đang xử lý" },
+  resolved: { id: 3, name: "resolved", display: "Đã xử lý" },
+};
+
 export const SORT_OPTIONS = [
   { value: "newest", label: "Mới nhất" },
   { value: "oldest", label: "Cũ nhất" },

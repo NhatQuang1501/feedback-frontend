@@ -37,7 +37,6 @@ const CustomSelect = ({
   className = "",
   selectClassName = "",
 }) => {
-  // Xác định chiều cao dựa trên kích thước
   const getHeight = () => {
     switch (size) {
       case "small":

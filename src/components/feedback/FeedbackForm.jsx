@@ -33,7 +33,6 @@ const FeedbackForm = () => {
   const [confirmDialogType, setConfirmDialogType] = useState("submit");
   const [confirmAction, setConfirmAction] = useState(null);
 
-  // Chuyển đổi constants thành mapping với ID
   const typeIdMapping = {
     suggestion: 1,
     bug: 2,
@@ -46,7 +45,6 @@ const FeedbackForm = () => {
     high: 3,
   };
 
-  // Hàm chuyển đổi chữ cái đầu thành chữ hoa
   const capitalizeFirstLetter = (string) => {
     if (!string) return "";
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -55,7 +53,6 @@ const FeedbackForm = () => {
   const handleInputChange = (field) => (event) => {
     let value = event.target.value;
 
-    // Tự động viết hoa chữ cái đầu cho tiêu đề và nội dung
     if (field === "title" || field === "content") {
       value = capitalizeFirstLetter(value);
     }
@@ -126,14 +123,12 @@ const FeedbackForm = () => {
     setIsSubmitting(true);
     setSubmitError(null);
 
-    // Tạo FormData để gửi dữ liệu và file
     const formDataToSubmit = new FormData();
     formDataToSubmit.append("title", formData.title);
     formDataToSubmit.append("content", formData.content);
     formDataToSubmit.append("type_id", typeIdMapping[formData.type]);
     formDataToSubmit.append("priority_id", priorityIdMapping[formData.priority]);
 
-    // Thêm các file đính kèm
     formData.attachments.forEach((file) => {
       formDataToSubmit.append("files", file);
     });

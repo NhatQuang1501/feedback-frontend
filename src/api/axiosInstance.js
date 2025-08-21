@@ -6,7 +6,6 @@ export const axiosInstance = axios.create({
   timeout: 15000,
 });
 
-// Gắn access token (nếu có)
 axiosInstance.interceptors.request.use((config) => {
   const access = localStorage.getItem("access_token");
   if (access) {
