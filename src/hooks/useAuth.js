@@ -111,7 +111,7 @@ export const useAuth = () => {
     register,
     logout,
     clearError,
-    getProfile,
+    getProfile, 
     refresh,
     googleAuth,
     clearAuthState,

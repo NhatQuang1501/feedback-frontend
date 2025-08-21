@@ -3,12 +3,12 @@ import { Typography, Alert, Divider, Grid } from "@mui/material";
 import { Email, Lock, Person } from "@mui/icons-material";
 import GoogleIcon from "@mui/icons-material/Google";
 
-// Custom components
+
 import FormField from "../common/FormField";
 import SubmitButton from "../common/SubmitButton";
 import SocialButton from "../common/SocialButton";
 
-// Hooks and utils
+
 import { useForm } from "../../hooks/useForm";
 import { useMultiplePasswordToggle } from "../../hooks/usePasswordToggle";
 import { validateRegisterForm } from "../../utils/validation";
