@@ -1,11 +1,9 @@
 import { useState } from "react";
 
-
 export const useForm = (initialValues, validationFn) => {
   const [formData, setFormData] = useState(initialValues);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-
 
   const handleChange = (e) => {
     const { name, value } = e.target;

@@ -2,7 +2,6 @@ import React from "react";
 import { TextField, InputAdornment, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-
 const FormField = ({
   name,
   label,
@@ -21,7 +20,6 @@ const FormField = ({
   className = "",
   ...props
 }) => {
-
   const shouldShowPlaceholder = !value && placeholder;
 
   return (
@@ -79,7 +77,7 @@ const FormField = ({
             },
           },
           "& .MuiInputBase-input": {
-            "paddingLeft": startIcon ? "8px" : "16px", 
+            "paddingLeft": startIcon ? "8px" : "16px",
             "paddingRight": type === "password" ? "8px" : "16px",
             "fontSize": "1rem",
             "lineHeight": "1.5",
@@ -95,7 +93,7 @@ const FormField = ({
             "backgroundColor": "white",
             "padding": "0 4px",
             "color": "#374151",
-           
+
             "transform": startIcon
               ? "translate(60px, -9px) scale(1)"
               : "translate(16px, -9px) scale(1)",

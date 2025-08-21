@@ -52,7 +52,6 @@ const AdminHeader = () => {
     <AppBar position="static" color="default" elevation={0} className="bg-white shadow-md">
       <Container maxWidth="lg" className="mx-auto">
         <Toolbar className="flex px-4 py-3">
-          {/* Logo & Brand */}
           <Typography
             variant="h5"
             component={Link}
@@ -62,7 +61,7 @@ const AdminHeader = () => {
             FeedbackHub Admin
           </Typography>
 
-          {/* Main Navigation - Now on the left */}
+          {/* Main Navigation */}
           <div className="hidden gap-6 sm:flex lg:gap-8">
             {navigationItems.map((item) => (
               <Button
@@ -83,12 +82,9 @@ const AdminHeader = () => {
             ))}
           </div>
 
-          {/* Spacer to push the right items to the end */}
           <div className="flex-grow"></div>
 
-          {/* Right side items */}
           <div className="flex items-center gap-3 sm:gap-6">
-            {/* Auth Separator */}
             <div className="hidden h-6 w-px bg-gray-300 sm:block"></div>
 
             {/* Profile Menu */}

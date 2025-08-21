@@ -138,9 +138,34 @@ const FeedbackForm = () => {
       showToast("Phản hồi của bạn đã được gửi thành công!", "success");
       handleReset();
     } catch (error) {
-      console.error("Submit error:", error);
-      setSubmitError("Có lỗi xảy ra khi gửi phản hồi");
-      showToast("Có lỗi xảy ra khi gửi phản hồi. Vui lòng thử lại!", "error");
+      let detailError = "Có lỗi xảy ra khi gửi phản hồi";
+      let newErrors = {};
+      if (error?.response?.data) {
+        const data = error.response.data;
+        if (data.files) {
+          newErrors.attachments = Array.isArray(data.files) ? data.files.join(", ") : data.files;
+        }
+        if (data.title) {
+          newErrors.title = Array.isArray(data.title) ? data.title.join(", ") : data.title;
+        }
+        if (data.content) {
+          newErrors.content = Array.isArray(data.content) ? data.content.join(", ") : data.content;
+        }
+        if (data.type_id) {
+          newErrors.type = Array.isArray(data.type_id) ? data.type_id.join(", ") : data.type_id;
+        }
+        if (data.priority_id) {
+          newErrors.priority = Array.isArray(data.priority_id)
+            ? data.priority_id.join(", ")
+            : data.priority_id;
+        }
+        if (data.detail) {
+          detailError = data.detail;
+        }
+      }
+      setErrors(newErrors);
+      setSubmitError(detailError);
+      showToast(detailError, "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -161,7 +186,6 @@ const FeedbackForm = () => {
     <>
       <CardContent className="p-6 sm:p-8 lg:p-10">
         <form onSubmit={handleConfirmSubmit} className="space-y-6">
-          {/* Error Alert */}
           {submitError && (
             <Alert severity="error" className="mb-4">
               {submitError}
@@ -240,7 +264,7 @@ const FeedbackForm = () => {
               </div>
             </div>
 
-            {/* Title - Thêm trường tiêu đề */}
+            {/* Title */}
             <div className="mt-6 space-y-1">
               <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
                 Tiêu đề

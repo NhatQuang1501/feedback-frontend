@@ -21,7 +21,6 @@ const AdminFeedbackManagementPage = () => {
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
-      {/* Page Header */}
       <div className="relative mb-8 text-center">
         <Typography variant="h1" className="mb-4 text-4xl font-bold text-gray-900">
           Quản Lý Phản Hồi

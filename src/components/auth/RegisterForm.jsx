@@ -3,11 +3,9 @@ import { Typography, Alert, Divider, Grid } from "@mui/material";
 import { Email, Lock, Person } from "@mui/icons-material";
 import GoogleIcon from "@mui/icons-material/Google";
 
-
 import FormField from "../common/FormField";
 import SubmitButton from "../common/SubmitButton";
 import SocialButton from "../common/SocialButton";
-
 
 import { useForm } from "../../hooks/useForm";
 import { useMultiplePasswordToggle } from "../../hooks/usePasswordToggle";

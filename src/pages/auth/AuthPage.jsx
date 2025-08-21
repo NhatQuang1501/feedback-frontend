@@ -12,7 +12,7 @@ const AuthPage = () => {
   const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    document.title = "Đăng Nhập / Đăng Ký - Feedback Hub";
+    document.title = "Đăng Nhập / Đăng Ký - FeedbackHub";
   }, []);
 
   useEffect(() => {

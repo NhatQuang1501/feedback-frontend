@@ -4,7 +4,6 @@ import { Box, Typography, Paper } from "@mui/material";
 const FeedbackContent = ({ feedback }) => {
   return (
     <>
-      {/* Content */}
       <Box className="mb-6">
         <Typography variant="subtitle1" className="mb-2 font-semibold text-gray-800">
           Nội dung phản hồi

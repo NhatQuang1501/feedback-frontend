@@ -11,7 +11,7 @@ import { getTypeInfo, getPriorityInfo, getStatusInfo } from "@/utils/constants";
 import { formatDate } from "@/utils/formatters";
 import Button from "@/components/common/Button";
 import { feedbackApi } from "@/api/feedbackApi";
-import STATUS from "@/utils/constants";
+import { STATUS } from "@/utils/constants";
 
 const FeedbackDetailHeader = ({ feedback, isAdmin, onStatusChange }) => {
   const [loading, setLoading] = useState(false);
@@ -90,7 +90,6 @@ const FeedbackDetailHeader = ({ feedback, isAdmin, onStatusChange }) => {
         </div>
       </div>
 
-      {/* Status Action Buttons */}
       {isAdmin && (
         <div className="mt-4 flex justify-end md:mt-0">
           {statusName === "resolved" ? (

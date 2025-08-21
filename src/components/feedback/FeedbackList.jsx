@@ -110,7 +110,6 @@ const FeedbackList = ({
 
   return (
     <div className="space-y-4">
-      {/* Feedback Table */}
       <TableContainer className="rounded-lg border border-gray-200">
         <Table>
           <TableHead className="bg-amber-100">

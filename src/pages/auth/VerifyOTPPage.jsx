@@ -32,7 +32,7 @@ const VerifyOTPPage = () => {
   const message = location.state?.message;
 
   useEffect(() => {
-    document.title = "Xác thực OTP - Feedback Hub";
+    document.title = "Xác thực OTP - FeedbackHub";
 
     // Redirect if no email
     if (!email) {
@@ -113,7 +113,7 @@ const VerifyOTPPage = () => {
           align="center"
           className="text-shadow mb-2 text-[1.75rem] leading-tight font-bold text-[#ffec99] sm:text-[2.25rem] md:text-[2.75rem]"
         >
-          Feedback Hub
+          FeedbackHub
         </Typography>
         <Typography
           variant="subtitle1"

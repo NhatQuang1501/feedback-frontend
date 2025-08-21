@@ -313,7 +313,6 @@ const UserFeedbackPage = () => {
 
   return (
     <Container maxWidth="lg" className="py-8">
-      {/* Page Header */}
       <Box className="mb-8 text-center">
         <Typography variant="h4" className="mb-2 font-bold text-gray-900">
           Quản Lý Phản Hồi Của Tôi
@@ -323,7 +322,6 @@ const UserFeedbackPage = () => {
         </Typography>
       </Box>
 
-      {/* Hiển thị thông tin người dùng */}
       <Paper className="mb-6 flex items-center justify-between rounded-lg bg-blue-50 p-4">
         <div>
           <Typography variant="h6" className="font-medium text-gray-900">
@@ -338,7 +336,6 @@ const UserFeedbackPage = () => {
         </Typography>
       </Paper>
 
-      {/* Main Content */}
       <Paper className="overflow-hidden rounded-xl shadow-md">
         <CustomTabs tabs={tabs} value={tabValue} onChange={handleTabChange} />
       </Paper>
