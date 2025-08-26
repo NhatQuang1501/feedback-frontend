@@ -7,7 +7,6 @@ import {
   ExpandMore as ExpandMoreIcon,
   ExpandLess as ExpandLessIcon,
   Clear as ClearIcon,
-  Sort as SortIcon,
 } from "@mui/icons-material";
 import {
   FEEDBACK_TYPES,
@@ -157,7 +156,6 @@ const FeedbackFilters = ({ filters, onFilterChange, sortBy, onSortChange, totalR
         </Button>
 
         <div className="flex items-center gap-2">
-          <SortIcon className="text-gray-500" />
           <CustomSelect
             value={sortBy}
             onChange={(e) => onSortChange(e.target.value)}

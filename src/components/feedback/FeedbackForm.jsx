@@ -326,9 +326,6 @@ const FeedbackForm = () => {
               Tệp đính kèm
             </Typography>
 
-            <Typography variant="body2" className="mb-3 text-gray-500">
-              Bạn có thể đính kèm tài liệu hỗ trợ dưới định dạng: PNG, JPG, PDF, DOCX...
-            </Typography>
             <FileUpload onFilesChange={handleFilesChange} error={errors.attachments} />
           </Box>
 
