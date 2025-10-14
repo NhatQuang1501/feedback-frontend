@@ -1,19 +1,52 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
-import { Container } from "@mui/material";
-import AdminHeader from "@/components/layout/AdminHeader";
-// import Footer from "@/components/layout/Footer";
+import { Outlet, Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Box, Typography, Button } from "@mui/material";
+import { Lock, Home } from "@mui/icons-material";
+import AdminHeader from "./AdminHeader";
 
 const AdminLayout = () => {
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+
+
+  const userRole = user?.role?.name;
+  const isAdmin = userRole === "admin";
+
+
+  if (!isAdmin) {
+    return (
+      <Box className="flex min-h-screen items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <Lock className="mx-auto mb-4 text-6xl text-gray-400" />
+          <Typography variant="h4" className="mb-2 font-bold text-gray-900">
+            Truy cập bị từ chối
+          </Typography>
+          <Typography variant="body1" className="mb-6 text-gray-600">
+            Bạn không có quyền truy cập vào trang này.
+            <br />
+            Quyền yêu cầu: admin
+            <br />
+            Quyền hiện tại: {userRole || "Không xác định"}
+          </Typography>
+          <Button
+            variant="contained"
+            startIcon={<Home />}
+            onClick={() => window.location.href = "/feedbacks/"}
+            className="bg-primary text-secondary hover:bg-primary-dark"
+          >
+            Về trang chủ
+          </Button>
+        </div>
+      </Box>
+    );
+  }
+
   return (
-    <div className="from-primary-light/30 to-primary/20 flex min-h-screen flex-col bg-gradient-to-br">
+    <div className="min-h-screen bg-gray-50">
       <AdminHeader />
-      <main className="flex-grow py-6 sm:py-8 lg:py-10">
-        <Container maxWidth="xl" className="relative z-10 mx-auto px-2 sm:px-3 lg:px-4">
-          <Outlet />
-        </Container>
+      <main className="py-6">
+        <Outlet />
       </main>
-      {/* <Footer /> */}
     </div>
   );
 };

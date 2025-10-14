@@ -14,14 +14,12 @@ const COLORS = {
     other: "#6b7280",
     default: "#6b7280",
   },
-  // Mức độ ưu tiên
   PRIORITY: {
     high: "#ef4444",
     medium: "#c7a84b",
     low: "#16a34a",
     default: "#6b7280",
   },
-  // Trạng thái
   STATUS: {
     pending: "#c7a84b",
     processing: "#3b82f6",

@@ -33,7 +33,6 @@ const FeedbackForm = () => {
   const [confirmDialogType, setConfirmDialogType] = useState("submit");
   const [confirmAction, setConfirmAction] = useState(null);
 
-  // Chuyển đổi constants thành mapping với ID
   const typeIdMapping = {
     suggestion: 1,
     bug: 2,
@@ -46,7 +45,6 @@ const FeedbackForm = () => {
     high: 3,
   };
 
-  // Hàm chuyển đổi chữ cái đầu thành chữ hoa
   const capitalizeFirstLetter = (string) => {
     if (!string) return "";
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -55,7 +53,6 @@ const FeedbackForm = () => {
   const handleInputChange = (field) => (event) => {
     let value = event.target.value;
 
-    // Tự động viết hoa chữ cái đầu cho tiêu đề và nội dung
     if (field === "title" || field === "content") {
       value = capitalizeFirstLetter(value);
     }
@@ -126,14 +123,12 @@ const FeedbackForm = () => {
     setIsSubmitting(true);
     setSubmitError(null);
 
-    // Tạo FormData để gửi dữ liệu và file
     const formDataToSubmit = new FormData();
     formDataToSubmit.append("title", formData.title);
     formDataToSubmit.append("content", formData.content);
     formDataToSubmit.append("type_id", typeIdMapping[formData.type]);
     formDataToSubmit.append("priority_id", priorityIdMapping[formData.priority]);
 
-    // Thêm các file đính kèm
     formData.attachments.forEach((file) => {
       formDataToSubmit.append("files", file);
     });
@@ -143,9 +138,34 @@ const FeedbackForm = () => {
       showToast("Phản hồi của bạn đã được gửi thành công!", "success");
       handleReset();
     } catch (error) {
-      console.error("Submit error:", error);
-      setSubmitError("Có lỗi xảy ra khi gửi phản hồi");
-      showToast("Có lỗi xảy ra khi gửi phản hồi. Vui lòng thử lại!", "error");
+      let detailError = "Có lỗi xảy ra khi gửi phản hồi";
+      let newErrors = {};
+      if (error?.response?.data) {
+        const data = error.response.data;
+        if (data.files) {
+          newErrors.attachments = Array.isArray(data.files) ? data.files.join(", ") : data.files;
+        }
+        if (data.title) {
+          newErrors.title = Array.isArray(data.title) ? data.title.join(", ") : data.title;
+        }
+        if (data.content) {
+          newErrors.content = Array.isArray(data.content) ? data.content.join(", ") : data.content;
+        }
+        if (data.type_id) {
+          newErrors.type = Array.isArray(data.type_id) ? data.type_id.join(", ") : data.type_id;
+        }
+        if (data.priority_id) {
+          newErrors.priority = Array.isArray(data.priority_id)
+            ? data.priority_id.join(", ")
+            : data.priority_id;
+        }
+        if (data.detail) {
+          detailError = data.detail;
+        }
+      }
+      setErrors(newErrors);
+      setSubmitError(detailError);
+      showToast(detailError, "error");
     } finally {
       setIsSubmitting(false);
     }
@@ -166,7 +186,6 @@ const FeedbackForm = () => {
     <>
       <CardContent className="p-6 sm:p-8 lg:p-10">
         <form onSubmit={handleConfirmSubmit} className="space-y-6">
-          {/* Error Alert */}
           {submitError && (
             <Alert severity="error" className="mb-4">
               {submitError}
@@ -245,7 +264,7 @@ const FeedbackForm = () => {
               </div>
             </div>
 
-            {/* Title - Thêm trường tiêu đề */}
+            {/* Title */}
             <div className="mt-6 space-y-1">
               <Typography variant="subtitle2" className="mb-1 font-medium text-gray-700">
                 Tiêu đề
@@ -307,9 +326,6 @@ const FeedbackForm = () => {
               Tệp đính kèm
             </Typography>
 
-            <Typography variant="body2" className="mb-3 text-gray-500">
-              Bạn có thể đính kèm tài liệu hỗ trợ dưới định dạng: PNG, JPG, PDF, DOCX...
-            </Typography>
             <FileUpload onFilesChange={handleFilesChange} error={errors.attachments} />
           </Box>
 

@@ -4,10 +4,21 @@ import { authApi } from "@/api/authApi";
 export const registerUser = createAsyncThunk("auth/register", async (form, { rejectWithValue }) => {
   try {
     const { data } = await authApi.register(form);
-    // Backend gửi OTP sau đăng ký. Có thể tự động mở màn hình Verify OTP.
     return data;
   } catch (e) {
-    return rejectWithValue(e?.response?.data || "Đăng ký thất bại");
+    if (e?.response?.status === 400) {
+      if (e?.response?.data?.email) {
+        return rejectWithValue("Email đã tồn tại. Vui lòng sử dụng email khác.");
+      } else if (e?.response?.data?.password) {
+        return rejectWithValue("Mật khẩu không đủ mạnh. Vui lòng chọn mật khẩu khác.");
+      } else {
+        return rejectWithValue("Dữ liệu đăng ký không hợp lệ. Vui lòng kiểm tra lại.");
+      }
+    } else if (e?.response?.status >= 500) {
+      return rejectWithValue("Lỗi hệ thống. Vui lòng thử lại sau.");
+    } else {
+      return rejectWithValue("Đăng ký thất bại. Vui lòng thử lại.");
+    }
   }
 });
 
@@ -18,7 +29,15 @@ export const loginUser = createAsyncThunk("auth/login", async (form, { rejectWit
     if (data.refresh) localStorage.setItem("refresh_token", data.refresh);
     return data;
   } catch (e) {
-    return rejectWithValue(e?.response?.data || "Đăng nhập thất bại");
+    if (e?.response?.status === 401) {
+      return rejectWithValue("Sai tài khoản hoặc mật khẩu. Vui lòng kiểm tra lại.");
+    } else if (e?.response?.status === 400) {
+      return rejectWithValue("Dữ liệu đăng nhập không hợp lệ. Vui lòng kiểm tra lại.");
+    } else if (e?.response?.status >= 500) {
+      return rejectWithValue("Lỗi hệ thống. Vui lòng thử lại sau.");
+    } else {
+      return rejectWithValue("Đăng nhập thất bại. Vui lòng thử lại.");
+    }
   }
 });
 
@@ -31,7 +50,15 @@ export const googleLogin = createAsyncThunk(
       if (data.refresh) localStorage.setItem("refresh_token", data.refresh);
       return data;
     } catch (e) {
-      return rejectWithValue(e?.response?.data || "Google đăng nhập thất bại");
+      if (e?.response?.status === 400) {
+        return rejectWithValue("Token Google không hợp lệ. Vui lòng thử lại.");
+      } else if (e?.response?.status === 401) {
+        return rejectWithValue("Xác thực Google thất bại. Vui lòng thử lại.");
+      } else if (e?.response?.status >= 500) {
+        return rejectWithValue("Lỗi hệ thống. Vui lòng thử lại sau.");
+      } else {
+        return rejectWithValue("Đăng nhập Google thất bại. Vui lòng thử lại.");
+      }
     }
   },
 );
@@ -39,7 +66,8 @@ export const googleLogin = createAsyncThunk(
 export const fetchProfile = createAsyncThunk("auth/me", async (_, { rejectWithValue }) => {
   try {
     const { data } = await authApi.me();
-    return data;
+    // Backend trả về format: { success: true, data: { user: {...}, permissions: {...} } }
+    return data.data || data; // Handle cả 2 format
   } catch (e) {
     return rejectWithValue(e?.response?.data || "Không thể lấy profile");
   }
@@ -48,10 +76,16 @@ export const fetchProfile = createAsyncThunk("auth/me", async (_, { rejectWithVa
 export const refreshToken = createAsyncThunk("auth/refresh", async (_, { rejectWithValue }) => {
   try {
     const r = localStorage.getItem("refresh_token");
+    if (!r) {
+      throw new Error("No refresh token");
+    }
     const { data } = await authApi.refresh(r);
     localStorage.setItem("access_token", data.access);
     return data.access;
   } catch (e) {
+    // Clear tokens if refresh fails
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
     return rejectWithValue(e?.response?.data || "Refresh token thất bại");
   }
 });
@@ -109,6 +143,14 @@ const authSlice = createSlice({
     setInitialized: (s) => {
       s.initialized = true;
     },
+    clearAuth: (s) => {
+      s.user = null;
+      s.isAuthenticated = false;
+      s.isAdmin = false;
+      s.error = null;
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+    },
   },
   extraReducers: (b) => {
     b.addCase(registerUser.pending, (s) => {
@@ -153,22 +195,36 @@ const authSlice = createSlice({
         s.error = a.payload;
       })
 
+      // Khôi phục fetchProfile cases
       .addCase(fetchProfile.pending, (s) => {
         s.isLoading = true;
       })
       .addCase(fetchProfile.fulfilled, (s, a) => {
         s.isLoading = false;
-        s.user = a.payload;
-        s.isAdmin = a.payload?.role?.name === "admin";
+        // Handle backend response format: { user: {...}, permissions: {...} }
+        const userData = a.payload.user || a.payload;
+        const permissions = a.payload.permissions || {};
+
+        s.user = userData;
+        s.isAdmin = permissions.is_admin || userData?.role?.name === "admin";
         s.isAuthenticated = true;
       })
       .addCase(fetchProfile.rejected, (s, a) => {
         s.isLoading = false;
         s.error = a.payload;
+        // Clear auth state if profile fetch fails
+        s.isAuthenticated = false;
+        s.user = null;
+        s.isAdmin = false;
       })
 
       .addCase(refreshToken.fulfilled, (s) => {
         s.isAuthenticated = true;
+      })
+      .addCase(refreshToken.rejected, (s) => {
+        s.isAuthenticated = false;
+        s.user = null;
+        s.isAdmin = false;
       })
 
       .addCase(logoutUser.fulfilled, (s) => {
@@ -207,5 +263,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearAuthError, setInitialized } = authSlice.actions;
+export const { clearAuthError, setInitialized, clearAuth } = authSlice.actions;
 export default authSlice.reducer;

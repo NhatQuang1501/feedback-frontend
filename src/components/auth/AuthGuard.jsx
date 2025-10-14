@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProfile, setInitialized } from "@/store/slices/authSlice";
+import { fetchProfile, setInitialized, clearAuth } from "@/store/slices/authSlice";
 
 const AuthGuard = ({ children }) => {
   const dispatch = useDispatch();
@@ -8,21 +8,28 @@ const AuthGuard = ({ children }) => {
 
   useEffect(() => {
     const initializeAuth = async () => {
-      if (isAuthenticated && !initialized) {
+      const accessToken = localStorage.getItem("access_token");
+      const refreshToken = localStorage.getItem("refresh_token");
+
+      if (accessToken && !initialized) {
         try {
+          // Fetch profile để verify token và lấy user info
           await dispatch(fetchProfile()).unwrap();
         } catch (error) {
           console.error("Failed to fetch profile:", error);
           // Clear invalid tokens
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
+          dispatch(clearAuth());
         }
+      } else if (!accessToken && !refreshToken) {
+        // No tokens, clear auth state
+        dispatch(clearAuth());
       }
+
       dispatch(setInitialized());
     };
 
     initializeAuth();
-  }, [dispatch, isAuthenticated, initialized]);
+  }, [dispatch, initialized]);
 
   // Show loading while initializing
   if (!initialized) {

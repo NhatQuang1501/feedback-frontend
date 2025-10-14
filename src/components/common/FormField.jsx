@@ -2,7 +2,6 @@ import React from "react";
 import { TextField, InputAdornment, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
-// ==================== FORM FIELD COMPONENT ====================
 const FormField = ({
   name,
   label,
@@ -21,10 +20,8 @@ const FormField = ({
   className = "",
   ...props
 }) => {
-  // Chỉ hiển thị placeholder khi không có value và label đã shrink
   const shouldShowPlaceholder = !value && placeholder;
 
-  // ==================== RENDER ====================
   return (
     <div className={`w-full ${className}`}>
       <TextField
@@ -73,14 +70,14 @@ const FormField = ({
               maxHeight: "none",
             },
             "& .MuiInputAdornment-positionStart": {
-              marginLeft: "8px", // Tăng khoảng cách từ viền trái
+              marginLeft: "8px",
             },
             "& .MuiInputAdornment-positionEnd": {
-              marginRight: "8px", // Tăng khoảng cách từ viền phải
+              marginRight: "8px",
             },
           },
           "& .MuiInputBase-input": {
-            "paddingLeft": startIcon ? "8px" : "16px", // Padding cho text input
+            "paddingLeft": startIcon ? "8px" : "16px",
             "paddingRight": type === "password" ? "8px" : "16px",
             "fontSize": "1rem",
             "lineHeight": "1.5",
@@ -96,7 +93,7 @@ const FormField = ({
             "backgroundColor": "white",
             "padding": "0 4px",
             "color": "#374151",
-            // Điều chỉnh vị trí label để không overlap với icon
+
             "transform": startIcon
               ? "translate(60px, -9px) scale(1)"
               : "translate(16px, -9px) scale(1)",

@@ -25,7 +25,6 @@ const UserFeedbackPage = () => {
     page_size: 10,
   });
 
-  // State cho phản hồi đang xử lý
   const [pendingFeedbacks, setPendingFeedbacks] = useState([]);
   const [pendingFeedbacksCount, setPendingFeedbacksCount] = useState(0);
   const [pendingFeedbacksPage, setPendingFeedbacksPage] = useState(1);
@@ -38,7 +37,6 @@ const UserFeedbackPage = () => {
     page_size: 10,
   });
 
-  // State cho phản hồi đã giải quyết
   const [resolvedFeedbacks, setResolvedFeedbacks] = useState([]);
   const [resolvedFeedbacksCount, setResolvedFeedbacksCount] = useState(0);
   const [resolvedFeedbacksPage, setResolvedFeedbacksPage] = useState(1);
@@ -51,12 +49,10 @@ const UserFeedbackPage = () => {
     page_size: 10,
   });
 
-  // State cho sắp xếp
   const [allSort, setAllSort] = useState("newest");
   const [pendingSort, setPendingSort] = useState("newest");
   const [resolvedSort, setResolvedSort] = useState("newest");
 
-  // Fetch tất cả phản hồi
   const fetchAllFeedbacks = async () => {
     try {
       setLoading(true);
@@ -78,7 +74,6 @@ const UserFeedbackPage = () => {
     }
   };
 
-  // Fetch phản hồi đang xử lý
   const fetchPendingFeedbacks = async () => {
     try {
       setLoading(true);
@@ -100,7 +95,6 @@ const UserFeedbackPage = () => {
     }
   };
 
-  // Fetch phản hồi đã giải quyết
   const fetchResolvedFeedbacks = async () => {
     try {
       setLoading(true);
@@ -122,16 +116,15 @@ const UserFeedbackPage = () => {
     }
   };
 
-  // Effect để load dữ liệu khi component mount hoặc khi tab thay đổi
   useEffect(() => {
     switch (tabValue) {
-      case 0: // Tab Tất cả
+      case 0:
         fetchAllFeedbacks();
         break;
-      case 1: // Tab Đang xử lý
+      case 1:
         fetchPendingFeedbacks();
         break;
-      case 2: // Tab Đã giải quyết
+      case 2:
         fetchResolvedFeedbacks();
         break;
       default:
@@ -147,39 +140,34 @@ const UserFeedbackPage = () => {
     resolvedSort,
   ]);
 
-  // Xử lý thay đổi tab
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
-  // Xử lý thay đổi filter cho tab Tất cả
   const handleAllFilterChange = (key, value) => {
     setAllFeedbacksFilters((prev) => ({
       ...prev,
       [key]: value,
-      page: 1, // Reset về trang 1 khi filter thay đổi
+      page: 1,
     }));
   };
 
-  // Xử lý thay đổi filter cho tab Đang xử lý
   const handlePendingFilterChange = (key, value) => {
     setPendingFeedbacksFilters((prev) => ({
       ...prev,
       [key]: value,
-      page: 1, // Reset về trang 1 khi filter thay đổi
+      page: 1,
     }));
   };
 
-  // Xử lý thay đổi filter cho tab Đã giải quyết
   const handleResolvedFilterChange = (key, value) => {
     setResolvedFeedbacksFilters((prev) => ({
       ...prev,
       [key]: value,
-      page: 1, // Reset về trang 1 khi filter thay đổi
+      page: 1,
     }));
   };
 
-  // Xử lý thay đổi trang cho tab Tất cả
   const handleAllPageChange = (page) => {
     setAllFeedbacksPage(page);
     setAllFeedbacksFilters((prev) => ({
@@ -188,7 +176,6 @@ const UserFeedbackPage = () => {
     }));
   };
 
-  // Xử lý thay đổi trang cho tab Đang xử lý
   const handlePendingPageChange = (page) => {
     setPendingFeedbacksPage(page);
     setPendingFeedbacksFilters((prev) => ({
@@ -197,7 +184,6 @@ const UserFeedbackPage = () => {
     }));
   };
 
-  // Xử lý thay đổi trang cho tab Đã giải quyết
   const handleResolvedPageChange = (page) => {
     setResolvedFeedbacksPage(page);
     setResolvedFeedbacksFilters((prev) => ({
@@ -206,7 +192,6 @@ const UserFeedbackPage = () => {
     }));
   };
 
-  // Xử lý thay đổi sắp xếp
   const handleAllSortChange = (value) => {
     setAllSort(value);
   };
@@ -219,7 +204,6 @@ const UserFeedbackPage = () => {
     setResolvedSort(value);
   };
 
-  // Nội dung các tab
   const tabs = [
     {
       label: "Tất cả phản hồi",
@@ -329,7 +313,6 @@ const UserFeedbackPage = () => {
 
   return (
     <Container maxWidth="lg" className="py-8">
-      {/* Page Header */}
       <Box className="mb-8 text-center">
         <Typography variant="h4" className="mb-2 font-bold text-gray-900">
           Quản Lý Phản Hồi Của Tôi
@@ -339,7 +322,6 @@ const UserFeedbackPage = () => {
         </Typography>
       </Box>
 
-      {/* Hiển thị thông tin người dùng */}
       <Paper className="mb-6 flex items-center justify-between rounded-lg bg-blue-50 p-4">
         <div>
           <Typography variant="h6" className="font-medium text-gray-900">
@@ -354,7 +336,6 @@ const UserFeedbackPage = () => {
         </Typography>
       </Paper>
 
-      {/* Main Content */}
       <Paper className="overflow-hidden rounded-xl shadow-md">
         <CustomTabs tabs={tabs} value={tabValue} onChange={handleTabChange} />
       </Paper>

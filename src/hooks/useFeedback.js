@@ -27,7 +27,6 @@ export const useFeedbackList = (initialFilters = {}) => {
 
   const debouncedKeyword = useDebounce(filters.q, 500);
 
-  // Tải danh sách feedback
   const loadFeedbacks = useCallback(() => {
     const params = {
       page: currentPage,
@@ -48,7 +47,6 @@ export const useFeedbackList = (initialFilters = {}) => {
     filters.sort,
   ]);
 
-  // Xử lý thay đổi filter - Sửa để tránh lỗi Maximum update depth
   const handleFilterChange = useCallback((filterType, value) => {
     setFilters((prev) => ({
       ...prev,
@@ -56,7 +54,6 @@ export const useFeedbackList = (initialFilters = {}) => {
     }));
   }, []);
 
-  // Xử lý thay đổi trang
   const handlePageChange = useCallback(
     (page) => {
       dispatch(setCurrentPage(page));
@@ -64,12 +61,10 @@ export const useFeedbackList = (initialFilters = {}) => {
     [dispatch],
   );
 
-  // Xử lý reset về trang 1 khi filter thay đổi
   useEffect(() => {
     dispatch(setCurrentPage(1));
   }, [dispatch, filters.status, filters.type, filters.priority, filters.q, filters.sort]);
 
-  // Tải dữ liệu khi component mount hoặc filters/currentPage thay đổi
   useEffect(() => {
     loadFeedbacks();
   }, [loadFeedbacks]);
@@ -95,14 +90,12 @@ export const useFeedbackDetail = (feedbackId) => {
     (state) => state.feedback,
   );
 
-  // Tải chi tiết feedback
   const loadFeedbackDetail = useCallback(() => {
     if (feedbackId) {
       dispatch(fetchFeedbackDetail(feedbackId));
     }
   }, [dispatch, feedbackId]);
 
-  // Cập nhật trạng thái feedback
   const handleStatusUpdate = async (statusId) => {
     if (feedbackId) {
       await dispatch(updateFeedbackStatus({ id: feedbackId, statusId }));
@@ -111,7 +104,6 @@ export const useFeedbackDetail = (feedbackId) => {
     return false;
   };
 
-  // Tải dữ liệu khi component mount hoặc feedbackId thay đổi
   useEffect(() => {
     loadFeedbackDetail();
   }, [loadFeedbackDetail]);
@@ -133,25 +125,22 @@ export const useExportFeedback = () => {
     (state) => state.feedback,
   );
 
-  // Bắt đầu export
   const startExport = async (filters) => {
     await dispatch(exportFeedbacks(filters));
   };
 
-  // Kiểm tra trạng thái export
   const checkStatus = async () => {
     if (exportTaskId) {
       await dispatch(checkExportStatus(exportTaskId));
     }
   };
 
-  // Tự động kiểm tra trạng thái export
   useEffect(() => {
     let interval;
     if (exportTaskId && exportStatus === "processing") {
       interval = setInterval(() => {
         dispatch(checkExportStatus(exportTaskId));
-      }, 2000); // Kiểm tra mỗi 2 giây
+      }, 2000);
     }
 
     return () => {
@@ -159,7 +148,6 @@ export const useExportFeedback = () => {
     };
   }, [dispatch, exportTaskId, exportStatus]);
 
-  // Download file khi có URL
   const downloadFile = async () => {
     if (exportUrl) {
       try {

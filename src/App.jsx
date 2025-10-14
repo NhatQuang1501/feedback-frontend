@@ -9,9 +9,6 @@ import AuthLayout from "@/components/layout/AuthLayout";
 import AdminLayout from "@/components/layout/AdminLayout";
 // Route Guards
 import ProtectedRoute from "@/routes/guards/ProtectedRoute";
-import RequireRoles from "@/routes/guards/RequireRoles";
-import RequireUserRole from "@/routes/guards/RequireUserRole";
-import RoleBasedRedirect from "@/components/auth/RoleBasedRedirect";
 import { ToastProvider } from "@/components/common/Toast";
 
 const FeedbackCreatePage = lazy(() => import("@/pages/feedback/user/FeedbackCreatePage"));
@@ -32,60 +29,44 @@ function App() {
         <CssBaseline />
         <ToastProvider>
           <Router>
-            <RoleBasedRedirect>
-              <Suspense
-                fallback={
-                  <CircularProgress className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
-                }
-              >
-                <Routes>
-                  {/* Auth Routes - Public */}
-                  <Route path="/auth" element={<AuthLayout />}>
-                    <Route index element={<Navigate to="/auth/login" replace />} />
-                    <Route path="login" element={<AuthPage />} />
-                    <Route path="verify-otp" element={<VerifyOTPPage />} />
-                    <Route path="forgot-password" element={<div>Forgot Password Page</div>} />
-                    <Route path="reset-password" element={<div>Reset Password Page</div>} />
+            <Suspense
+              fallback={
+                <CircularProgress className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
+              }
+            >
+              <Routes>
+                {/* Auth Routes - Public */}
+                <Route path="/auth" element={<AuthLayout />}>
+                  <Route index element={<Navigate to="/auth/login" replace />} />
+                  <Route path="login" element={<AuthPage />} />
+                  <Route path="verify-otp" element={<VerifyOTPPage />} />
+                  <Route path="forgot-password" element={<div>Forgot Password Page</div>} />
+                  <Route path="reset-password" element={<div>Reset Password Page</div>} />
+                </Route>
+
+                {/* Protected Routes */}
+                <Route element={<ProtectedRoute />}>
+                  {/* Admin Routes */}
+                  <Route path="/admin" element={<AdminLayout />}>
+                    <Route index element={<Navigate to="/admin/feedbacks" replace />} />
+                    <Route path="feedbacks" element={<AdminFeedbackManagementPage />} />
+                    <Route path="feedbacks/:id" element={<FeedbackDetailPage />} />
+                    <Route path="dashboard" element={<AdminDashboardPage />} />
                   </Route>
 
-                  {/* Protected Routes */}
-                  <Route element={<ProtectedRoute />}>
-                    {/* Admin Routes - Require admin role */}
-                    <Route
-                      path="/admin"
-                      element={
-                        <RequireRoles roles={["admin"]}>
-                          <AdminLayout />
-                        </RequireRoles>
-                      }
-                    >
-                      <Route index element={<Navigate to="/admin/feedbacks" replace />} />
-                      <Route path="feedbacks" element={<AdminFeedbackManagementPage />} />
-                      <Route path="feedbacks/:id" element={<FeedbackDetailPage />} />
-                      <Route path="dashboard" element={<AdminDashboardPage />} />
-                    </Route>
-
-                    {/* User Routes - Require user role (block admin access) */}
-                    <Route
-                      path="/"
-                      element={
-                        <RequireUserRole>
-                          <MainLayout />
-                        </RequireUserRole>
-                      }
-                    >
-                      <Route index element={<Navigate to="/feedbacks/create" replace />} />
-                      <Route path="feedbacks/create" element={<FeedbackCreatePage />} />
-                      <Route path="feedbacks/:id" element={<FeedbackDetailPage />} />
-                      <Route path="feedbacks" element={<UserFeedbackPage />} />
-                    </Route>
+                  {/* User Routes */}
+                  <Route path="/" element={<MainLayout />}>
+                    <Route index element={<Navigate to="/feedbacks/create" replace />} />
+                    <Route path="feedbacks/create" element={<FeedbackCreatePage />} />
+                    <Route path="feedbacks/:id" element={<FeedbackDetailPage />} />
+                    <Route path="feedbacks" element={<UserFeedbackPage />} />
                   </Route>
+                </Route>
 
-                  {/* 404 Page */}
-                  <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-              </Suspense>
-            </RoleBasedRedirect>
+                {/* 404 Page */}
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </Suspense>
           </Router>
         </ToastProvider>
       </ThemeProvider>

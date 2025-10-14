@@ -64,12 +64,10 @@ const Pagination = ({
 
   return (
     <div className="mt-6 flex flex-col items-center gap-3">
-      {/* Display text */}
       <Typography variant="body2" className="text-gray-600">
         Hiển thị {startItem}-{endItem} của {totalItems} kết quả
       </Typography>
 
-      {/* Page navigation */}
       <div className="flex items-center gap-1">
         <IconButton
           size="small"

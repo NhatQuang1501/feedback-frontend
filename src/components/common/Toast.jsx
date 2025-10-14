@@ -8,7 +8,6 @@ import {
   Close as CloseIcon,
 } from "@mui/icons-material";
 
-// Sử dụng Context để quản lý toast từ bất kỳ component nào
 export const ToastContext = React.createContext({
   showToast: () => {},
 });
@@ -19,7 +18,6 @@ export const ToastProvider = ({ children }) => {
   const showToast = (message, type = "success", duration = 3000) => {
     setToast({ open: true, message, type });
 
-    // Tự động đóng sau duration
     if (duration !== 0) {
       setTimeout(() => {
         setToast((prev) => ({ ...prev, open: false }));
@@ -41,7 +39,6 @@ ToastProvider.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
-// Hook để sử dụng toast từ bất kỳ component nào
 export const useToast = () => {
   const context = React.useContext(ToastContext);
   if (!context) {
@@ -50,15 +47,12 @@ export const useToast = () => {
   return context;
 };
 
-// Component Toast
 const Toast = ({ message, type = "success", onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Hiệu ứng slide-in
     setTimeout(() => setIsVisible(true), 10);
 
-    // Cleanup: đảm bảo toast biến mất khi component unmount
     return () => setIsVisible(false);
   }, []);
 

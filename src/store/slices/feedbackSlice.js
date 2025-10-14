@@ -1,13 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { feedbackApi } from "../../api/feedbackApi";
 
-// Thunk action để gửi feedback
 export const submitFeedback = createAsyncThunk(
   "feedback/submit",
   async (feedbackData, { rejectWithValue }) => {
     try {
-      // Mock API call - giữ nguyên code cũ
-      await new Promise((resolve) => setTimeout(resolve, 2000)); // Simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 2000));
 
       // Mock response
       const response = {
@@ -24,7 +22,6 @@ export const submitFeedback = createAsyncThunk(
   },
 );
 
-// Thunk action để lấy danh sách feedback
 export const fetchFeedbacks = createAsyncThunk(
   "feedback/fetchFeedbacks",
   async (params, { rejectWithValue }) => {
@@ -37,7 +34,6 @@ export const fetchFeedbacks = createAsyncThunk(
   },
 );
 
-// Thunk action để lấy chi tiết feedback
 export const fetchFeedbackDetail = createAsyncThunk(
   "feedback/fetchFeedbackDetail",
   async (id, { rejectWithValue }) => {
@@ -50,7 +46,6 @@ export const fetchFeedbackDetail = createAsyncThunk(
   },
 );
 
-// Thunk action để cập nhật trạng thái feedback
 export const updateFeedbackStatus = createAsyncThunk(
   "feedback/updateStatus",
   async ({ id, statusId }, { rejectWithValue }) => {
@@ -63,7 +58,6 @@ export const updateFeedbackStatus = createAsyncThunk(
   },
 );
 
-// Thunk action để export feedback
 export const exportFeedbacks = createAsyncThunk(
   "feedback/export",
   async (filters, { rejectWithValue }) => {
@@ -76,7 +70,6 @@ export const exportFeedbacks = createAsyncThunk(
   },
 );
 
-// Thunk action để kiểm tra trạng thái export
 export const checkExportStatus = createAsyncThunk(
   "feedback/checkExport",
   async (taskId, { rejectWithValue }) => {
@@ -92,19 +85,19 @@ export const checkExportStatus = createAsyncThunk(
 const feedbackSlice = createSlice({
   name: "feedback",
   initialState: {
-    // Danh sách feedback
+    // Feedback list
     feedbacks: [],
     totalItems: 0,
     currentPage: 1,
     isLoading: false,
     error: null,
 
-    // Chi tiết feedback
+    // Feedback detail
     selectedFeedback: null,
     isLoadingDetail: false,
     detailError: null,
 
-    // Cập nhật trạng thái
+    // Update status
     isUpdating: false,
     updateError: null,
 
@@ -142,14 +135,13 @@ const feedbackSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch feedbacks
       .addCase(fetchFeedbacks.pending, (state) => {
         state.isLoading = true;
         state.error = null;
       })
       .addCase(fetchFeedbacks.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.feedbacks = action.payload.data || []; // Sử dụng 'data' thay vì 'results'
+        state.feedbacks = action.payload.data || [];
         state.totalItems = action.payload.count || 0;
         state.currentPage = action.payload.current_page || 1;
         state.totalPages = action.payload.total_pages || 1;
@@ -159,7 +151,6 @@ const feedbackSlice = createSlice({
         state.error = action.payload || "Có lỗi xảy ra khi tải danh sách phản hồi";
       })
 
-      // Fetch feedback detail
       .addCase(fetchFeedbackDetail.pending, (state) => {
         state.isLoadingDetail = true;
         state.detailError = null;
@@ -173,7 +164,6 @@ const feedbackSlice = createSlice({
         state.detailError = action.payload || "Có lỗi xảy ra khi tải chi tiết phản hồi";
       })
 
-      // Update feedback status
       .addCase(updateFeedbackStatus.pending, (state) => {
         state.isUpdating = true;
         state.updateError = null;
@@ -182,7 +172,6 @@ const feedbackSlice = createSlice({
         state.isUpdating = false;
         state.selectedFeedback = action.payload;
 
-        // Cập nhật feedback trong danh sách
         const index = state.feedbacks.findIndex(
           (f) => f.feedback_id === action.payload.feedback_id,
         );
@@ -195,7 +184,6 @@ const feedbackSlice = createSlice({
         state.updateError = action.payload || "Có lỗi xảy ra khi cập nhật trạng thái";
       })
 
-      // Export feedbacks
       .addCase(exportFeedbacks.pending, (state) => {
         state.isExporting = true;
         state.exportError = null;
@@ -210,7 +198,6 @@ const feedbackSlice = createSlice({
         state.exportError = action.payload || "Có lỗi xảy ra khi xuất dữ liệu";
       })
 
-      // Check export status
       .addCase(checkExportStatus.pending, (state) => {
         state.isExporting = true;
       })
@@ -226,7 +213,6 @@ const feedbackSlice = createSlice({
         state.exportError = action.payload || "Có lỗi xảy ra khi kiểm tra trạng thái xuất";
       })
 
-      // Submit feedback (giữ nguyên code cũ)
       .addCase(submitFeedback.pending, (state) => {
         state.isSubmitting = true;
         state.submitSuccess = false;

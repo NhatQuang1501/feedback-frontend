@@ -8,6 +8,7 @@ import {
   fetchProfile,
   refreshToken,
   googleLogin,
+  clearAuth,
 } from "@/store/slices/authSlice";
 
 export const useAuth = () => {
@@ -22,6 +23,7 @@ export const useAuth = () => {
   const clearError = () => dispatch(clearAuthError());
   const getProfile = () => dispatch(fetchProfile());
   const refresh = () => dispatch(refreshToken());
+  const clearAuthState = () => dispatch(clearAuth());
 
   const googleAuth = (idToken) => dispatch(googleLogin(idToken));
 
@@ -112,6 +114,7 @@ export const useAuth = () => {
     getProfile,
     refresh,
     googleAuth,
+    clearAuthState,
 
     // Helpers
     isAdmin,

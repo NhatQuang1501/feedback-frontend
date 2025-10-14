@@ -140,14 +140,12 @@ const FileUpload = ({ onFilesChange, error }) => {
         </div>
       </Paper>
 
-      {/* Error Alert */}
       {(uploadError || error) && (
         <Alert severity="error" className="flex items-center rounded-lg shadow-sm">
           {uploadError || error}
         </Alert>
       )}
 
-      {/* Selected Files */}
       {files.length > 0 && (
         <Box className="rounded-lg border border-gray-100 bg-gray-50/80 p-4">
           <Typography variant="subtitle2" className="mb-3 font-medium text-gray-700">

@@ -89,7 +89,7 @@ const AuthTabs = ({
           align="center"
           className="text-shadow mb-2 text-[1.75rem] leading-tight font-bold text-[#ffec99] sm:text-[2.25rem] md:text-[2.75rem]"
         >
-          Feedback Hub
+          FeedbackHub
         </Typography>
         <Typography
           variant="subtitle1"

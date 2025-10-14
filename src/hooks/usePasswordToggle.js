@@ -1,6 +1,5 @@
 import { useState } from "react";
 
-// ==================== PASSWORD TOGGLE HOOK ====================
 export const usePasswordToggle = () => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -14,7 +13,6 @@ export const usePasswordToggle = () => {
   };
 };
 
-// ==================== MULTIPLE PASSWORD TOGGLE HOOK ====================
 export const useMultiplePasswordToggle = (fields = []) => {
   const initialState = fields.reduce((acc, field) => {
     acc[field] = false;

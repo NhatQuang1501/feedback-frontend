@@ -34,7 +34,7 @@ const Badge = ({ children, variant = "default", color, style, ...props }) => {
           backgroundColor: "transparent",
           border: `1px solid ${color || "#c7a84b"}`,
           color: color || "#c7a84b",
-          padding: "5px 15px", // Giảm padding cho outline
+          padding: "5px 15px",
         };
       case "destructive":
         return {
@@ -42,9 +42,9 @@ const Badge = ({ children, variant = "default", color, style, ...props }) => {
           backgroundColor: "#fef2f2",
           border: "1px solid #b91c1c",
           color: "#b91c1c",
-          padding: "5px 15px", // Giảm padding cho destructive
+          padding: "5px 15px",
         };
-      default: // "default"
+      default:
         return {
           ...baseStyles,
           backgroundColor: color || "#c7a84b",
@@ -55,7 +55,7 @@ const Badge = ({ children, variant = "default", color, style, ...props }) => {
 
   const badgeStyles = {
     ...getVariantStyles(),
-    ...style, // Allow custom styles to override
+    ...style,
   };
 
   return (

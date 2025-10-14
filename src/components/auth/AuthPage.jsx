@@ -9,23 +9,28 @@ const AuthPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { isLoading, error, isAuthenticated } = useSelector((state) => state.auth);
+  const { isLoading, error, isAuthenticated, user, isAdmin } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    document.title = "Đăng Nhập / Đăng Ký - FeedbackHub";
+    document.title = "Đăng Nhập / Đăng Ký - Feedback Hub";
   }, []);
 
+  // Tự động chuyển hướng sau khi đăng nhập
   useEffect(() => {
-    if (isAuthenticated) {
-      const from = location.state?.from?.pathname || "/";
-      navigate(from, { replace: true });
+    if (isAuthenticated && user) {
+      if (isAdmin) {
+        navigate("/admin/feedbacks", { replace: true });
+      } else {
+        navigate("/feedbacks/create", { replace: true });
+      }
     }
-  }, [isAuthenticated, navigate, location]);
+  }, [isAuthenticated, user, isAdmin, navigate]);
 
   const handleLogin = async (formData) => {
     try {
       await dispatch(loginUser(formData)).unwrap();
-    } catch (error) {}
+    } catch (error) {
+    }
   };
 
   const handleRegister = async (formData) => {
